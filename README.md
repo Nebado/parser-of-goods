@@ -16,4 +16,4 @@ $ php -S localhost:5757
 
 ## References
 
-[PHPExcel]: https://github.com/PHPOffice/PHPExcel
+[PHPExcel](https://github.com/PHPOffice/PHPExcel)
