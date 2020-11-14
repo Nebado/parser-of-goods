@@ -1,24 +1,17 @@
 {
-  "name": "nebado",
-  "description": "Parser of goods",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "nebado",
-      "email": "ruslan.nbd@gmail.com"
+    
+    "name": "ParserOfGoods",
+    "description": "Simple parser of goods",
+    "license": "MIT",
+    "keywords": ["beta"],
+    "authors": [
+        {
+            "name": "Nebado",
+            "email": "ruslan.nbd@gmail.com"
+        }
+    ],
+    "require": {
+        "coderockr/php-query": "dev-master",
+        "phpoffice/phpexcel": "^1.8"
     }
-  ],
-  "minimum-stability": "dev",
-  "require": {
-    "coderockr/php-query": "dev-master",
-    "phpoffice/phpexcel": "dev-master"
-  },
-  "autoload": {
-    "psr-4": {
-      "App\\": "app/"
-    },
-    "files": [
-      "helpers/helpers.php"
-    ]
-  }
 }

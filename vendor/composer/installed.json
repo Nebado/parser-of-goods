@@ -52,8 +52,8 @@
     },
     {
         "name": "phpoffice/phpexcel",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "version": "1.8.2",
+        "version_normalized": "1.8.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/PHPOffice/PHPExcel.git",
@@ -76,7 +76,7 @@
         },
         "time": "2018-11-22T23:07:24+00:00",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-0": {
                 "PHPExcel": "Classes/"
@@ -92,15 +92,15 @@
                 "homepage": "http://blog.maartenballiauw.be"
             },
             {
-                "name": "Mark Baker",
-                "homepage": "http://markbakeruk.net"
+                "name": "Erik Tilt"
             },
             {
                 "name": "Franck Lefevre",
                 "homepage": "http://rootslabs.net"
             },
             {
-                "name": "Erik Tilt"
+                "name": "Mark Baker",
+                "homepage": "http://markbakeruk.net"
             }
         ],
         "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",

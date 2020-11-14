@@ -13,7 +13,7 @@ if (isset($_POST['start']) && !empty($_POST['start'])) {
 
 <h1>Parser of Goods</h1>
 <form action="/" method="post">
-    <input type="text" name="url" value="<?=$_SESSION['url']?>" placeholder="Input your url" style="width: 500px" /><br><br>
+    <input type="text" name="url" value="<?= isset($_SESSION['url']) ? $_SESSION['url'] : ''?>" placeholder="Input your url" style="width: 500px" /><br><br>
     <input type="submit" name="start" value="Start" />
 </form>
 

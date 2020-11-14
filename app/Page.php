@@ -71,69 +71,69 @@ function run($start, $url) {
         // TODO (#2) Fix Class PHPExcel is not found
 
         // Save in Excel
-        /* $phpExcel = new PHPExcel();
+        $phpExcel = new PHPExcel();
 
-         * $titles = array(
-         *     array(
-         *         'name' => 'Name',
-         *         'ceil' => 'A'
-         *     ),
-         *     array(
-         *         'name' => 'Code',
-         *         'ceil' => 'B'
-         *     ),
-         *     array(
-         *         'name' => 'Price',
-         *         'ceil' => 'C'
-         *     ),
-         *     array(
-         *         'name' => 'Description',
-         *         'ceil' => 'D'
-         *     ),
-         *     array(
-         *         'name' => 'Image',
-         *         'ceil' => 'E'
-         *     )
-         * );
+        $titles = array(
+            array(
+                'name' => 'Name',
+                'ceil' => 'A'
+            ),
+            array(
+                'name' => 'Code',
+                'ceil' => 'B'
+            ),
+            array(
+                'name' => 'Price',
+                'ceil' => 'C'
+            ),
+            array(
+                'name' => 'Description',
+                'ceil' => 'D'
+            ),
+            array(
+                'name' => 'Image',
+                'ceil' => 'E'
+            )
+        );
 
-         * for ($i = 0; $i < count($titles); $i++) {
-         *     $string = $titles[$i]['name'];
-         *     //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
-         *     $ceilLetter = $titles[$i]['ceil'] . 1;
-         *     $phpExcel->getActiveSheet()->setCellValueExplicit($ceilLetter, $string, PHPExcel_Cell_DataType::TYPE_STRING);
-         * }
+        for ($i = 0; $i < count($titles); $i++) {
+            $string = $titles[$i]['name'];
+            //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
+            $ceilLetter = $titles[$i]['ceil'] . 1;
+            $phpExcel->getActiveSheet()->setCellValueExplicit($ceilLetter, $string, PHPExcel_Cell_DataType::TYPE_STRING);
+        }
 
-         * $i = 2;
+        $i = 2;
 
-         * foreach($arrGoods as $row) {
-         *     $phpExcel->getActiveSheet()->setCellValueExplicit("A$i", $row['name'], PHPExcel_Cell_DataType::TYPE_STRING);
-         *     //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
-         *     $phpExcel->getActiveSheet()->setCellValue("B$i", $row['code']);
-         *     $phpExcel->getActiveSheet()->setCellValue("C$i", $row['price']);
-         *     $description = $row['description'];
-         *     //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
-         *     $phpExcel->getActiveSheet()->setCellValueExplicit("D$i", $description, PHPExcel_Cell_DataType::TYPE_STRING);
-         *     $phpExcel->getActiveSheet()->setCellValue("E$i", $row['photo'], PHPExcel_Cell_DataType::TYPE_STRING);
-         *     $i++;
-         * }
+        foreach($arrGoods as $row) {
+            $phpExcel->getActiveSheet()->setCellValueExplicit("A$i", $row['name'], PHPExcel_Cell_DataType::TYPE_STRING);
+            //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
+            $phpExcel->getActiveSheet()->setCellValue("B$i", $row['code']);
+            $phpExcel->getActiveSheet()->setCellValue("C$i", $row['price']);
+            $description = $row['description'];
+            //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
+            $phpExcel->getActiveSheet()->setCellValueExplicit("D$i", $description, PHPExcel_Cell_DataType::TYPE_STRING);
+            $phpExcel->getActiveSheet()->setCellValue("E$i", $row['photo'], PHPExcel_Cell_DataType::TYPE_STRING);
+            $i++;
+        }
 
-         * $phpExcel->getActiveSheet()->getColumnDimension('A')->setWidth(96);
-         * $phpExcel->getActiveSheet()->getColumnDimension('B')->setWidth(16);
-         * $phpExcel->getActiveSheet()->getColumnDimension('C')->setWidth(16);
-         * $phpExcel->getActiveSheet()->getColumnDimension('D')->setWidth(96);
-         * $phpExcel->getActiveSheet()->getColumnDimension('E')->setWidth(96);
+        $phpExcel->getActiveSheet()->getColumnDimension('A')->setWidth(96);
+        $phpExcel->getActiveSheet()->getColumnDimension('B')->setWidth(16);
+        $phpExcel->getActiveSheet()->getColumnDimension('C')->setWidth(16);
+        $phpExcel->getActiveSheet()->getColumnDimension('D')->setWidth(96);
+        $phpExcel->getActiveSheet()->getColumnDimension('E')->setWidth(96);
 
-         * $page = $phpExcel->setActiveSheetIndex();
-         * $page->setTitle('goods');
-         * $objWriter = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel2007');
-         * $filename = "goods.xlsx";
+        $page = $phpExcel->setActiveSheetIndex();
+        $page->setTitle('goods');
+        $objWriter = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel2007');
+        $filename = "goods.xlsx";
 
-         * if (file_exists($filename)) {
-         *     unlink($filename);
-         * }
+        if (file_exists($filename)) {
+            unlink($filename);
+        }
 
-         * PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
-         * $objWriter->save($filename); */
+        PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
+        $objWriter->save($filename);
 
         // Download images
         $catalog_out_path = "images";
@@ -156,6 +156,6 @@ function run($start, $url) {
     }
 }
 
-if ($_SESSION['action'] == 'Start') {
+if (isset($_SESSION['action'])) {
     run($_SESSION['action'], $_SESSION['url']);
 }
