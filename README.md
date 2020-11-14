@@ -6,6 +6,18 @@ Parser of goods on php with generate Excel file, also downloading images.
 
 - php ^5.2
 - php-xml
+- php-zip
+- php-gb
+- phpQuery
+- phpSpreadsheet
+
+## Installation
+
+```
+$ composer require coderockr/phpquery
+$ composer require phpoffice/phpexcel
+
+```
 
 ## Quick start
 
