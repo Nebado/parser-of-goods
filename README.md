@@ -9,7 +9,7 @@ Parser of goods on php with generate Excel file, also downloading images.
 - php-zip
 - php-gb
 - phpQuery
-- phpSpreadsheet
+- phpExcel
 
 ## Installation
 
