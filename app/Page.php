@@ -68,8 +68,6 @@ function run($start, $url) {
             phpQuery::unloadDocuments();
         }
 
-        // TODO (#2) Fix Class PHPExcel is not found
-
         // Save in Excel
         $phpExcel = new PHPExcel();
 
