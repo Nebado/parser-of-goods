@@ -26,6 +26,10 @@ $ php -S localhost:5757
 
 ```
 
+## Usage
+
+In order to start parsing, you need to maintain fields, and for this you need to know the classes or id of the elements (name, price, etc).
+
 ## References
 
 [PHPExcel](https://github.com/PHPOffice/PHPExcel)
