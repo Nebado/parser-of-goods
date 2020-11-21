@@ -1,7 +1,8 @@
 <?php
 
-require_once('vendor/autoload.php');
-require_once('app/Parser.php');
+require_once('./vendor/autoload.php');
+require_once("./libs/CurlMulti.php");
+require_once("./libs/Curl.php");
 
 session_start();
 

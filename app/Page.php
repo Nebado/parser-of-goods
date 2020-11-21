@@ -1,5 +1,8 @@
 <?php
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 ini_set('max_execution_time', '300');
 
 function run($start, $catUrl) {
@@ -70,15 +73,12 @@ function run($start, $catUrl) {
                         }
                     }                    
                 }
-                
-                
-                
                 phpQuery::unloadDocuments();
             }
         }
 
         // Save in Excel
-        $phpExcel = new PHPExcel();
+        $phpExcel = new Spreadsheet();
 
         $titles = array(
             array(
@@ -107,20 +107,20 @@ function run($start, $catUrl) {
             $string = $titles[$i]['name'];
             //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
             $ceilLetter = $titles[$i]['ceil'] . 1;
-            $phpExcel->getActiveSheet()->setCellValueExplicit($ceilLetter, $string, PHPExcel_Cell_DataType::TYPE_STRING);
+            $phpExcel->getActiveSheet()->setCellValueExplicit($ceilLetter, $string, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
         }
 
         $i = 2;
 
         foreach($arrGoods as $row) {
-            $phpExcel->getActiveSheet()->setCellValueExplicit("A$i", $row['name'], PHPExcel_Cell_DataType::TYPE_STRING);
+            $phpExcel->getActiveSheet()->setCellValueExplicit("A$i", $row['name'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
             $phpExcel->getActiveSheet()->setCellValue("B$i", $row['code']);
             $phpExcel->getActiveSheet()->setCellValue("C$i", $row['price']);
             $description = $row['description'];
             //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
-            $phpExcel->getActiveSheet()->setCellValueExplicit("D$i", $description, PHPExcel_Cell_DataType::TYPE_STRING);
-            $phpExcel->getActiveSheet()->setCellValue("E$i", $row['photo'], PHPExcel_Cell_DataType::TYPE_STRING);
+            $phpExcel->getActiveSheet()->setCellValueExplicit("D$i", $description, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $phpExcel->getActiveSheet()->setCellValue("E$i", $row['photo'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             $i++;
         }
 
@@ -130,16 +130,15 @@ function run($start, $catUrl) {
         $phpExcel->getActiveSheet()->getColumnDimension('D')->setWidth(96);
         $phpExcel->getActiveSheet()->getColumnDimension('E')->setWidth(96);
 
-        $page = $phpExcel->setActiveSheetIndex();
+        $page = $phpExcel->setActiveSheetIndex(0);
         $page->setTitle('goods');
-        $objWriter = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel2007');
+        $objWriter = new Xlsx($phpExcel);
         $filename = "goods.xlsx";
 
         if (file_exists($filename)) {
             unlink($filename);
         }
 
-        PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
         $objWriter->save($filename);
 
         // Download images

@@ -16,7 +16,7 @@ Parser of goods on php with generate Excel file, also downloading images.
 
 ```
 $ composer require coderockr/phpquery
-$ composer require phpoffice/phpexcel
+$ composer require phpoffice/phpspreadsheet
 
 ```
 
