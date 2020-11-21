@@ -1,20 +1,7 @@
-<?php
-
-unset($_SESSION['action']);
-unset($_SESSION['url']);
-
-if (isset($_POST['start']) && !empty($_POST['start'])) {
-    $_SESSION['action'] = $_POST['start'];
-    $_SESSION['url'] = $_POST['url'];
-}
-
-
-?>
-
 <h1>Parser of Goods</h1>
-<form action="/" method="post">
-    <input type="text" name="url" value="<?= isset($_SESSION['url']) ? $_SESSION['url'] : ''?>" placeholder="Input your url" style="width: 500px" /><br><br>
-    <input type="submit" name="start" value="Start" />
+<form action="" method="post">
+    <input type="text" name="url" placeholder="Input your url" style="width: 500px" /><br><br>
+    <button type="submit" name="start" value="1">Start</button>
 </form>
 
 <?php

@@ -6,10 +6,10 @@ function run($start, $catUrl) {
     $urlArr = explode('/', $catUrl);
     $url_domain = $urlArr[2];
 
-    if ($start == 'Start' && $catUrl != null) {
+    if ($start == 1 && $catUrl != null) {
         $c = 0;
         $categoryUrl = $catUrl;
-        while ($c < 5) {
+        while ($c < 1) {
             $c++;
             $html = Parser::getPage([
                 "url" => "$categoryUrl"
@@ -157,11 +157,14 @@ function run($start, $catUrl) {
                 file_put_contents($catalog_out_path . "/" . $foto_name, file_get_contents($photoUrl));
             }
         }
+
+        unset($_POST['start']);
+        unset($_POST['url']);
     } else {
         return;
     }
 }
 
-if (isset($_SESSION['action'])) {
-    run($_SESSION['action'], $_SESSION['url']);
+if (isset($_POST['start'])) {
+    run($_POST['start'], $_POST['url']);
 }
