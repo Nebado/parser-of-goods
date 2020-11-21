@@ -6,6 +6,7 @@ Parser of goods on php with generate Excel file, also downloading images.
 
 - php ^5.2
 - php-xml
+- php-curl
 - php-zip
 - php-gb
 - phpQuery
