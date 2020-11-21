@@ -1,8 +1,10 @@
 <?php
 
-require_once('./vendor/autoload.php');
+/* require_once("./libs/autoload.php"); */
+require_once("./vendor/autoload.php");
 require_once("./libs/CurlMulti.php");
 require_once("./libs/Curl.php");
+require_once("./libs/PhpQuery.php");
 
 session_start();
 
@@ -14,4 +16,3 @@ global $time;
 $time = microtime(true) - $startTime;
 
 include_once('views/index.php');
-

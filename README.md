@@ -14,11 +14,17 @@ Parser of goods on php with generate Excel file, also downloading images.
 
 ## Installation
 
-```
-$ composer require coderockr/phpquery
-$ composer require phpoffice/phpspreadsheet
+Composer
 
 ```
+$ composer require electrolinux/phpquery
+
+```
+Without composer
+
+Uncomment /* require_once("./libs/autoload.php"); */ in index.php and comment require_once("./vendor/autoload.php");
+
+![screenshot](./assets/wocomposer.png)
 
 ## Quick start
 
