@@ -67,7 +67,7 @@
                 echo '<td>'.$arrGoods[$i]['code'].'</td>';
                 echo '<td>'.$arrGoods[$i]['price'].'</td>';
                 echo '<td>'.$arrGoods[$i]['description'].'</td>';
-                $photosTitle[$i] = mb_substr($arrGoods[$i]['photo'], (mb_strpos($arrGoods[$i]['photo'], "source-img/") + 37));
+                $photosTitle[$i] = substr($arrGoods[$i]['photo'], (strrpos($arrGoods[$i]['photo'], "/") + 1));
                 echo '<td>'.$photosTitle[$i].'</td>';
                 echo '</tr>';
             }

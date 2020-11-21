@@ -78,8 +78,6 @@ function run($start, $catUrl) {
         $phpExcel = new PHPExcel();
 
         $titles = array(
-
-
             array(
                 'name' => 'Name',
                 'ceil' => 'A'
@@ -149,7 +147,7 @@ function run($start, $catUrl) {
 
         $k = 0;
         for($k = 0; $k < count($arrGoods); $k++) {
-            $foto_name = mb_substr($arrGoods[$k]['photo'], (mb_strpos($arrGoods[$k]['photo'], "source-img/") + 37));
+            $foto_name = substr($arrGoods[$k]['photo'], (strrpos($arrGoods[$k]['photo'], "/") + 1));
             $photoUrl = 'https:'.$arrGoods[$k]['photo'];
 
             unlink($catalog_out_path . '/'. $foto_name);
