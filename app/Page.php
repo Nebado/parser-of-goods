@@ -42,16 +42,19 @@ function run($start, $catUrl) {
                     }
                 }
 
+                // Use Multi Curl
                 foreach ($urls as $url) {
-                    $htmlGoods[] = Parser::getPage([
-                        "url" => "https://".$url_domain.$url
-                    ]);
+                    $urlGoods[] = "https://".$url_domain.$url;
                 }
 
+                $ref = new cURmultiStable;
+                $htmlGoods = $ref->runmulticurl($urlGoods);
+
+                // Generate goods
                 global $arrGoods;
                 for ($i = 0; $i < count($htmlGoods); ++$i) {
-                    if(!empty($htmlGoods[$i]["data"])) {
-                        $contentGoods[$i] = $htmlGoods[$i]["data"]["content"];
+                    if(!empty($htmlGoods[$i])) {
+                        $contentGoods[$i] = $htmlGoods[$i];
                         phpQuery::newDocument($contentGoods[$i]);
 
                         // Section main parsing fields
