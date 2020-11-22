@@ -10,7 +10,7 @@ Parser of goods on php with generate Excel file, also downloading images.
 - php-zip
 - php-gb
 - phpQuery
-- phpExcel
+- PhpSpreadsheet
 
 ## Installation
 
@@ -39,4 +39,4 @@ In order to start parsing, you need to maintain fields, and for this you need to
 
 ## References
 
-[PHPExcel](https://github.com/PHPOffice/PHPExcel)
+[PhpSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet)
