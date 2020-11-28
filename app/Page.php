@@ -8,72 +8,76 @@ function run($start, $catUrl) {
     $url_domain = $urlArr[2];
 
     if ($start == 1 && $catUrl != null) {
-        $c = 0;
-        $categoryUrl = $catUrl;
-        while ($c < 1) {
-            $c++;
-            $html = Parser::getPage([
-                "url" => "$categoryUrl"
-            ]);            
-            
-            if (!empty($html["data"])) {
-                $content = $html["data"]["content"];
-                phpQuery::newDocument($content);
+        $htmlCat = Parser::getPage([
+            "url" => "$catUrl"
+        ]);
 
-                // Pagination section
-                $pagination = pq('.pagination')->find('a')->attr('href');
-                $lengthStrPagination = strlen($pagination);
-                $pagination = substr($pagination, 2, $lengthStrPagination);
-                $categoryUrl = $catUrl . $pagination;
+        if (!empty($htmlCat["data"])) {
+            $domCat = phpQuery::newDocument($htmlCat["data"]["content"]);
 
-                // Parsing categories
-                $categories = pq(".block-goods-list")->find(".goods-photo");
-                $goods = [];
-                foreach ($categories as $key => $category){
-                    $category = pq($category);
-                    $goods[$key] = [
-                        "url"  => trim($category->attr("href"))
-                    ];
+            // Pagination section
+            $pagCount = pq('ul.pagination > li > a')->text();
+            $paginationCount = str_replace('>', '', $pagCount);
+            $countPages = substr(trim($paginationCount), -1);
+
+            for ($i = 1; $i <= $countPages; $i++) {
+                $pagHref = str_replace('./', '', pq('ul.pagination > li > a')->attr('href'));
+                $paginationHref = preg_replace("/page=(\d+)/", "page=$i", $pagHref);
+                if ($i === 1) {
+                    $categoryHref[] = $catUrl;
+                } else {
+                    $categoryHref[] = $catUrl . $paginationHref;
                 }
+            }
+            phpQuery::unloadDocuments();
+        }
 
-                // Parsing goods
-                foreach($goods as $good => $goodsUrl) {
-                    foreach ($goodsUrl as $uri) {
-                        $urls[] = "".$uri;
-                    }
+        // Use Multi Curl for categories
+        $ref = new cURmultiStable;
+        $htmlCategories = $ref->runmulticurl($categoryHref);
+
+        //Parsing all categories
+        for ($k = 0; $k < count($htmlCategories); ++$k) {
+            if (!empty($htmlCategories[$k])) {
+                $contentCategories[$k] = $htmlCategories[$k];
+                phpQuery::newDocument($contentCategories[$k]);
+
+                $links = pq('.block-goods-list')->find('.goods-name a');
+
+                foreach ($links as $link) {
+                    $pqLink = pq($link);
+		            $urlGoods[] = "https://".$url_domain.$pqLink->attr('href');
                 }
-
-                // Use Multi Curl
-                foreach ($urls as $url) {
-                    $urlGoods[] = "https://".$url_domain.$url;
-                }
-
-                $ref = new cURmultiStable;
-                $htmlGoods = $ref->runmulticurl($urlGoods);
-
-                // Generate goods
-                global $arrGoods;
-                for ($i = 0; $i < count($htmlGoods); ++$i) {
-                    if(!empty($htmlGoods[$i])) {
-                        $contentGoods[$i] = $htmlGoods[$i];
-                        phpQuery::newDocument($contentGoods[$i]);
-
-                        // Section main parsing fields
-                        $arrGoods[$i]['name'] = trim(pq("._goods-title")->text());
-                        $arrGoods[$i]['code'] = pq("._goods-id")->text();
-                        $arrGoods[$i]['price'] = pq("span[itemprop='price']")->text();
-                        $arrGoods[$i]['description'] = trim(pq("._goods-description-text")->text());
-                        /* more params... */
-
-                        $arrGoods[$i]['photo'] = pq('#goods-top-photo')->attr('href');
-                        if ($arrGoods[$i]['photo'] == '#') {
-                            $arrGoods[$i]['photo'] = pq('#goods_photos a')->attr('href');
-                        }
-                    }                    
-                }
-                phpQuery::unloadDocuments();
             }
         }
+        phpQuery::unloadDocuments();
+
+        // Use Multi Curl
+        $ref = new cURmultiStable;
+        $htmlGoods = $ref->runmulticurl($urlGoods);
+
+        // Generate goods
+        global $arrGoods;
+        for ($i = 0; $i < count($htmlGoods); ++$i) {
+            if(!empty($htmlGoods[$i])) {
+                $contentGoods[$i] = $htmlGoods[$i];
+                phpQuery::newDocument($contentGoods[$i]);
+
+                // Section main parsing fields
+                $arrGoods[$i]['name'] = trim(pq("._goods-title")->text());
+                $arrGoods[$i]['code'] = pq("._goods-id")->text();
+                $arrGoods[$i]['price'] = pq("span[itemprop='price']")->text();
+                $arrGoods[$i]['description'] = trim(pq("._goods-description-text")->text());
+                /* more params... */
+
+                $arrGoods[$i]['photo'] = pq('#goods-top-photo')->attr('href');
+                if ($arrGoods[$i]['photo'] == '#') {
+                    $arrGoods[$i]['photo'] = pq('#goods_photos a')->attr('href');
+                }
+            }                    
+        }
+        phpQuery::unloadDocuments();
+        
 
         // Save in Excel
         $phpExcel = new Spreadsheet();
