@@ -3,8 +3,6 @@
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-ini_set('max_execution_time', '300');
-
 function run($start, $catUrl) {
     $urlArr = explode('/', $catUrl);
     $url_domain = $urlArr[2];
