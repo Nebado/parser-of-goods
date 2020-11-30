@@ -144,19 +144,20 @@ function run($start, $catUrl) {
         $objWriter->save($filename);
 
         // Download images
-        $catalog_out_path = "images";
-        if(!is_dir($catalog_out_path)) {
-            mkdir($catalog_out_path, 0777, true);
+        $catalogOutPath = "images";
+        if(!is_dir($catalogOutPath)) {
+            mkdir($catalogOutPath, 0777, true);
         }
 
         $k = 0;
         for($k = 0; $k < count($arrGoods); $k++) {
-            $foto_name = substr($arrGoods[$k]['photo'], (strrpos($arrGoods[$k]['photo'], "/") + 1));
+            $photoName = substr($arrGoods[$k]['photo'], (strrpos($arrGoods[$k]['photo'], "/") + 1));
             $photoUrl = 'https:'.$arrGoods[$k]['photo'];
 
-            unlink($catalog_out_path . '/'. $foto_name);
-            if (!file_exists($catalog_out_path . "/" . $foto_name)) {
-                file_put_contents($catalog_out_path . "/" . $foto_name, file_get_contents($photoUrl));
+            $fullPhotoPathName = $catalogOutPath . '/'. $photoName;
+
+            if (!file_exists($fullPhotoPathName)) {
+                file_put_contents($fullPhotoPathName, file_get_contents($photoUrl));
             }
         }
 
