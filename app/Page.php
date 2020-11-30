@@ -48,9 +48,9 @@ function run($start, $catUrl) {
                     $pqLink = pq($link);
 		            $urlGoods[] = "https://".$url_domain.$pqLink->attr('href');
                 }
+                phpQuery::unloadDocuments();
             }
         }
-        phpQuery::unloadDocuments();
 
         // Use Multi Curl
         $ref = new cURmultiStable;
@@ -74,10 +74,10 @@ function run($start, $catUrl) {
                 if ($arrGoods[$i]['photo'] == '#') {
                     $arrGoods[$i]['photo'] = pq('#goods_photos a')->attr('href');
                 }
+                
+                phpQuery::unloadDocuments();
             }                    
-        }
-        phpQuery::unloadDocuments();
-        
+        }        
 
         // Save in Excel
         $phpExcel = new Spreadsheet();
