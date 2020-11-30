@@ -123,10 +123,10 @@ class Parser
                     curl_setopt($rCh, CURLOPT_NOBODY, true);
                 }
 
-                /* if (strpos($sUrl, "https") !== false) {
-                 *     curl_setopt($rCh, CURLOPT_SSL_VERIFYHOST, true);
-                 *     curl_setopt($rCh, CURLOPT_SSL_VERIFYPEER, true);
-                 * } */
+                if (strpos($sUrl, "https") !== false) {
+                    curl_setopt($rCh, CURLOPT_SSL_VERIFYHOST, 0);
+                    curl_setopt($rCh, CURLOPT_SSL_VERIFYPEER, 0);
+                }
 
                 if ($sCookieFile) {
                     curl_setopt($rCh, CURLOPT_COOKIEJAR, __DIR__ . "/" . $sCookieFile);
