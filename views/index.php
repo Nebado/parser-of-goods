@@ -3,54 +3,15 @@
     <head>
         <title>Parser Of Goods</title>
         <meta charset="utf-8" />
-        <style>
-         html, body {
-             padding: 0;
-             margin: 0;
-         }
-         body {
-             color: #ffffff;
-             padding: 10px;
-             background-color: #181818;
-         }
-         table, tr, td, th {
-             width: auto;
-             background-color: #282828;
-             border: 1px solid #eeeeee;
-             margin: 10px 0px;
-         }
-         th {
-             background-color: #282744;
-         }
-         h1.title {
-             text-align: center;
-         }
-         .input-url {
-             width: 500px;
-             height: 30px;
-         }
-         .btn {
-             color: #ffffff;
-             border: none;
-             font-weight: bold;
-             height: 30px;
-             width: 70px;
-         }
-         .btn-start {
-             background-color: #22ec22;
-         }
-         .btn-stop {
-             background-color: #ff1e1e;
-         }
-         .total, .time {
-             color: #22ec22;
-         }
-        </style>
+        <link rel="stylesheet" href="../assets/styles/main.css">
+        <link rel="stylesheet" href="../assets/styles/normalize.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Serif+Pro:wght@300;600;700&display=swap" rel="stylesheet">
     </head>
     <body>
         <h1 class="title">Parser of Goods</h1>
         <form action="" method="post" class="simple-form">
-            <input class="input-url" type="text" name="url" placeholder="Input your url" style="width: 500px" /><br><br>
+            <input class="input-url" type="text" name="url" placeholder="Input your url" /><br><br>
             <button class="btn btn-start" type="submit" name="start" value="1">Start</button>
             <button class="btn btn-stop" type="button" onclick="window.stop()">Stop</button>
         </form>
@@ -77,5 +38,6 @@
         }
 
         ?>
+    
     </body>
 </html>

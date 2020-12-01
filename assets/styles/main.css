@@ -1,0 +1,81 @@
+* {
+  font-family: "Bebas Neue", cursive;
+}
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+body {
+  color: #ffffff;
+  padding: 10px;
+  background: #757f9a; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #d7dde8,
+    #757f9a
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #d7dde8,
+    #757f9a
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+table,
+tr,
+td,
+th {
+  width: auto;
+  background-color: #282828;
+  border: 1px solid #eeeeee;
+  margin: 10px 0px;
+}
+th {
+  background-color: #282744;
+}
+h1.title {
+  text-align: center;
+  font-size: 35px;
+  line-height: 0.3;
+  text-shadow: 4px 5px #38000f;
+  letter-spacing: 8px;
+  color: #8891a9;
+}
+.input-url {
+  width: 350px;
+  padding: 10px 0 10px 20px;
+  border-radius: 20px;
+  box-shadow: 6px 3px #7d87a0;
+  font-size: 16px;
+  -webkit-text-fill-color: #0e0505e0;
+  letter-spacing: 1.3px;
+  border: none;
+  background: #d3d9e5;
+}
+input:active,
+:hover,
+:focus {
+  outline: 0;
+  outline-offset: 0;
+}
+.btn {
+  color: #ffffff;
+  border: none;
+  letter-spacing: 4.6px;
+  width: 110px;
+  cursor: pointer;
+  line-height: 1.2;
+  margin-left: 50px;
+  border-radius: 23px;
+  padding: 8px;
+}
+.btn-start {
+  background-color: #9ba4b8;
+}
+.btn-stop {
+  background-color: #9ba4b8;
+}
+.total,
+.time {
+  color: #22ec22;
+}
