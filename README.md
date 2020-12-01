@@ -25,7 +25,7 @@ $ composer require electrolinux/phpquery
 Uncomment /* require_once("./libs/autoload.php"); */ in index.php
 and comment require_once("./vendor/autoload.php");
 
-![screenshot](./assets/wocomposer.png)
+![screenshot](./assets/images/git.png)
 
 ## Quick start
 
