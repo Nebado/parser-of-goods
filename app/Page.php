@@ -20,6 +20,10 @@ function run($start, $catUrl) {
             $paginationCount = str_replace('>', '', $pagCount);
             $countPages = substr(trim($paginationCount), -1);
 
+            if ($countPages == '') {
+                $categoryHref[] = $catUrl;
+            }
+
             for ($i = 1; $i <= $countPages; $i++) {
                 $pagHref = str_replace('./', '', pq('ul.pagination > li > a')->attr('href'));
                 $paginationHref = preg_replace("/page=(\d+)/", "page=$i", $pagHref);
