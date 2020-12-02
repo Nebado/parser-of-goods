@@ -9,26 +9,27 @@
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Serif+Pro:wght@300;600;700&display=swap" rel="stylesheet">
     </head>
     <body>
-        <header class="video-header">
-            <video src="https://css-tricks-post-videos.s3.us-east-1.amazonaws.com/Island%20-%204141.mp4" autoplay loop playsinline muted></video>
-        </header>
+        <video id="myVideo" src="https://css-tricks-post-videos.s3.us-east-1.amazonaws.com/Island%20-%204141.mp4" autoplay loop playsinline muted></video>
+        
         <main id="main" class="main--wrapper">
-            <div class="left_block_main">
-                <form action="" method="post" class="simple-form">
+            <div class="left_block_main simple-form">
+                <form action="" method="post">
                     <h1 class="title">Parser of Goods</h1>
                     <fieldset class="form-input">
                         <input class="input-url" type="text" name="url" placeholder="Input your url" /><br><br>
                         <button class="btn btn-start" type="submit" name="start" value="1">Start</button>
                         <button class="btn btn-stop" type="button" onclick="window.stop()">Stop</button>
+
                     </fieldset>
                 </form>
+                <button id="btn" class="btn btn-show">Show Table</button>
                 <br>
             </div>
-            <div class="output-table">
+            <div id="modalTable" class="modal-content output-table">
+                <span class="close">&times;</span>
                 <?php
-
                 if (isset($arrGoods) && !empty($arrGoods)) {
-                    echo '<table>';
+                    echo '<table id="table">';
                     echo '<tr><th>Name</th><th>Code</th><th>Price</th><th>Description</th><th>Photos</th></tr>';
                     for ($i = 0; $i < count($arrGoods); ++$i) {
                         echo '<tr>';
@@ -44,7 +45,6 @@
 
                     echo '<hr/><p class="total">Done. Total: ' . count($arrGoods) . ' products</p><p class="time">Time - '.$time.'</p><br/>';
                 }
-
                 ?>
             </div>
             <div class="right_block_main">
@@ -62,4 +62,5 @@
             </div>
         </footer>
     </body>
+    <script src="../assets/js/main.js"></script>
 </html>
