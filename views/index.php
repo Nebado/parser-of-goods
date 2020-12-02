@@ -9,8 +9,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Serif+Pro:wght@300;600;700&display=swap" rel="stylesheet">
     </head>
     <body>
-    <main id="main" class="main--wrapper">
-        <div class="left_block_main">
         <h1 class="title">Parser of Goods</h1>
         <form action="" method="post" class="simple-form">
             <input class="input-url" type="text" name="url" placeholder="Input your url" /><br><br>
@@ -40,18 +38,6 @@
         }
 
         ?>
-        </div>
-        <div class="right_block_main">
-        </div>
-    </main>
-    <footer id="footer" class="footer_wrapper">
-        <div class="main_footer_block">
-            <ul class="our_git">
-                <li><a href="https://github.com/Nebado">Ruslan</a></li>
-                <li><a href="">Sergei</a></li>
-                <li><a href="https://github.com/Calm13">Pavel</a></li>
-            </ul>
-        </div>
-    </footer>
+    
     </body>
 </html>
