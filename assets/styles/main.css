@@ -5,21 +5,24 @@ html,
 body {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 body {
-  color: #ffffff;
-  padding: 10px;
-  background: #757f9a; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #d7dde8,
-    #757f9a
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #d7dde8,
-    #757f9a
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: #ffffff;
+    background: #757f9a; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+        to right,
+        #757575,
+        #757f9a
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+        to right,
+        #757575,
+        #757f9a
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+main {
+    padding: 0 10px;
 }
 table,
 tr,
@@ -41,41 +44,186 @@ h1.title {
   letter-spacing: 8px;
   color: #8891a9;
 }
+.simple-form {
+    text-align: center;
+    width: 600px;
+    margin: 0 auto;
+    box-shadow: 4px 53px 56px black;
+    background: #8c95ad14;
+    border-radius: 80px;
+    box-sizing: border-box;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 29px;
+    height: 300px;
+    transform: scale(1);
+    animation: formMy 3s ease-in-out;
+}
+.form-input {
+    margin-top: 70px;
+    border: none;
+}
 .input-url {
-  width: 350px;
-  padding: 10px 0 10px 20px;
-  border-radius: 20px;
-  box-shadow: 6px 3px #7d87a0;
-  font-size: 16px;
-  -webkit-text-fill-color: #0e0505e0;
-  letter-spacing: 1.3px;
-  border: none;
-  background: #d3d9e5;
+    width: 350px;
+    padding: 10px 10px 10px 20px;
+    border-radius: 20px;
+    box-shadow: 6px 3px #7d87a0;
+    font-size: 16px;
+    -webkit-text-fill-color: #0e0505e0;
+    letter-spacing: 1.3px;
+    border: none;
+    background: #d3d9e5;
+}
+.input-url:hover {
+    animation: inputBu 3s ease-in-out;
 }
 input:active,
 :hover,
 :focus {
-  outline: 0;
-  outline-offset: 0;
+    outline: 0;
+    outline-offset: 0;
 }
 .btn {
-  color: #ffffff;
-  border: none;
-  letter-spacing: 4.6px;
-  width: 110px;
-  cursor: pointer;
-  line-height: 1.2;
-  margin-left: 50px;
-  border-radius: 23px;
-  padding: 8px;
+    color: #ffffff;
+    border: none;
+    letter-spacing: 4.6px;
+    width: 110px;
+    cursor: pointer;
+    line-height: 1.2;
+    margin-left: 8px;
+    border-radius: 23px;
+    padding: 8px;
 }
 .btn-start {
-  background-color: #9ba4b8;
+    background-color: #9ba4b8;
 }
 .btn-stop {
-  background-color: #9ba4b8;
+    background-color: #9ba4b8;
 }
 .total,
 .time {
-  color: #22ec22;
+    color: #aaec22;
+    font-size: 21px;
+    color: #fff;
+    text-align: center;
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
+}
+.footer_wrapper {
+    height: 80px;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 70px;
+    background: #ffffff40;
+    border-top: 1px solid #ffffffba;
+}
+.our_git {
+    margin: 10px 0 0;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 0;
+}
+.main_footer_block {
+    width: 500px;
+    margin: 0 auto;
+}
+.our_git li {
+    list-style: none;
+    font-size: 20px;
+    letter-spacing: 1.2px;
+    position: relative;
+}
+.our_git li::after {
+    content: "Contact Git";
+    position: absolute;
+    top: -5px;
+    left: -16px;
+    color: #dcb6b6;
+    text-align: center;
+    transition: 1.8s;
+    padding: 5px 5px 0;
+    opacity: 0;
+    font-size: 15px;
+    border-top: none;
+    width: 80px;
+    background: #fff;
+    height: 20px;
+    border-radius: 40px;
+    border-top: none;
+    border-top: none;
+    border-bottom: 5px solid #c7b3b3;
+}
+.our_git li:hover:after {
+    top: -51px;
+    opacity: 1;
+}
+.our_git li a {
+    color: #fff;
+    text-decoration: none;
+}
+.output-table {
+    display: none;
+}
+@keyframes inputBu {
+    40% {
+        transform: rotate3d(40, 23, 21, -5deg);
+    }
+    80% {
+        transform: rotate3d(40, 23, 21, 5deg);
+    }
+    100% {
+        transform: rotate3d(40, 23, 21, 0deg);
+    }
+}
+@keyframes formMy {
+    40% {
+        transform: scale(0.4);
+    }
+    75% {
+        transform: scale(0.7);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+@-webkit-keyframes glow {
+    from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #aaec22, 0 0 40px #aaec22, 0 0 50px #aaec22, 0 0 60px #aaec22, 0 0 70px #aaec22;
+    }
+    to {
+        text-shadow: 0 0 20px #fff, 0 0 30px #ffec22, 0 0 40px #ffec22, 0 0 50px #ffec22, 0 0 60px #ffec22, 0 0 70px #ffec22, 0 0 80px #ffec22;
+    }
+}
+
+// Video background
+:root {
+    --headerOpacity: 1;
+    --headerScale: 1;
+}
+
+.video-header {
+    position: absolute;
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+}
+.video-header, .video-header video, .video-header .viewport-header {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.video-header video {
+    background: brown;
+    object-fit: cover;
+}
+.video-header .viewport-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    opacity: var(--headerOpacity);
+    transform: scale(var(--headerScale));
 }
