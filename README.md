@@ -19,11 +19,11 @@ Parser of goods on php with generate Excel file, also downloading images.
 ```
 $ composer require electrolinux/phpquery
 
+Uncomment /* require_once("./vendor/autoload.php"); */ in index.php
+and comment require_once("./libs/autoload.php");
+
 ```
 * Without composer
-
-Uncomment /* require_once("./libs/autoload.php"); */ in index.php
-and comment require_once("./vendor/autoload.php");
 
 ![screenshot](./assets/images/git.png)
 
