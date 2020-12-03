@@ -13,17 +13,31 @@
         
         <main id="main" class="main--wrapper">
             <div class="left_block_main simple-form">
-                <form action="" method="post">
-                    <h1 class="title">Parser of Goods</h1>
-                    <fieldset class="form-input">
-                        <input class="input-url" type="text" name="url" placeholder="Input your url" /><br><br>
-                        <button class="btn btn-start" type="submit" name="start" value="1">Start</button>
-                        <button class="btn btn-stop" type="button" onclick="window.stop()">Stop</button>
-
-                    </fieldset>
-                </form>
-                <button id="btn" class="btn btn-show">Show Table</button>
-                <br>
+                <div class="slider">
+                    <div class="item">
+                        <button id="btn" class="btn btn-show">Show Table</button>
+                        <form action="" method="post">
+                            <h1 class="title">Parser of Goods</h1>
+                            <fieldset class="form-input">
+                                <input class="input-url" type="text" name="url" placeholder="Input your url category" /><br><br>
+                                <input class="input-checkbox" type="checkbox" name="image" /> Download images<br><br>
+                                <input class="input-checkbox" type="checkbox" name="excel" /> Excel <br><br>
+                                <a class="next btn" onclick="nextSlide()">Next</a>
+                            </fieldset>
+                            <br>
+                    </div>
+                    <div class="item">
+                        <h1 class="title">Choose Fields</h1>
+                        <fieldset class="form-input">
+                            <input class="input-url" type="text" name="field1" placeholder="Input field" /><br><br>
+                            <button class="btn btn-start" type="submit" name="start" value="1">Start</button>
+                            <button class="btn btn-stop" type="button" onclick="window.stop()">Stop</button>
+                            <a class="previous btn" onclick="previousSlide()">Previous</a>
+                        </form>
+                        <br>
+                    </div>
+                    
+                </div>
             </div>
             <div id="modalTable" class="modal-content output-table">
                 <span class="close">&times;</span>
