@@ -203,7 +203,6 @@ input:active,
   /* Make video to at least 100% wide and tall */
   min-width: 100%;
   min-height: 100%;
-
   /* Setting width & height to auto prevents the browser from stretching or squishing the video */
   width: auto;
   height: auto;
@@ -234,7 +233,6 @@ input:active,
   opacity: 0.9;
   position: absolute;
   top: 100%;
-  left: 50px;
   padding: 20px;
   width: 94%;
   z-index: 1000;
@@ -242,18 +240,15 @@ input:active,
 }
 .close {
   color: #aaa;
-
   font-size: 60px;
-
   font-weight: bold;
-
   position: absolute;
   right: -10px;
   top: 10px;
 }
 .close:hover,
 .close:focus {
-  color: black;
+  color: #eee;
   text-decoration: none;
   cursor: pointer;
 }
@@ -288,7 +283,7 @@ input:active,
 }
 .slider .previous:hover,
 .slider .next:hover {
-  background-color: rgba(0, 0, 0, 0.2);
+  color: #ece;
 }
 .slider .item {
   animation-name: fade;
