@@ -16,4 +16,4 @@ global $time;
 
 $time = microtime(true) - $startTime;
 
-include_once('views/index.php');
+include_once('views/view.php');

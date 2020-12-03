@@ -3,8 +3,8 @@
     <head>
         <title>Parser Of Goods</title>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="../assets/styles/main.css">
-        <link rel="stylesheet" href="../assets/styles/normalize.css">
+        <link rel="stylesheet" href="assets/styles/main.css">
+        <link rel="stylesheet" href="assets/styles/normalize.css">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Serif+Pro:wght@300;600;700&display=swap" rel="stylesheet">
     </head>
@@ -72,5 +72,5 @@
             </div>
         </footer>
     </body>
-    <script src="../assets/js/main.js"></script>
+    <script src="assets/js/main.js"></script>
 </html>
