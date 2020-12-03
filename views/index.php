@@ -61,10 +61,6 @@
                 }
                 ?>
             </div>
-            <div class="right_block_main">
-                <div class="item"><a href="">About</a></div>
-                <div class="item"><a href="">Contact</a></div>
-            </div>
         </main>
         <footer id="footer" class="footer_wrapper">
             <div class="main_footer_block">
