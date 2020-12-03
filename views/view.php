@@ -66,7 +66,7 @@
             <div class="main_footer_block">
                 <ul class="our_git">
                     <li><a href="https://github.com/Nebado">Ruslan</a></li>
-                    <li><a href="">Sergei</a></li>
+                    <li><a href="https://github.com/seriyyah">Sergei</a></li>
                     <li><a href="https://github.com/Calm13">Pavel</a></li>
                 </ul>
             </div>
