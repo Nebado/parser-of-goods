@@ -15,7 +15,7 @@
             <div class="left_block_main simple-form">
                 <div class="slider">
                     <div class="item">
-                        <button id="btn" class="btn btn-show">Show Table</button>
+                        <a id="btn" href="#modalTable" class="btn btn-show">Show Table</a>
                         <form action="" method="post">
                             <h1 class="title">Parser of Goods</h1>
                             <fieldset class="form-input">

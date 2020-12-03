@@ -120,9 +120,11 @@ input:active,
   background-color: #9ba4b8;
 }
 .btn-show {
-  position: absolute;
-  bottom: 20px;
-  left: 38%;
+    position: absolute;
+    bottom: 20px;
+    left: 36%;
+    text-decoration: none;
+    text-align: center;
 }
 .total,
 .time {

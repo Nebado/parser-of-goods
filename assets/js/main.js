@@ -44,10 +44,10 @@ function showSlides(n) {
     let slides = document.getElementsByClassName("item");
 
     if (n > slides.length) {
-        slideIndex = 1
+        slideIndex = 1;
     }
     if (n < 1) {
-        slideIndex = slides.length
+        slideIndex = slides.length;
     }
 
     for (let slide of slides) {
