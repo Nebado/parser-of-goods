@@ -75,7 +75,7 @@ h1.title {
     margin-top: 50px;
     margin-bottom: 50px;
     padding: 29px;
-    min-height: 300px;
+    min-height: 370px;
     transform: scale(1) translateX(-50%);
     animation: formMy 3s ease-in-out;
 }
@@ -97,8 +97,12 @@ h1.title {
     border: none;
     background: #2C2F31;
 }
-.input-url {
+.input-card {
     margin-bottom: 30px;
+}
+.required {
+    margin-left: 10px;
+    color: #ff9300;
 }
 .input:hover {
     animation: inputBu 3s ease-in-out;
@@ -123,8 +127,12 @@ input:active,
     border-radius: 23px;
     padding: 8px;
 }
-.btn-start,
-.btn-stop,
+.btn-start {
+    background-color: #007708;
+}
+.btn-stop {
+    background-color: #770008;
+}
 .btn-show,
 .btn-add {
     background-color: #9ba4b8;
@@ -144,7 +152,7 @@ input:active,
     width: 70px;
 }
 .btn-remove {
-    background-color: #ff0e02;
+    background-color: #770008;
     width: 80px;
 }
 .total,

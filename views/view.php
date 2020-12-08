@@ -19,11 +19,12 @@
                         <form action="" method="post">
                             <h1 class="title">Parser of Goods</h1>
                             <fieldset class="form-input">
-                                <input class="input input-url" type="text" name="url" placeholder="Input your url category" /><br>
+                                <input class="input input-url" type="text" name="url" value="<?= $_SESSION["url"]?>" placeholder="Input your url category" /><span class="required">*</span>
+                                <input class="input input-card" type="text" name="card_good" value="<?= $_SESSION["card_good"]?>" placeholder="Input your class card of good" /><span class="required">*</span><br>
                                 <label for="image">Download images</label>
-                                <input id="image" class="input-checkbox" type="checkbox" name="image" /><br>
-                                <label for="excel">Excel</label>
-                                <input id="excel" class="input-checkbox" type="checkbox" name="excel" /> 
+                                <input id="image" class="input-checkbox" type="checkbox" checked="checked" name="image" value="1" /><br>
+                                <label for="excel">Excel/CSV</label>
+                                <input id="excel" class="input-checkbox" type="checkbox" checked="checked" name="excel" value="1" /> 
                                 <a class="next btn" onclick="nextSlide()">Next</a>
                             </fieldset>
                     </div>
@@ -31,11 +32,11 @@
                         <h1 class="title">Choose Fields</h1>
                         <fieldset class="form-input">
                             <div id="form-fields">
-                                <input class="input input-name" type="text" name="name" placeholder="Input class name" />
-                                <input class="input input-code" type="text" name="code" placeholder="Input class code" />
-                                <input class="input input-price" type="text" name="price" placeholder="Input class price" />
-                                <input class="input input-photo" type="text" name="photo" placeholder="Input class photo" />
-                                <input class="input input-description" type="text" name="description" placeholder="Input class description" />
+                                <input class="input input-name" type="text" name="name" value="<?= $_SESSION["name"]?>" placeholder="Input class name" /><span class="required">*</span>
+                                <input class="input input-code" type="text" name="code" value="<?= $_SESSION["code"]?>" placeholder="Input class code" /><span class="required">*</span>
+                                <input class="input input-price" type="text" name="price" value="<?= $_SESSION["price"]?>" placeholder="Input class price" /><span class="required">*</span>
+                                <input class="input input-photo" type="text" name="photo" value="<?= $_SESSION["photo"]?>" placeholder="Input class photo" /><span class="required">*</span>
+                                <input class="input input-description" type="text" value="<?= $_SESSION["description"]?>" name="description" placeholder="Input class description" />
                             </div>
                             <div class="btn-group">
                                 <button class="btn btn-start" type="submit" name="start" value="1">Start</button>
