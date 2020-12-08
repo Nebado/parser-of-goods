@@ -19,24 +19,33 @@
                         <form action="" method="post">
                             <h1 class="title">Parser of Goods</h1>
                             <fieldset class="form-input">
-                                <input class="input-url" type="text" name="url" placeholder="Input your url category" /><br><br>
-                                <input class="input-checkbox" type="checkbox" name="image" /> Download images<br><br>
-                                <input class="input-checkbox" type="checkbox" name="excel" /> Excel <br><br>
+                                <input class="input input-url" type="text" name="url" placeholder="Input your url category" /><br>
+                                <label for="image">Download images</label>
+                                <input id="image" class="input-checkbox" type="checkbox" name="image" /><br>
+                                <label for="excel">Excel</label>
+                                <input id="excel" class="input-checkbox" type="checkbox" name="excel" /> 
                                 <a class="next btn" onclick="nextSlide()">Next</a>
                             </fieldset>
-                            <br>
                     </div>
                     <div class="item">
                         <h1 class="title">Choose Fields</h1>
                         <fieldset class="form-input">
-                            <input class="input-url" type="text" name="field1" placeholder="Input field" /><br><br>
-                            <button class="btn btn-start" type="submit" name="start" value="1">Start</button>
-                            <button class="btn btn-stop" type="button" onclick="window.stop()">Stop</button>
-                            <a class="previous btn" onclick="previousSlide()">Previous</a>
+                            <div id="form-fields">
+                                <input class="input input-name" type="text" name="name" placeholder="Input class name" />
+                                <input class="input input-code" type="text" name="code" placeholder="Input class code" />
+                                <input class="input input-price" type="text" name="price" placeholder="Input class price" />
+                                <input class="input input-photo" type="text" name="photo" placeholder="Input class photo" />
+                                <input class="input input-description" type="text" name="description" placeholder="Input class description" />
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-start" type="submit" name="start" value="1">Start</button>
+                                <button class="btn btn-stop" type="button" onclick="window.stop()">Stop</button>
+                                <a class="previous btn" onclick="previousSlide()">Previous</a>
+                            </div>
+                        </fieldset>
                         </form>
-                        <br>
+                        <button class="btn btn-add" onclick="addField()">Add</button>
                     </div>
-                    
                 </div>
             </div>
             <div id="modalTable" class="modal-content output-table">

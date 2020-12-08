@@ -1,8 +1,8 @@
 // Modal Window
-var modal = document.getElementById("modalTable");
-var btn = document.getElementById("btn");
-var table = document.getElementById("table");
-var span = document.getElementsByClassName("close")[0];
+let modal = document.getElementById("modalTable");
+let btn = document.getElementById("btn");
+let table = document.getElementById("table");
+let span = document.getElementsByClassName("close")[0];
 
 btn.addEventListener("click", showFunc);
 span.addEventListener("click", hideFunc);
@@ -54,4 +54,35 @@ function showSlides(n) {
         slide.style.display = "none";
     }
     slides[slideIndex - 1].style.display = "block";
+}
+
+// Add more fields
+let i = 0;
+function addField() {
+    i++;
+    let containerId = document.getElementById('form-fields'),
+        inputField  = document.createElement('input'),
+        removeBtn   = document.createElement('input');
+
+    inputField.setAttribute('type', 'text');
+    inputField.setAttribute('name', 'field[]');
+    inputField.setAttribute('id', 'field'+i);
+    inputField.setAttribute('class', 'input');
+    inputField.setAttribute('placeholder', 'Input custom field');
+
+    removeBtn.setAttribute('type', 'submit');
+    removeBtn.setAttribute('id', 'btnRem'+i);
+    removeBtn.setAttribute('value', 'Remove');
+    removeBtn.setAttribute("onclick", "removeField('field"+i+"', 'btnRem"+i+"')");
+    removeBtn.setAttribute('class', 'btn btn-remove');
+
+    containerId.appendChild(inputField);
+    containerId.appendChild(removeBtn);
+}
+
+function removeField(fieldId, btnId) {
+    let field = document.getElementById(fieldId),
+        btn = document.getElementById(btnId);
+    field.parentNode.removeChild(field);
+    btn.parentNode.removeChild(btn);
 }
