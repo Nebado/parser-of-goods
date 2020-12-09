@@ -2,6 +2,12 @@
 
 Parser of goods on php with generate Excel file, also downloading images.
 
+
+* Version 0.1
+
+![screenshot](./assets/images/parser_v0.1.png)
+![screenshot](./assets/images/parser_v0.1-2.png)
+
 ## Dependencies
 
 - php ^5.2
@@ -25,7 +31,8 @@ and comment require_once("./libs/autoload.php");
 ```
 * Without composer
 
-![screenshot](./assets/images/git.png)
+Uncomment /* require_once("./libs/autoload.php"); */ in index.php
+and comment require_once("./vendor/autoload.php");
 
 ## Quick start
 
