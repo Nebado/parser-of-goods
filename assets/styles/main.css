@@ -1,81 +1,362 @@
 * {
-  font-family: "Bebas Neue", cursive;
+    font-family: "Bebas Neue", cursive;
 }
 html,
 body {
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 body {
-  color: #ffffff;
-  padding: 10px;
-  background: #757f9a; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #d7dde8,
-    #757f9a
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #d7dde8,
-    #757f9a
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: #ffffff;
+    overflow-x: hidden;
+}
+#myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+}
+main {
+    bottom: 0;
+    color: #f1f1f1;
+    width: 100%;
+    padding: 20px;
+    padding: 0 10px;
 }
 table,
 tr,
 td,
 th {
-  width: auto;
-  background-color: #282828;
-  border: 1px solid #eeeeee;
-  margin: 10px 0px;
+    width: auto;
+    background-color: #282828;
+    border-right: 1px solid;
+    border-left: 1px solid;
+    margin: 10px 0px;
+    text-align: center;
+    font-size: 19px;
+    line-height: 1.6;
+    padding: 15px 20px;
+    border-collapse: collapse;
+    border-bottom: 1px solid;
+}
+#table > tbody > tr:nth-child(2) > td:nth-child(3) {
+    width: 80px;
+}
+#table tr:hover td {
+    background: #000;
+    transition: 0.6s;
 }
 th {
-  background-color: #282744;
+    background-color: #727272;
+    padding: 10px 0;
+    font-size: 23px;
+    line-height: 1.7;
 }
 h1.title {
-  text-align: center;
-  font-size: 35px;
-  line-height: 0.3;
-  text-shadow: 4px 5px #38000f;
-  letter-spacing: 8px;
-  color: #8891a9;
+    text-align: center;
+    font-size: 35px;
+    line-height: 0.3;
+    text-shadow: 4px 5px #38000f;
+    letter-spacing: 8px;
+    color: #8891a9;
 }
-.input-url {
-  width: 350px;
-  padding: 10px 0 10px 20px;
-  border-radius: 20px;
-  box-shadow: 6px 3px #7d87a0;
-  font-size: 16px;
-  -webkit-text-fill-color: #0e0505e0;
-  letter-spacing: 1.3px;
-  border: none;
-  background: #d3d9e5;
+.simple-form {
+    width: 600px;
+    margin: 0 auto;
+    box-shadow: 4px 53px 56px black;
+    background: #8c95ad14;
+    border-radius: 80px;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    box-sizing: border-box;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 29px;
+    min-height: 370px;
+    transform: scale(1) translateX(-50%);
+    animation: formMy 3s ease-in-out;
+}
+.form-input {
+    margin-top: 50px;
+    border: none;
+}
+.input {
+    display: inline-block;
+    width: 350px;
+    padding: 10px 10px 10px 20px;
+    margin: 5px 0px;
+    border-radius: 20px;
+    box-shadow: 6px 3px #7d87a0;
+    font-size: 16px;
+    /* -webkit-text-fill-color: #0e0505e0; */
+    color: #ffffff;
+    letter-spacing: 1.3px;
+    border: none;
+    background: #2C2F31;
+}
+.input-card {
+    margin-bottom: 30px;
+}
+.required {
+    margin-left: 10px;
+    color: #ff9300;
+}
+.input:hover {
+    animation: inputBu 3s ease-in-out;
 }
 input:active,
 :hover,
 :focus {
-  outline: 0;
-  outline-offset: 0;
+    outline: 0;
+    outline-offset: 0;
+}
+.btn-group {
+    margin-top: 20px;
 }
 .btn {
-  color: #ffffff;
-  border: none;
-  letter-spacing: 4.6px;
-  width: 110px;
-  cursor: pointer;
-  line-height: 1.2;
-  margin-left: 50px;
-  border-radius: 23px;
-  padding: 8px;
+    color: #ffffff;
+    border: none;
+    letter-spacing: 4.6px;
+    width: 140px;
+    cursor: pointer;
+    line-height: 1.2;
+    margin-left: 8px;
+    border-radius: 23px;
+    padding: 8px;
 }
 .btn-start {
-  background-color: #9ba4b8;
+    background-color: #007708;
 }
 .btn-stop {
-  background-color: #9ba4b8;
+    background-color: #770008;
+}
+.btn-show,
+.btn-add {
+    background-color: #9ba4b8;
+}
+.btn-show {
+    position: absolute;
+    bottom: 20px;
+    left: 36%;
+    text-decoration: none;
+    text-align: center;
+}
+.btn-add {
+    background-color: #fa8e22;
+    position: fixed;
+    right: 20px;
+    top: 318px;
+    width: 70px;
+}
+.btn-remove {
+    background-color: #770008;
+    width: 80px;
 }
 .total,
 .time {
-  color: #22ec22;
+    color: #aaec22;
+    font-size: 21px;
+    color: #fff;
+    text-align: center;
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
+}
+.footer_wrapper {
+    height: 80px;
+    width: 100%;
+    margin: 0 auto;
+    transform: translateY(-80px);
+    top: 100%;
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 99999;
+    background: #ffffff40;
+}
+.our_git {
+    margin: 10px 0 0;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 0;
+}
+.main_footer_block {
+    width: 500px;
+    margin: 0 auto;
+}
+.our_git li {
+    list-style: none;
+    font-size: 20px;
+    letter-spacing: 1.2px;
+    position: relative;
+}
+.our_git li::after {
+    content: "Contact Git";
+    position: absolute;
+    top: -5px;
+    left: -28px;
+    color: #000000;
+    text-align: center;
+    transition: 1.8s;
+    padding: 10px 15px 0;
+    opacity: 0;
+    font-size: 17px;
+    border-top: none;
+    width: 80px;
+    background: #fff;
+    height: 20px;
+    border-radius: 40px;
+}
+.our_git li:hover:after {
+    top: -51px;
+    opacity: 1;
+}
+.our_git li a {
+    color: #fff;
+    text-decoration: none;
+}
+// Video background
+:root {
+    --headerOpacity: 1;
+    --headerScale: 1;
+}
+.video-header {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.video-header video {
+    /* Make video to at least 100% wide and tall */
+    min-width: 100%;
+    min-height: 100%;
+    /* Setting width & height to auto prevents the browser from stretching or squishing the video */
+    width: auto;
+    height: auto;
+
+    /* Center the video */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+// Modal Window
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    transform: scale(1);
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-content {
+    display: none;
+    /* background-color: #fefefe; */
+    opacity: 0.9;
+    position: absolute;
+    top: 100%;
+    padding: 20px;
+    width: 94%;
+    z-index: 1000;
+    transform: scale(1);
+}
+.close {
+    color: #aaa;
+    font-size: 60px;
+    font-weight: bold;
+    position: absolute;
+    right: -10px;
+    top: 10px;
+}
+.close:hover,
+.close:focus {
+    color: #eee;
+    text-decoration: none;
+    cursor: pointer;
+}
+// Slider
+.slider {
+    max-width: 90%;
+    position: relative;
+    margin: auto;
+    height: 300px;
+}
+.slider .previous,
+.slider .next {
+    cursor: pointer;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    margin: 20px 20px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+}
+.slider .next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+.slider .previous {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+.slider .previous:hover,
+.slider .next:hover {
+    color: #ece;
+}
+.slider .item {
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+@keyframes fade {
+    from {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes inputBu {
+    40% {
+        transform: rotate3d(40, 23, 21, -5deg);
+    }
+    80% {
+        transform: rotate3d(40, 23, 21, 5deg);
+    }
+    100% {
+        transform: rotate3d(40, 23, 21, 0deg);
+    }
+}
+@keyframes formMy {
+    40% {
+        transform: scale(0.4);
+    }
+    75% {
+        transform: scale(0.7);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+@-webkit-keyframes glow {
+    from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #aaec22,
+        0 0 40px #aaec22, 0 0 50px #aaec22, 0 0 60px #aaec22, 0 0 70px #aaec22;
+    }
+    to {
+        text-shadow: 0 0 20px #fff, 0 0 30px #ffec22, 0 0 40px #ffec22,
+        0 0 50px #ffec22, 0 0 60px #ffec22, 0 0 70px #ffec22, 0 0 80px #ffec22;
+    }
 }

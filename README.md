@@ -2,6 +2,12 @@
 
 Parser of goods on php with generate Excel file, also downloading images.
 
+
+* Version 0.1
+
+![screenshot](./assets/images/parser_v0.1.png)
+![screenshot](./assets/images/parser_v0.1-2.png)
+
 ## Dependencies
 
 - php ^5.2
@@ -19,13 +25,14 @@ Parser of goods on php with generate Excel file, also downloading images.
 ```
 $ composer require electrolinux/phpquery
 
+Uncomment /* require_once("./vendor/autoload.php"); */ in index.php
+and comment require_once("./libs/autoload.php");
+
 ```
 * Without composer
 
 Uncomment /* require_once("./libs/autoload.php"); */ in index.php
 and comment require_once("./vendor/autoload.php");
-
-![screenshot](./assets/images/git.png)
 
 ## Quick start
 
