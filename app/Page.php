@@ -172,20 +172,38 @@ function run($start, $catUrl) {
             $catalogOutPath = "images";
             if(!is_dir($catalogOutPath)) {
                 mkdir($catalogOutPath, 0777, true);
-            }
-
+            }            
+            
             $k = 0;
             for($k = 0; $k < count($arrGoods); $k++) {
                 $photoName = substr($arrGoods[$k]['photo'], (strrpos($arrGoods[$k]['photo'], "/") + 1));
                 $photoUrl = $arrGoods[$k]['photo'];
 
                 $fullPhotoPathName = $catalogOutPath . '/'. $photoName;
+                $arrFullPhotos[] = $fullPhotoPathName;
 
-                if (!file_exists($fullPhotoPathName)) {
+                if (!file_exists($fullPhotoPathName)) {                    
                     file_put_contents($fullPhotoPathName, file_get_contents($photoUrl));
                 }
             }
 
+            // Zip archive images
+
+            $zipPath = "zip";
+            if(!is_dir($zipPath)) {
+                mkdir($zipPath, 0777, true);
+            }
+            
+            $zip = new ZipArchive();
+            $filenameZip = $zipPath . DIRECTORY_SEPARATOR ."images" . ".zip";
+            $zip->open($filenameZip, ZIPARCHIVE::CREATE);
+            $files = scandir('images');
+            foreach ($files as $file) {
+                if ($file == '.' || $file == '..') {continue;}
+                $f = 'images'.DIRECTORY_SEPARATOR.$file;
+                $zip->addFile($f);
+            }
+            $zip->close();
         }
 
         unset($_POST['start']);

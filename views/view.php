@@ -21,10 +21,17 @@
                             <fieldset class="form-input">
                                 <input class="input input-url" type="text" name="url" value="<?= $_SESSION["url"]?>" placeholder="Input your url category" /><span class="required">*</span>
                                 <input class="input input-card" type="text" name="card_good" value="<?= $_SESSION["card_good"]?>" placeholder="Input your class card of good" /><span class="required">*</span><br>
+                                <input id="image" class="input-checkbox" type="checkbox" checked="checked" name="image" value="1" />
                                 <label for="image">Download images</label>
-                                <input id="image" class="input-checkbox" type="checkbox" checked="checked" name="image" value="1" /><br>
+                                <?php if (file_exists($_SERVER['DOCUMENT_ROOT'].'/zip/images.zip')): ?>
+                                    <a href="zip/images.zip" class="download">Download</a>
+                                <?php endif; ?>
+                                <br><br>
+                                <input id="excel" class="input-checkbox" type="checkbox" checked="checked" name="excel" value="1" />
                                 <label for="excel">Excel/CSV</label>
-                                <input id="excel" class="input-checkbox" type="checkbox" checked="checked" name="excel" value="1" /> 
+                                <?php if (file_exists($_SERVER['DOCUMENT_ROOT'].'/goods.xlsx')): ?>
+                                    <a href="./goods.xlsx" class="download">Download</a>
+                                <?php endif; ?>
                                 <a class="next btn" onclick="nextSlide()">Next</a>
                             </fieldset>
                     </div>
