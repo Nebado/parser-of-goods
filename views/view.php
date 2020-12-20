@@ -9,7 +9,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Serif+Pro:wght@300;600;700&display=swap" rel="stylesheet">
     </head>
     <body>
-        <video id="myVideo" src="https://css-tricks-post-videos.s3.us-east-1.amazonaws.com/Island%20-%204141.mp4" autoplay loop playsinline muted></video>
+        <!-- <video id="myVideo" src="https://css-tricks-post-videos.s3.us-east-1.amazonaws.com/Island%20-%204141.mp4" autoplay loop playsinline muted></video> -->
         
         <main id="main" class="main--wrapper">
             <div class="left_block_main simple-form">

@@ -5,8 +5,7 @@ Parser of goods on php with generate Excel file, also downloading images.
 
 * Version 0.1
 
-![screenshot](./assets/images/parser_v0.1.png)
-![screenshot](./assets/images/parser_v0.1-2.png)
+![screenshot](./assets/images/parser_v0.1_3.png)
 
 ## Dependencies
 
