@@ -22,6 +22,7 @@ Parser of goods on php with generate Excel file, also downloading images.
 * Composer
 
 ```
+$ composer init
 $ composer require electrolinux/phpquery
 
 Uncomment /* require_once("./vendor/autoload.php"); */ in index.php
@@ -48,8 +49,7 @@ Use WAMP, XAMP, MAMP or OpenServer
 
 ## Usage
 
-In order to start parsing, you need to maintain fields, and for this you need to know the classes or id of the elements (name, price, etc).
-
+In order to start parsing, you need to get fields, and for this you need to know tags, classes or id of the elements (name, price, etc).
 ## References
 
 [PhpSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet)
