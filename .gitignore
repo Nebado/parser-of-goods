@@ -4,3 +4,5 @@ vendor/
 goods.xlsx
 .zip
 zip/
+composer.lock
+composer.json
