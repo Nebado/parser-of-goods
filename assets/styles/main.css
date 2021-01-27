@@ -118,6 +118,7 @@ input:active,
     margin-top: 20px;
 }
 .btn {
+    opacity: 0.7;
     color: #ffffff;
     border: none;
     letter-spacing: 4.6px;
@@ -155,6 +156,9 @@ input:active,
 .btn-remove {
     background-color: #770008;
     width: 80px;
+}
+.btn:hover {
+    opacity: 1;
 }
 .total,
 .time {
