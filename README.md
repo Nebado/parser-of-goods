@@ -25,6 +25,8 @@ WARNING! The parser is in an active development state. If you want to use parser
 ```
 $ composer init
 $ composer require electrolinux/phpquery
+$ composer require phpzip/phpzip
+$ composer require phpoffice/phpspreadsheet
 
 Uncomment /* require_once("./vendor/autoload.php"); */ in index.php
 and comment require_once("./libs/autoload.php");

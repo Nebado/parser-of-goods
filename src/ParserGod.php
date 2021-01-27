@@ -2,8 +2,9 @@
 
 namespace ParserGod;
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet as Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx as Xlsx;
+use PHPZip\Zip\File\Zip as Zip;
 
 class ParserGod implements ParserGodInterface
 {
@@ -115,7 +116,7 @@ class ParserGod implements ParserGodInterface
             // Save in Excel
 
             if (isset($_POST["excel"]) && $_POST["excel"] == "1") {
-                $phpExcel = new \Spreadsheet();
+                $phpExcel = new Spreadsheet();
 
                 $titles = array(
                     array(
@@ -207,9 +208,11 @@ class ParserGod implements ParserGodInterface
                     mkdir($zipPath, 0777, true);
                 }
                 
-                $zip = new ZipArchive();
+                $zip = new \ZipArchive();
+                /* $zip = new Zip(); */
                 $filenameZip = $zipPath . DIRECTORY_SEPARATOR ."images" . ".zip";
-                $zip->open($filenameZip, ZIPARCHIVE::CREATE);
+                /* $zip->saveZipFile($filenameZip); */
+                $zip->open($filenameZip);
                 $files = scandir('images');
                 foreach ($files as $file) {
                     if ($file == '.' || $file == '..') {continue;}
