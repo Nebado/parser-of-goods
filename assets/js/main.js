@@ -72,7 +72,7 @@ function addField() {
 
     removeBtn.setAttribute('type', 'submit');
     removeBtn.setAttribute('id', 'btnRem'+i);
-    removeBtn.setAttribute('value', 'Remove');
+    removeBtn.setAttribute('value', '-');
     removeBtn.setAttribute("onclick", "removeField('field"+i+"', 'btnRem"+i+"')");
     removeBtn.setAttribute('class', 'btn btn-remove');
 
