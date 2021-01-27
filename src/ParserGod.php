@@ -1,12 +1,11 @@
 <?php
 
+namespace ParserGod;
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use App\ParserInterface;
 
-namespace App;
-
-class ParserGod implements \ParserInterface
+class ParserGod implements ParserGodInterface
 {
     public $start;
     public $stop;

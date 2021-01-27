@@ -5,13 +5,12 @@ require_once("./vendor/autoload.php");
 require_once("./libs/CurlMulti.php");
 require_once("./libs/Curl.php");
 require_once("./libs/PhpQuery.php");
-require_once('./App/ParserGod.php');
 
 session_start();
 
 $startTime = microtime(true);
 
-$parser = new App\ParserGod();
+$parser = new ParserGod\ParserGod();
 $parser->process($_POST['start'], $_POST['url']);
 
 global $time;
