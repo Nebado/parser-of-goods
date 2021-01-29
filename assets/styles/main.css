@@ -89,6 +89,7 @@ h1.title {
     border: none;
 }
 .input {
+    font-family: 'Arial', sans-serif;
     display: inline-block;
     width: 350px;
     padding: 10px 10px 10px 20px;
