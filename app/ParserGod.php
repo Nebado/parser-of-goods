@@ -1,6 +1,6 @@
 <?php
 
-namespace ParserGod;
+namespace App;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet as Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as Xlsx;

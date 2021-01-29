@@ -1,6 +1,6 @@
 <?php
 
-namespace ParserGod;
+namespace App;
 
 interface ParserGodInterface
 {

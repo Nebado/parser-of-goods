@@ -13,7 +13,7 @@ session_start();
 
 $startTime = microtime(true);
 
-$parser = new ParserGod\ParserGod();
+$parser = new App\ParserGod();
 $parser->process($_POST['start'], $_POST['url']);
 
 global $time;
