@@ -98,33 +98,27 @@ class ParserGod implements ParserGodInterface
                     \phpQuery::newDocument($contentGoods[$i]);
 
                     // Section main parsing fields
-
-                    if (!empty($name))
-                        $arrGoods[$i]['name'] = trim(pq($name)->text());
-
-                    if (!empty($code)) {
-                        $arrGoods[$i]['code'] = pq($code)->text();
-                    }
                     
-                    if (!empty($price))
-                        $arrGoods[$i]['price'] = pq($price)->text();
+                    $arrGoods[$i]['name'] = (!empty($name)) ? ($arrGoods[$i]['name'] = trim(pq($name)->text())) : '';
+
+                    $arrGoods[$i]['code'] = (!empty($code)) ? ($arrGoods[$i]['code'] = pq($code)->text()) : '';
                     
-                    if (!empty($desc))
-                        $arrGoods[$i]['description'] = trim(pq($desc)->text());
+                    $arrGoods[$i]['price'] = (!empty($price)) ? ($arrGoods[$i]['price'] = pq($price)->text()) : '';
+                    
+                    $arrGoods[$i]['description'] = (!empty($desc)) ? ($arrGoods[$i]['desc'] = pq($desc)->text()) : '';
                     
                     /* more params... */
-
-                    if (!empty($photo)) {
-                        $arrGoods[$i]['photo'] = pq($photo)->attr('href');
+                    
+                    $arrGoods[$i]['photo'] = (!empty($photo)) ? ($arrGoods[$i]['photo'] = pq($photo)->attr('href')) : '';
                         
-                        if ($arrGoods[$i]['photo'] == '') {
-                            $arrGoods[$i]['photo'] = pq($photo)->attr('src');
-                        }
+                    if ($arrGoods[$i]['photo'] == '') {
+                        $arrGoods[$i]['photo'] = pq($photo)->attr('src');
                     }
+                }
 
-                    \phpQuery::unloadDocuments();
-                }                    
-            }
+                \phpQuery::unloadDocuments();
+            }                    
+                        
 
             // Save in Excel
 
@@ -200,7 +194,7 @@ class ParserGod implements ParserGodInterface
                 if(!is_dir($catalogOutPath)) {
                     mkdir($catalogOutPath, 0777, true);
                 }            
-                
+                            
                 $k = 0;
                 for($k = 0; $k < count($arrGoods); $k++) {
                     $photoName = substr($arrGoods[$k]['photo'], (strrpos($arrGoods[$k]['photo'], "/") + 1));
@@ -220,7 +214,7 @@ class ParserGod implements ParserGodInterface
                 if(!is_dir($zipPath)) {
                     mkdir($zipPath, 0777, true);
                 }
-                
+                            
                 $zip = new \ZipArchive();
                 /* $zip = new Zip(); */
                 $filenameZip = $zipPath . DIRECTORY_SEPARATOR ."images" . ".zip";
