@@ -77,7 +77,7 @@ class ParserGod implements ParserGodInterface
             $htmlGoods = $ref->runmulticurl($urlGoods);
 
             $name = isset($_POST['name']) ? $_POST['name'] : '';     
-            $code = isset($_POST['code']) ? $_POST['code'] : '';
+            $code = isset($_POST['code']) ? $_POST['code']) : '';
             $price = isset($_POST['price']) ? $_POST['price'] : '';
             $photo = isset($_POST['photo']) ? $_POST['photo'] : '';
             $desc = isset($_POST['description']) ? $_POST['description'] : '';
@@ -98,17 +98,30 @@ class ParserGod implements ParserGodInterface
                     \phpQuery::newDocument($contentGoods[$i]);
 
                     // Section main parsing fields
-                    $arrGoods[$i]['name'] = trim(pq($name)->text());
-                    $arrGoods[$i]['code'] = pq($code)->text();
-                    $arrGoods[$i]['price'] = pq($price)->text();
-                    $arrGoods[$i]['description'] = trim(pq($desc)->text());
-                    /* more params... */
 
-                    $arrGoods[$i]['photo'] = pq($photo)->attr('href');
-                    if ($arrGoods[$i]['photo'] == '') {
-                        $arrGoods[$i]['photo'] = pq($photo)->attr('src');
+                    if (!empty($name))
+                        $arrGoods[$i]['name'] = trim(pq($name)->text());
+
+                    if (!empty($code)) {
+                        $arrGoods[$i]['code'] = pq($code)->text();
                     }
                     
+                    if (!empty($price))
+                        $arrGoods[$i]['price'] = pq($price)->text();
+                    
+                    if (!empty($desc))
+                        $arrGoods[$i]['description'] = trim(pq($desc)->text());
+                    
+                    /* more params... */
+
+                    if (!empty($photo)) {
+                        $arrGoods[$i]['photo'] = pq($photo)->attr('href');
+                        
+                        if ($arrGoods[$i]['photo'] == '') {
+                            $arrGoods[$i]['photo'] = pq($photo)->attr('src');
+                        }
+                    }
+
                     \phpQuery::unloadDocuments();
                 }                    
             }
