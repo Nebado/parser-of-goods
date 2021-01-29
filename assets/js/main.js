@@ -9,10 +9,12 @@ span.addEventListener("click", hideFunc);
 
 function showFunc() {
     modal.style.display = "block";
+    document.body.style.overflowY = "auto";
 }
 
 function hideFunc() {
     modal.style.display = "none";
+    document.body.style.overflowY = "hidden";
 }
 
 // Show Table

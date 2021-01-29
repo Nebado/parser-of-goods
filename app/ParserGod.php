@@ -77,7 +77,7 @@ class ParserGod implements ParserGodInterface
             $htmlGoods = $ref->runmulticurl($urlGoods);
 
             $name = isset($_POST['name']) ? $_POST['name'] : '';     
-            $code = isset($_POST['code']) ? $_POST['code']) : '';
+            $code = isset($_POST['code']) ? $_POST['code'] : '';
             $price = isset($_POST['price']) ? $_POST['price'] : '';
             $photo = isset($_POST['photo']) ? $_POST['photo'] : '';
             $desc = isset($_POST['description']) ? $_POST['description'] : '';

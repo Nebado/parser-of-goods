@@ -30,7 +30,7 @@ table,
 tr,
 td,
 th {
-    width: auto;
+    width: 100%;
     background-color: #282828;
     border-right: 1px solid;
     border-left: 1px solid;
@@ -42,9 +42,13 @@ th {
     border-collapse: collapse;
     border-bottom: 1px solid;
 }
-#table > tbody > tr:nth-child(2) > td:nth-child(3) {
-    width: 80px;
+td,
+th {
+    width: 20%;
 }
+    #table > tbody > tr:nth-child(2) > td:nth-child(3) {
+        width: 80px;
+    }
 #table tr:hover td {
     background: #000;
     transition: 0.6s;
