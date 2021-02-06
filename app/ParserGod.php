@@ -10,6 +10,9 @@ class ParserGod implements ParserGodInterface
 {
     public $start;
     public $stop;
+    public static $host;
+    public static $ssl;
+    public static $sslPort = 443;
 
     public function __construct()
     {
@@ -18,8 +21,11 @@ class ParserGod implements ParserGodInterface
 
     public function process($start, $catUrl)
     {
-        $urlArr = explode('/', $catUrl);
-        $url_domain = $urlArr[2];
+        // Set a site host
+        self::$host = self::getHost($catUrl);
+
+        // Check ssl
+        self::$ssl = self::checkSsl($catUrl);
 
         if ($start == true && $catUrl != null) {
             $htmlCat = \Parser::getPage([
@@ -56,14 +62,14 @@ class ParserGod implements ParserGodInterface
 
             $cardGood = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
 
-            // Get all url products from card in category
+            // Get all url of products from card in category
             for ($k = 0; $k < count($htmlCategories); ++$k) {
                 if (!empty($htmlCategories[$k])) {
                     $domCategory[$k] = \phpQuery::newDocument($htmlCategories[$k]);
 
                     foreach ($domCategory[$k]->find($cardGood) as $link) {
                         $pqLink = pq($link);
-		                $urlGoods[] = "https://".$url_domain.$pqLink->find('a')->attr('href');
+		                $urlGoods[] = self::$ssl.$url_domain.$pqLink->find('a')->attr('href');
                     }
                     \phpQuery::unloadDocuments();
                 }
@@ -231,5 +237,33 @@ class ParserGod implements ParserGodInterface
         } else {
             return;
         }
+    }
+
+    /**
+     * Get a host
+     *
+     * @param string
+     * @return string
+     */
+    public static function getHost($url)
+    {
+        $urlArr = explode('/', $url);
+        $host = $urlArr[2];
+
+        return $host;
+    }
+
+    /**
+     * Check ssl in site
+     *
+     * @param string
+     * @return string
+     */
+    public static function checkSsl($url)
+    {
+        $fp = fsockopen('ssl://'. self::$host, self::$sslPort, $errno, $errstr, 30);
+        $result = (!empty($fp)) ? "https://" : "http://";
+
+        return $result;
     }
 }
