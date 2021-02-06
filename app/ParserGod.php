@@ -69,7 +69,7 @@ class ParserGod implements ParserGodInterface
 
                     foreach ($domCategory[$k]->find($cardGood) as $link) {
                         $pqLink = pq($link);
-		                $urlGoods[] = self::$ssl.$url_domain.$pqLink->find('a')->attr('href');
+		                $urlGoods[] = self::$ssl.self::$host.$pqLink->find('a')->attr('href');
                     }
                     \phpQuery::unloadDocuments();
                 }
