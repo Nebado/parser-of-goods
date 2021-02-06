@@ -9,11 +9,11 @@ use \zipArchive;
 
 class ParserGod implements ParserGodInterface
 {
+    const SSL_PORT = 443;
     public $start;
     public $stop;
     public static $host;
-    public static $ssl;
-    public static $sslPort = 443;
+    public static $protocol;
 
     public function __construct()
     {
@@ -22,11 +22,11 @@ class ParserGod implements ParserGodInterface
 
     public function process($start, $catUrl)
     {
-        // Set a site host
+        // Get a hostname
         self::$host = self::getHost($catUrl);
 
-        // Check ssl
-        self::$ssl = self::checkSsl($catUrl);
+        // Check protocol
+        self::$protocol = self::checkProtocol($catUrl);
 
         if ($start == true && $catUrl != null) {
             $htmlCat = \Parser::getPage([
@@ -70,7 +70,7 @@ class ParserGod implements ParserGodInterface
 
                     foreach ($domCategory[$k]->find($cardGood) as $link) {
                         $pqLink = pq($link);
-		                $urlGoods[] = self::$ssl.self::$host.$pqLink->find('a')->attr('href');
+		                $urlGoods[] = self::$protocol.self::$host.$pqLink->find('a')->attr('href');
                     }
                     \phpQuery::unloadDocuments();
                 }
@@ -123,123 +123,141 @@ class ParserGod implements ParserGodInterface
                 \phpQuery::unloadDocuments();
             }
 
-
-            // Save in Excel
-
-            if (isset($_POST["excel"]) && $_POST["excel"] == "1") {
-                $phpExcel = new Spreadsheet();
-
-                $titles = array(
-                    array(
-                        'name' => 'Name',
-                        'ceil' => 'A'
-                    ),
-                    array(
-                        'name' => 'Code',
-                        'ceil' => 'B'
-                    ),
-                    array(
-                        'name' => 'Price',
-                        'ceil' => 'C'
-                    ),
-                    array(
-                        'name' => 'Description',
-                        'ceil' => 'D'
-                    ),
-                    array(
-                        'name' => 'Image',
-                        'ceil' => 'E'
-                    )
-                );
-
-                for ($i = 0; $i < count($titles); $i++) {
-                    $string = $titles[$i]['name'];
-                    //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
-                    $ceilLetter = $titles[$i]['ceil'] . 1;
-                    $phpExcel->getActiveSheet()->setCellValueExplicit($ceilLetter, $string, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-                }
-
-                $i = 2;
-
-                foreach($arrGoods as $row) {
-                    $phpExcel->getActiveSheet()->setCellValueExplicit("A$i", $row['name'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-                    //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
-                    $phpExcel->getActiveSheet()->setCellValue("B$i", $row['code']);
-                    $phpExcel->getActiveSheet()->setCellValue("C$i", $row['price']);
-                    $description = $row['description'];
-                    //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
-                    $phpExcel->getActiveSheet()->setCellValueExplicit("D$i", $description, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-                    $phpExcel->getActiveSheet()->setCellValue("E$i", $row['photo'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-                    $i++;
-                }
-
-                $phpExcel->getActiveSheet()->getColumnDimension('A')->setWidth(96);
-                $phpExcel->getActiveSheet()->getColumnDimension('B')->setWidth(16);
-                $phpExcel->getActiveSheet()->getColumnDimension('C')->setWidth(16);
-                $phpExcel->getActiveSheet()->getColumnDimension('D')->setWidth(96);
-                $phpExcel->getActiveSheet()->getColumnDimension('E')->setWidth(96);
-
-                $page = $phpExcel->setActiveSheetIndex(0);
-                $page->setTitle('goods');
-                $objWriter = new Xlsx($phpExcel);
-                $filename = "goods.xlsx";
-
-                if (file_exists($filename)) {
-                    unlink($filename);
-                }
-
-                $objWriter->save($filename);
-            }
-
-            // Download images
-
-            if (isset($_POST["image"]) && $_POST["image"] == "1") {
-                $catalogOutPath = "images";
-                if(!is_dir($catalogOutPath)) {
-                    mkdir($catalogOutPath, 0777, true);
-                }
-
-                $k = 0;
-                for($k = 0; $k < count($arrGoods); $k++) {
-                    $photoName = substr($arrGoods[$k]['photo'], (strrpos($arrGoods[$k]['photo'], "/") + 1));
-                    $photoUrl = self::$ssl.self::$host.$arrGoods[$k]['photo'];
-
-                    $fullPhotoPathName = $catalogOutPath . DIRECTORY_SEPARATOR . $photoName;
-                    $arrFullPhotos[] = $fullPhotoPathName;
-
-                    if (!file_exists($fullPhotoPathName)) {
-                        file_put_contents($fullPhotoPathName, file_get_contents($photoUrl));
-                    }
-                }
-
-                // Zip archive images
-                $zipPath = "zip";
-                
-                if(!is_dir($zipPath)) {
-                    mkdir($zipPath, 0777, true);
-                }
-                
-                $zip = new ZipArchive();
-                $filenameZip = $zipPath . DIRECTORY_SEPARATOR ."images" . ".zip";
-                /* $zip = new Zip();
-                 * $zip->saveZipFile($filenameZip); */
-                $res = $zip->open($filenameZip, ZipArchive::CREATE);
-                $files = scandir('images');
-
-                if ($res === TRUE) {
-                    foreach ($files as $file) {
-                        if ($file == '.' || $file == '..') {continue;}
-                        $f = 'images'.DIRECTORY_SEPARATOR.$file;
-                        $zip->addFile($f);
-                    }
-                    $zip->close();
-                }
-            }
+            $this->generateExcel($arrGoods);
+            
+            $this->downloadImages($arrGoods);
 
             unset($_POST['start']);
             unset($_POST['url']);
         } else {
             return;
+        }
+    }
+
+    /**
+     * Generate Excel file
+     */
+    public function generateExcel($arrGoods)
+    {
+        if (isset($_POST["excel"]) && $_POST["excel"] == "1") {
+            $phpExcel = new Spreadsheet();
+
+            $titles = array(
+                array(
+                    'name' => 'Name',
+                    'ceil' => 'A'
+                ),
+                array(
+                    'name' => 'Code',
+                    'ceil' => 'B'
+                ),
+                array(
+                    'name' => 'Price',
+                    'ceil' => 'C'
+                ),
+                array(
+                    'name' => 'Description',
+                    'ceil' => 'D'
+                ),
+                array(
+                    'name' => 'Image',
+                    'ceil' => 'E'
+                )
+            );
+
+            for ($i = 0; $i < count($titles); $i++) {
+                $string = $titles[$i]['name'];
+                //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
+                $ceilLetter = $titles[$i]['ceil'] . 1;
+                $phpExcel->getActiveSheet()->setCellValueExplicit($ceilLetter, $string, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            }
+
+            $i = 2;
+
+            foreach($arrGoods as $row) {
+                $phpExcel->getActiveSheet()->setCellValueExplicit("A$i", $row['name'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
+                $phpExcel->getActiveSheet()->setCellValue("B$i", $row['code']);
+                $phpExcel->getActiveSheet()->setCellValue("C$i", $row['price']);
+                $description = $row['description'];
+                //$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
+                $phpExcel->getActiveSheet()->setCellValueExplicit("D$i", $description, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $phpExcel->getActiveSheet()->setCellValue("E$i", $row['photo'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $i++;
+            }
+
+            $phpExcel->getActiveSheet()->getColumnDimension('A')->setWidth(96);
+            $phpExcel->getActiveSheet()->getColumnDimension('B')->setWidth(16);
+            $phpExcel->getActiveSheet()->getColumnDimension('C')->setWidth(16);
+            $phpExcel->getActiveSheet()->getColumnDimension('D')->setWidth(96);
+            $phpExcel->getActiveSheet()->getColumnDimension('E')->setWidth(96);
+
+            $page = $phpExcel->setActiveSheetIndex(0);
+            $page->setTitle('goods');
+            $objWriter = new Xlsx($phpExcel);
+            $filename = "goods.xlsx";
+
+            if (file_exists($filename)) {
+                unlink($filename);
+            }
+
+            $objWriter->save($filename);
+        }
+    }
+
+    /**
+     * Download images
+     */
+    public function downloadImages($arrGoods)
+    {
+        if (isset($_POST["image"]) && $_POST["image"] == "1") {
+            $catalogOutPath = "images";
+            if(!is_dir($catalogOutPath)) {
+                mkdir($catalogOutPath, 0777, true);
+            }
+
+            $k = 0;
+            for($k = 0; $k < count($arrGoods); $k++) {
+                $photoName = substr($arrGoods[$k]['photo'], (strrpos($arrGoods[$k]['photo'], "/") + 1));
+                $photoUrl = self::$protocol.self::$host.$arrGoods[$k]['photo'];
+
+                $fullPhotoPathName = $catalogOutPath . DIRECTORY_SEPARATOR . $photoName;
+                $arrFullPhotos[] = $fullPhotoPathName;
+
+                if (!file_exists($fullPhotoPathName)) {
+                    file_put_contents($fullPhotoPathName, file_get_contents($photoUrl));
+                }
+            }
+
+            $this->zipUp();
+        }
+    }
+
+    /**
+     * Create zip file for images 
+     */
+    public function zipUp()
+    {
+        $zipPath = "zip";
+        
+        if(!is_dir($zipPath)) {
+            mkdir($zipPath, 0777, true);
+        }
+        
+        $zip = new ZipArchive();
+        $filenameZip = $zipPath . DIRECTORY_SEPARATOR ."images" . ".zip";
+        /* $zip = new Zip();
+         * $zip->saveZipFile($filenameZip); */
+        $res = $zip->open($filenameZip, ZipArchive::CREATE);
+        $files = scandir('images');
+
+        if ($res === TRUE) {
+            foreach ($files as $file) {
+                if ($file == '.' || $file == '..') {continue;}
+                $f = 'images'.DIRECTORY_SEPARATOR.$file;
+                $zip->addFile($f);
+            }
+            $zip->close();
         }
     }
 
@@ -258,14 +276,14 @@ class ParserGod implements ParserGodInterface
     }
 
     /**
-     * Check ssl in site
+     * Check protocol in site
      *
      * @param string
      * @return string
      */
-    public static function checkSsl($url)
+    public static function checkProtocol($url)
     {
-        $fp = fsockopen('ssl://'. self::$host, self::$sslPort, $errno, $errstr, 30);
+        $fp = fsockopen('ssl://'. self::$host, ParserGod::SSL_PORT, $errno, $errstr, 30);
         $result = (!empty($fp)) ? "https://" : "http://";
 
         return $result;
