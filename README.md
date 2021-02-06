@@ -23,13 +23,7 @@ WARNING! The parser is in an active development state. If you want to use parser
 * Composer
 
 ```
-$ composer init
-$ composer require electrolinux/phpquery
-$ composer require phpzip/phpzip
-$ composer require phpoffice/phpspreadsheet
-
-Uncomment /* require_once("./vendor/autoload.php"); */ in index.php
-and comment require_once("./libs/autoload.php");
+$ composer update
 
 ```
 * Without composer
