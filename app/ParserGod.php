@@ -5,6 +5,7 @@ namespace App;
 use PhpOffice\PhpSpreadsheet\Spreadsheet as Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as Xlsx;
 use PHPZip\Zip\File\Zip as Zip;
+use \zipArchive;
 
 class ParserGod implements ParserGodInterface
 {
@@ -73,7 +74,7 @@ class ParserGod implements ParserGodInterface
                     }
                     \phpQuery::unloadDocuments();
                 }
-            }
+            };
 
             // Use Multi Curl
             $ref = new \cURmultiStable;
@@ -201,9 +202,9 @@ class ParserGod implements ParserGodInterface
                 $k = 0;
                 for($k = 0; $k < count($arrGoods); $k++) {
                     $photoName = substr($arrGoods[$k]['photo'], (strrpos($arrGoods[$k]['photo'], "/") + 1));
-                    $photoUrl = $arrGoods[$k]['photo'];
+                    $photoUrl = self::$ssl.self::$host.$arrGoods[$k]['photo'];
 
-                    $fullPhotoPathName = $catalogOutPath . '/'. $photoName;
+                    $fullPhotoPathName = $catalogOutPath . DIRECTORY_SEPARATOR . $photoName;
                     $arrFullPhotos[] = $fullPhotoPathName;
 
                     if (!file_exists($fullPhotoPathName)) {
@@ -212,24 +213,27 @@ class ParserGod implements ParserGodInterface
                 }
 
                 // Zip archive images
-
                 $zipPath = "zip";
+                
                 if(!is_dir($zipPath)) {
                     mkdir($zipPath, 0777, true);
                 }
-
-                $zip = new \ZipArchive();
-                /* $zip = new Zip(); */
+                
+                $zip = new ZipArchive();
                 $filenameZip = $zipPath . DIRECTORY_SEPARATOR ."images" . ".zip";
-                /* $zip->saveZipFile($filenameZip); */
-                $zip->open($filenameZip);
+                /* $zip = new Zip();
+                 * $zip->saveZipFile($filenameZip); */
+                $res = $zip->open($filenameZip, ZipArchive::CREATE);
                 $files = scandir('images');
-                foreach ($files as $file) {
-                    if ($file == '.' || $file == '..') {continue;}
-                    $f = 'images'.DIRECTORY_SEPARATOR.$file;
-                    $zip->addFile($f);
+
+                if ($res === TRUE) {
+                    foreach ($files as $file) {
+                        if ($file == '.' || $file == '..') {continue;}
+                        $f = 'images'.DIRECTORY_SEPARATOR.$file;
+                        $zip->addFile($f);
+                    }
+                    $zip->close();
                 }
-                $zip->close();
             }
 
             unset($_POST['start']);
