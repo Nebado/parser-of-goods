@@ -10,7 +10,7 @@ class ParserGod implements ParserGodInterface
 {
     public $start;
     public $stop;
-    
+
     public function __construct()
     {
         $this->start = false;
@@ -56,17 +56,14 @@ class ParserGod implements ParserGodInterface
 
             $cardGood = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
 
-            // Parsing all categories
+            // Get all url products from card in category
             for ($k = 0; $k < count($htmlCategories); ++$k) {
                 if (!empty($htmlCategories[$k])) {
-                    $contentCategories[$k] = $htmlCategories[$k];
-                    \phpQuery::newDocument($contentCategories[$k]);
+                    $domCategory[$k] = \phpQuery::newDocument($htmlCategories[$k]);
 
-                    $links = pq($cardGood);
-
-                    foreach ($links as $link) {
+                    foreach ($domCategory[$k]->find($cardGood) as $link) {
                         $pqLink = pq($link);
-		                $urlGoods[] = "https://".$url_domain.$pqLink->attr('href');
+		                $urlGoods[] = "https://".$url_domain.$pqLink->find('a')->attr('href');
                     }
                     \phpQuery::unloadDocuments();
                 }
@@ -76,12 +73,12 @@ class ParserGod implements ParserGodInterface
             $ref = new \cURmultiStable;
             $htmlGoods = $ref->runmulticurl($urlGoods);
 
-            $name = isset($_POST['name']) ? $_POST['name'] : '';     
+            $name = isset($_POST['name']) ? $_POST['name'] : '';
             $code = isset($_POST['code']) ? $_POST['code'] : '';
             $price = isset($_POST['price']) ? $_POST['price'] : '';
             $photo = isset($_POST['photo']) ? $_POST['photo'] : '';
             $desc = isset($_POST['description']) ? $_POST['description'] : '';
-            
+
             $_SESSION["name"] = isset($_POST["name"]) ? $_POST["name"] : "";
             $_SESSION["code"] = isset($_POST["code"]) ? $_POST["code"] : "";
             $_SESSION["price"] = isset($_POST["price"]) ? $_POST["price"] : "";
@@ -98,27 +95,27 @@ class ParserGod implements ParserGodInterface
                     \phpQuery::newDocument($contentGoods[$i]);
 
                     // Section main parsing fields
-                    
+
                     $arrGoods[$i]['name'] = (!empty($name)) ? ($arrGoods[$i]['name'] = trim(pq($name)->text())) : '';
 
                     $arrGoods[$i]['code'] = (!empty($code)) ? ($arrGoods[$i]['code'] = pq($code)->text()) : '';
-                    
+
                     $arrGoods[$i]['price'] = (!empty($price)) ? ($arrGoods[$i]['price'] = pq($price)->text()) : '';
-                    
+
                     $arrGoods[$i]['description'] = (!empty($desc)) ? ($arrGoods[$i]['desc'] = pq($desc)->text()) : '';
-                    
+
                     /* more params... */
-                    
+
                     $arrGoods[$i]['photo'] = (!empty($photo)) ? ($arrGoods[$i]['photo'] = pq($photo)->attr('href')) : '';
-                        
+
                     if ($arrGoods[$i]['photo'] == '') {
                         $arrGoods[$i]['photo'] = pq($photo)->attr('src');
                     }
                 }
 
                 \phpQuery::unloadDocuments();
-            }                    
-                        
+            }
+
 
             // Save in Excel
 
@@ -193,8 +190,8 @@ class ParserGod implements ParserGodInterface
                 $catalogOutPath = "images";
                 if(!is_dir($catalogOutPath)) {
                     mkdir($catalogOutPath, 0777, true);
-                }            
-                            
+                }
+
                 $k = 0;
                 for($k = 0; $k < count($arrGoods); $k++) {
                     $photoName = substr($arrGoods[$k]['photo'], (strrpos($arrGoods[$k]['photo'], "/") + 1));
@@ -203,7 +200,7 @@ class ParserGod implements ParserGodInterface
                     $fullPhotoPathName = $catalogOutPath . '/'. $photoName;
                     $arrFullPhotos[] = $fullPhotoPathName;
 
-                    if (!file_exists($fullPhotoPathName)) {                    
+                    if (!file_exists($fullPhotoPathName)) {
                         file_put_contents($fullPhotoPathName, file_get_contents($photoUrl));
                     }
                 }
@@ -214,7 +211,7 @@ class ParserGod implements ParserGodInterface
                 if(!is_dir($zipPath)) {
                     mkdir($zipPath, 0777, true);
                 }
-                            
+
                 $zip = new \ZipArchive();
                 /* $zip = new Zip(); */
                 $filenameZip = $zipPath . DIRECTORY_SEPARATOR ."images" . ".zip";
