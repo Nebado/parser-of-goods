@@ -33,33 +33,14 @@ class ParserGod implements ParserGodInterface
                 "url" => "$catUrl"
             ]);
 
-            if (!empty($htmlCat["data"])) {
-                $domCat = \phpQuery::newDocument($htmlCat["data"]["content"]);
-
-                // Pagination section
-                $pagCount = pq('ul.pagination > li > a')->text();
-                $paginationCount = str_replace('>', '', $pagCount);
-                $countPages = substr(trim($paginationCount), -1);
-
-                if ($countPages == '') {
-                    $categoryHref[] = $catUrl;
-                }
-
-                for ($i = 1; $i <= $countPages; $i++) {
-                    $pagHref = str_replace('./', '', pq('ul.pagination > li > a')->attr('href'));
-                    $paginationHref = preg_replace("/page=(\d+)/", "page=$i", $pagHref);
-                    if ($i === 1) {
-                        $categoryHref[] = $catUrl;
-                    } else {
-                        $categoryHref[] = $catUrl . $paginationHref;
-                    }
-                }
-                \phpQuery::unloadDocuments();
+            $categoryUrls = $this->parsePagination($htmlCat, $catUrl);
+            if (empty($categoryUrls)) {
+                $categoryUrls[] = $catUrl;
             }
 
             // Use Multi Curl for categories
             $ref = new \cURmultiStable;
-            $htmlCategories = $ref->runmulticurl($categoryHref);
+            $htmlCategories = $ref->runmulticurl($categoryUrls);
 
             $cardGood = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
 
@@ -154,6 +135,44 @@ class ParserGod implements ParserGodInterface
         } else {
             return;
         }
+    }
+
+    /**
+     * Parsing pagination that to get all 
+     * urls of category if it exists.
+     * 
+     * @param string
+     * @return array
+     */
+    public function parsePagination($htmlCat)
+    {
+        $countPages = 50;
+        
+        if (!empty($htmlCat["data"])) {
+            $domCat = \phpQuery::newDocument($htmlCat["data"]["content"]);
+
+            // Pagination section
+            $pagCount = pq('.pagination a')->text();
+            if (!empty($pagCount)) {
+                $paginationCount = substr($pagCount, 0, strpos($pagCount, '>'));
+                $countPages = substr(trim($paginationCount), -1);
+
+                for ($i = 1; $i <= $countPages; $i++) {
+                    $pagHref = str_replace('./', '', pq('ul.pagination > li > a')->attr('href'));
+                    $paginationHref = preg_replace("/page=(\d+)/", "page=$i", $pagHref);
+                    if ($i === 1) {
+                        $categoryHref[] = $catUrl;
+                    } else {
+                        $categoryHref[] = $catUrl . $paginationHref;
+                    }
+                }
+            }
+            \phpQuery::unloadDocuments();
+        } else {
+            $categoryHref[] = '';
+        }
+
+        return $categoryHref;
     }
 
     /**
