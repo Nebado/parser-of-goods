@@ -69,12 +69,33 @@ class ParserGod implements ParserGodInterface
                     $domCategory[$k] = \phpQuery::newDocument($htmlCategories[$k]);
 
                     foreach ($domCategory[$k]->find($cardGood) as $link) {
-                        $pqLink = pq($link);
-		                $urlGoods[] = self::$protocol.self::$host.$pqLink->find('a')->attr('href');
+                        $productCard = pq($link);
+                        $links = $productCard->find('a');
+
+                        foreach ($links as $link) {
+                            $pqLink = pq($link);
+                            $href = $pqLink->attr('href');
+
+                            if (trim($href) === '#') {
+                                continue;
+                            } else {
+                                $hrefs[] = $pqLink->attr('href');
+                            }
+                        }
+
+                        $hrefs = array_unique($hrefs);                        
                     }
                     \phpQuery::unloadDocuments();
                 }
-            };
+            }
+
+            foreach ($hrefs as $href) {
+                if (substr($href, 0, 4) === 'http') {
+		            $urlGoods[] = $href;
+                } else {
+                    $urlGoods[] = self::$protocol.self::$host.$href;
+                }
+            }
 
             // Use Multi Curl
             $ref = new \cURmultiStable;
@@ -96,6 +117,7 @@ class ParserGod implements ParserGodInterface
 
             // Generate goods
             global $arrGoods;
+
             for ($i = 0; $i < count($htmlGoods); ++$i) {
                 if(!empty($htmlGoods[$i])) {
                     $contentGoods[$i] = $htmlGoods[$i];
@@ -124,7 +146,7 @@ class ParserGod implements ParserGodInterface
             }
 
             $this->generateExcel($arrGoods);
-            
+
             $this->downloadImages($arrGoods);
 
             unset($_POST['start']);
@@ -234,16 +256,16 @@ class ParserGod implements ParserGodInterface
     }
 
     /**
-     * Create zip file for images 
+     * Create zip file for images
      */
     public function zipUp()
     {
         $zipPath = "zip";
-        
+
         if(!is_dir($zipPath)) {
             mkdir($zipPath, 0777, true);
         }
-        
+
         $zip = new ZipArchive();
         $filenameZip = $zipPath . DIRECTORY_SEPARATOR ."images" . ".zip";
         /* $zip = new Zip();
