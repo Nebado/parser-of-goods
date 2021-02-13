@@ -3,6 +3,8 @@ let modal = document.getElementById("modalTable");
 let btn = document.getElementById("btn");
 let table = document.getElementById("table");
 let span = document.getElementsByClassName("close")[0];
+let paginationRange = document.getElementById("pagination-range"),
+    numberPages = document.getElementById("number-pages");
 
 btn.addEventListener("click", showFunc);
 span.addEventListener("click", hideFunc);
@@ -22,6 +24,13 @@ if (table) {
     btn.style.display = "inline-block";
 } else {
     btn.style.display = "none";
+}
+
+// Slider range
+numberPages.innerHTML = paginationRange.value;
+
+paginationRange.oninput = function() {
+  numberPages.innerHTML = this.value;
 }
 
 // Slider
@@ -89,6 +98,19 @@ function removeField(fieldId, btnId) {
     btn.parentNode.removeChild(btn);
 }
 
+// Pagination
+function pagination() {
+    let checkPagination = document.getElementById('pagination-checkbox'),
+        pagination      = document.getElementById('pagination');
+
+    if (checkPagination.checked == true) {
+        pagination.style.display = 'block';
+    } else {
+        pagination.style.display = 'none';
+    }
+}
+
+// Background
 (function() {
     var canvas = document.createElement('canvas'),
         ctx = canvas.getContext('2d'),

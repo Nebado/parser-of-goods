@@ -9,8 +9,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Serif+Pro:wght@300;600;700&display=swap" rel="stylesheet">
     </head>
     <body>
-        <!-- <video id="myVideo" src="https://css-tricks-post-videos.s3.us-east-1.amazonaws.com/Island%20-%204141.mp4" autoplay loop playsinline muted></video> -->
-        
+        <!-- <video id="myVideo" src="https://css-tricks-post-videos.s3.us-east-1.amazonaws.com/Island%20-%204141.mp4" autoplay loop playsinline muted></video> -->        
         <main id="main" class="main--wrapper">
             <div class="left_block_main simple-form">
                 <div class="slider">
@@ -19,9 +18,19 @@
                         <form action="" method="post">
                             <h1 class="title">Parser of Goods</h1>
                             <fieldset class="form-input">
-                                <input class="input input-url" type="text" name="url" value="<?= $_SESSION["url"]?>" placeholder="Input your url category" /><span class="required">*</span>
-                                <input class="input input-card" type="text" name="card_good" value="<?= $_SESSION["card_good"]?>" placeholder="Input your class card of good" /><span class="required">*</span><br>
-                                <input id="image" class="input-checkbox" type="checkbox" checked="checked" name="image" value="1" />
+                                <input class="input input-url" type="text" name="url" value="<?= $_SESSION["url"]?>" placeholder="Enter your url category" /><span class="required">*</span>
+                                <input class="input input-card" type="text" name="card_good" value="<?= $_SESSION["card_good"]?>" placeholder="Enter your class card of good" /><span class="required">*</span><br>
+                                <input id="pagination-checkbox" class="input-checkbox" onclick="pagination()" type="checkbox" />
+                                <label for="pagination">Pagination</label><br><br>
+                                <div id="pagination" style="display: none;">
+                                    <input id="pagination-url" class="input input-pagination" type="text" name="pagination_url" value="<?= $_SESSION["pagination"]?>" placeholder="Enter url page with pagination" /><span class="required">*</span><br><br>
+                                    <div>
+                                        <p>Enter the number of pages in pagination</p>
+                                        <input type="range" min="1" max="50" value="1" class="slider-range" id="pagination-range">
+                                        <p>Value:<span id="number-pages"></span></p>
+                                    </div><br>
+                                </div>
+                                <input id="image" class="input-checkbox" type="checkbox" checked=" name="image" value="1" />
                                 <label for="image">Download images</label>
                                 <?php if (file_exists($_SERVER['DOCUMENT_ROOT'].'/zip/images.zip')): ?>
                                     <a href="zip/images.zip" class="download">Download</a>

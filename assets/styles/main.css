@@ -72,7 +72,7 @@ h1.title {
     margin: 0 auto;
     box-shadow: 4px 53px 56px black;
     background: #8c95ad14;
-    border-radius: 80px;
+    border-radius: 40px;
     position: absolute;
     top: 10%;
     left: 50%;
@@ -251,4 +251,21 @@ input:active,
 .slider .item {
     animation-name: fade;
     animation-duration: 1.5s;
+}
+
+// Slider range
+.slider-range {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;  
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.download {
+    color: #f5ee0c;
 }
