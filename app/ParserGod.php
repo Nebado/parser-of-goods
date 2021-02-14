@@ -31,23 +31,25 @@ class ParserGod implements ParserGodInterface
         if ($start == true && $catUrl != null) {
 
             // Get data from request post if exists post data
-            $cardGood = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
-            $paginationUrl = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
-            $name = isset($_POST['name']) ? $_POST['name'] : '';
-            $code = isset($_POST['code']) ? $_POST['code'] : '';
-            $price = isset($_POST['price']) ? $_POST['price'] : '';
-            $photo = isset($_POST['photo']) ? $_POST['photo'] : '';
-            $desc = isset($_POST['description']) ? $_POST['description'] : '';
+            $cardGood                   = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
+            $paginationUrl              = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
+            $quantityPages              = isset($_POST["quantity_pages"]) ? $_POST["quantity_pages"] : "";
+            $name                       = isset($_POST['name']) ? $_POST['name'] : '';
+            $code                       = isset($_POST['code']) ? $_POST['code'] : '';
+            $price                      = isset($_POST['price']) ? $_POST['price'] : '';
+            $photo                      = isset($_POST['photo']) ? $_POST['photo'] : '';
+            $desc                       = isset($_POST['description']) ? $_POST['description'] : '';
 
             // Put data in session from request post if exists post data
-            $_SESSION["name"] = isset($_POST["name"]) ? $_POST["name"] : "";
-            $_SESSION["code"] = isset($_POST["code"]) ? $_POST["code"] : "";
-            $_SESSION["price"] = isset($_POST["price"]) ? $_POST["price"] : "";
-            $_SESSION["photo"] = isset($_POST["photo"]) ? $_POST["photo"] : "";
-            $_SESSION["description"] = isset($_POST["description"]) ? $_POST["description"] : "";
-            $_SESSION["card_good"] = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
+            $_SESSION["name"]           = isset($_POST["name"]) ? $_POST["name"] : "";
+            $_SESSION["code"]           = isset($_POST["code"]) ? $_POST["code"] : "";
+            $_SESSION["price"]          = isset($_POST["price"]) ? $_POST["price"] : "";
+            $_SESSION["photo"]          = isset($_POST["photo"]) ? $_POST["photo"] : "";
+            $_SESSION["description"]    = isset($_POST["description"]) ? $_POST["description"] : "";
+            $_SESSION["card_good"]      = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
             $_SESSION["pagination_url"] = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
-            $_SESSION["url"] = isset($_POST["url"]) ? $_POST["url"] : "";
+            $_SESSION["quantity_pages"] = isset($_POST["quantity_pages"]) ? $_POST["quantity_pages"] : "";
+            $_SESSION["url"]            = isset($_POST["url"]) ? $_POST["url"] : "";
 
             $htmlCat = \Parser::getPage([
                 "url" => "$catUrl"
@@ -55,8 +57,9 @@ class ParserGod implements ParserGodInterface
 
             // Get category urls if exists pagination, otherwise,
             // put category url.
-            $categoryUrls = $this->parsePagination($paginationUrl);
-            if (empty($categoryUrls)) {
+            if (!empty($paginationUrl)) {
+                $categoryUrls = $this->getAllUrlPagesOfPagination($paginationUrl, $quantityPages);
+            } else {
                 $categoryUrls[] = $catUrl;
             }
 
@@ -83,7 +86,6 @@ class ParserGod implements ParserGodInterface
                                 $hrefs[] = $pqLink->attr('href');
                             }
                         }
-
                         $hrefs = array_unique($hrefs);
                     }
                     \phpQuery::unloadDocuments();
@@ -135,47 +137,33 @@ class ParserGod implements ParserGodInterface
             $this->generateExcel($arrGoods);
 
             $this->downloadImages($arrGoods);
-
-            unset($_POST['start']);
-            unset($_POST['url']);
         } else {
             return;
         }
     }
 
     /**
-     * Parsing pagination that to get all
-     * urls of category if it exists.
+     * Get all url pages of pagination
      *
-     * @param string
+     * @param string $paginationUrl
+     * @param integer $quantiyPages
      * @return array
      */
-    public function parsePagination($htmlCat)
+    public function getAllUrlPagesOfPagination($paginationUrl, $quantityPages)
     {
-        $countPages = 50;
+        $categoryHref = [];
+        $quantityPages = intval($quantityPages);
 
-        if (!empty($htmlCat["data"])) {
-            $domCat = \phpQuery::newDocument($htmlCat["data"]["content"]);
-
-            // Pagination section
-            $pagCount = pq('.pagination a')->text();
-            if (!empty($pagCount)) {
-                $paginationCount = substr($pagCount, 0, strpos($pagCount, '>'));
-                $countPages = substr(trim($paginationCount), -1);
-
-                for ($i = 1; $i <= $countPages; $i++) {
-                    $pagHref = str_replace('./', '', pq('ul.pagination > li > a')->attr('href'));
-                    $paginationHref = preg_replace("/page=(\d+)/", "page=$i", $pagHref);
-                    if ($i === 1) {
-                        $categoryHref[] = $catUrl;
-                    } else {
-                        $categoryHref[] = $catUrl . $paginationHref;
-                    }
+        if ($quantityPages > 0) {
+            for ($i = 1; $i <= $quantityPages; $i++) {
+                if ($paginationUrl[strlen($str)-1] == '/') {
+                    $paginationUrl = substr($paginationUrl, 0, -1);
+                }
+                if (intval(substr($paginationUrl, -1)) != false) {
+                    $paginationUrl = substr_replace($paginationUrl, $i, -1);
+                    $categoryHref[] = $paginationUrl;
                 }
             }
-            \phpQuery::unloadDocuments();
-        } else {
-            $categoryHref[] = '';
         }
 
         return $categoryHref;
