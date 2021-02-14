@@ -30,6 +30,8 @@ class ParserGod implements ParserGodInterface
 
         if ($start == true && $catUrl != null) {
 
+            // TODO: Make method for registration session data and request data
+            
             // Get data from request post if exists post data
             $cardGood                   = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
             $paginationUrl              = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
@@ -56,20 +58,23 @@ class ParserGod implements ParserGodInterface
             ]);
 
             // Get category urls if exists pagination, otherwise,
-            // put category url.
+            // put category url
             if (!empty($paginationUrl) && intval($quantityPages) > 0) {
                 $categoryUrls = $this->getAllUrlPagesOfPagination($paginationUrl, $quantityPages);
             } else {
                 $categoryUrls[] = $catUrl;
             }
 
-            /* echo '<pre>';
-             * print_r($categoryUrls);die; */
-
             // Use Multi Curl for categories
             $ref = new \cURmultiStable;
             $htmlCategories = $ref->runmulticurl($categoryUrls);
 
+            // TODO: Optimize process of parsing products card
+            // 1. Unload memory
+            // 2. Use other library for parsing
+
+            // TODO: Fix select only url product in product card
+            
             // Get all url of products from card in category
             for ($k = 0; $k < count($htmlCategories); ++$k) {
                 if (!empty($htmlCategories[$k])) {
@@ -102,9 +107,6 @@ class ParserGod implements ParserGodInterface
                     $urlGoods[] = self::$protocol.self::$host.$href;
                 }
             }
-
-            /* echo '<pre>';
-             * print_r($urlGoods);die; */
 
             // Use Multi Curl
             $ref = new \cURmultiStable;
@@ -161,6 +163,9 @@ class ParserGod implements ParserGodInterface
      */
     public function getAllUrlPagesOfPagination($paginationUrl, $quantityPages)
     {
+        // TODO: Doesn't work with different cases paginationUrl        
+        // work only one digit in paginationUrl
+        
         $categoryHref = [];
         $quantityPages = intval($quantityPages);
 
