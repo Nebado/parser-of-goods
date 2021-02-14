@@ -26,13 +26,6 @@ if (table) {
     btn.style.display = "none";
 }
 
-// Slider range
-numberPages.innerHTML = paginationRange.value;
-
-paginationRange.oninput = function() {
-  numberPages.innerHTML = this.value;
-}
-
 // Slider
 let slideIndex = 1;
 let next = document.getElementsByClassName("next")[0];

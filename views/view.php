@@ -24,11 +24,10 @@
                                     <label for="pagination">Pagination</label><br>
                                     <div>
                                         <div id="pagination" style="display: none;">
-                                            <input id="pagination-url" class="input input-pagination" type="text" name="pagination_url" value="<?= $_SESSION["pagination"]?>" placeholder="Enter url page with pagination" /><span class="required">*</span><br>
+                                            <input id="pagination-url" class="input input-pagination" type="text" name="pagination_url" value="<?= $_SESSION["pagination"]?>" placeholder="Enter url page with pagination" />
                                             <div>
                                                 <p>Enter the number of pages in pagination</p>
-                                                <input type="range" min="1" max="50" value="1" class="slider-range" id="pagination-range">
-                                                <p>Value:<span id="number-pages"></span></p>
+                                                <input type="text" name="quantity_pages" value="0" class="quantity-pages" id="quantiy-pages" />
                                             </div><br>
                                         </div>
                                         <div>
