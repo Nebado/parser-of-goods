@@ -24,10 +24,10 @@
                                     <label for="pagination">Pagination</label><br>
                                     <div>
                                         <div id="pagination" style="display: none;">
-                                            <input id="pagination-url" class="input input-pagination" type="text" name="pagination_url" value="<?= $_SESSION["pagination"]?>" placeholder="Enter url page with pagination" />
+                                            <input id="pagination-url" class="input input-pagination" type="text" name="pagination_url" value="<?= isset($_SESSION["pagination_url"]) ? $_SESSION["pagination_url"] : ""?>" placeholder="Enter url page with pagination" />
                                             <div>
                                                 <p>Enter the number of pages in pagination</p>
-                                                <input type="text" name="quantity_pages" value="0" class="quantity-pages" id="quantiy-pages" />
+                                                <input type="text" name="quantity_pages" value="<?= isset($_SESSION["quantity_pages"]) ? $_SESSION["quantity_pages"] : "0"?>" class="quantity-pages" id="quantiy-pages" />
                                             </div><br>
                                         </div>
                                         <div>

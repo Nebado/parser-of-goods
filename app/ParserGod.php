@@ -33,7 +33,7 @@ class ParserGod implements ParserGodInterface
             // Get data from request post if exists post data
             $cardGood                   = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
             $paginationUrl              = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
-            $quantityPages              = isset($_POST["quantity_pages"]) ? $_POST["quantity_pages"] : "";
+            $quantityPages              = isset($_POST["quantity_pages"]) ? $_POST["quantity_pages"] : "0";
             $name                       = isset($_POST['name']) ? $_POST['name'] : '';
             $code                       = isset($_POST['code']) ? $_POST['code'] : '';
             $price                      = isset($_POST['price']) ? $_POST['price'] : '';
@@ -57,11 +57,14 @@ class ParserGod implements ParserGodInterface
 
             // Get category urls if exists pagination, otherwise,
             // put category url.
-            if (!empty($paginationUrl)) {
+            if (!empty($paginationUrl) && intval($quantityPages) > 0) {
                 $categoryUrls = $this->getAllUrlPagesOfPagination($paginationUrl, $quantityPages);
             } else {
                 $categoryUrls[] = $catUrl;
             }
+
+            /* echo '<pre>';
+             * print_r($categoryUrls);die; */
 
             // Use Multi Curl for categories
             $ref = new \cURmultiStable;
@@ -100,6 +103,9 @@ class ParserGod implements ParserGodInterface
                 }
             }
 
+            /* echo '<pre>';
+             * print_r($urlGoods);die; */
+
             // Use Multi Curl
             $ref = new \cURmultiStable;
             $htmlGoods = $ref->runmulticurl($urlGoods);
@@ -137,6 +143,10 @@ class ParserGod implements ParserGodInterface
             $this->generateExcel($arrGoods);
 
             $this->downloadImages($arrGoods);
+
+            // Unset session data
+            unset($_SESSION["pagination_url"]);
+            unset($_SESSION["quantity_pages"]);
         } else {
             return;
         }
@@ -156,12 +166,12 @@ class ParserGod implements ParserGodInterface
 
         if ($quantityPages > 0) {
             for ($i = 1; $i <= $quantityPages; $i++) {
-                if ($paginationUrl[strlen($str)-1] == '/') {
+                if ($paginationUrl[strlen($paginationUrl)-1] == '/') {
                     $paginationUrl = substr($paginationUrl, 0, -1);
                 }
                 if (intval(substr($paginationUrl, -1)) != false) {
-                    $paginationUrl = substr_replace($paginationUrl, $i, -1);
-                    $categoryHref[] = $paginationUrl;
+                    $paginationHref = substr_replace($paginationUrl, $i, -1);
+                    $categoryHref[] = $paginationHref;
                 }
             }
         }
