@@ -12,13 +12,6 @@ body {
     overflow: hidden;
     background: rgba(28, 28, 28, 1);
 }
-#myVideo {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
-}
 main {
     bottom: 0;
     color: #f1f1f1;
@@ -82,7 +75,6 @@ h1.title {
     padding: 29px;
     min-height: 370px;
     transform: scale(1) translateX(-50%);
-    animation: formMy 3s ease-in-out;
 }
 .form-input {
     margin-top: 50px;
