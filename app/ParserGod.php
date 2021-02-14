@@ -29,11 +29,33 @@ class ParserGod implements ParserGodInterface
         self::$protocol = self::checkProtocol($catUrl);
 
         if ($start == true && $catUrl != null) {
+
+            // Get data from request post if exists post data
+            $cardGood = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
+            $paginationUrl = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
+            $name = isset($_POST['name']) ? $_POST['name'] : '';
+            $code = isset($_POST['code']) ? $_POST['code'] : '';
+            $price = isset($_POST['price']) ? $_POST['price'] : '';
+            $photo = isset($_POST['photo']) ? $_POST['photo'] : '';
+            $desc = isset($_POST['description']) ? $_POST['description'] : '';
+
+            // Put data in session from request post if exists post data
+            $_SESSION["name"] = isset($_POST["name"]) ? $_POST["name"] : "";
+            $_SESSION["code"] = isset($_POST["code"]) ? $_POST["code"] : "";
+            $_SESSION["price"] = isset($_POST["price"]) ? $_POST["price"] : "";
+            $_SESSION["photo"] = isset($_POST["photo"]) ? $_POST["photo"] : "";
+            $_SESSION["description"] = isset($_POST["description"]) ? $_POST["description"] : "";
+            $_SESSION["card_good"] = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
+            $_SESSION["pagination_url"] = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
+            $_SESSION["url"] = isset($_POST["url"]) ? $_POST["url"] : "";
+
             $htmlCat = \Parser::getPage([
                 "url" => "$catUrl"
             ]);
 
-            $categoryUrls = $this->parsePagination($htmlCat, $catUrl);
+            // Get category urls if exists pagination, otherwise,
+            // put category url.
+            $categoryUrls = $this->parsePagination($paginationUrl);
             if (empty($categoryUrls)) {
                 $categoryUrls[] = $catUrl;
             }
@@ -41,8 +63,6 @@ class ParserGod implements ParserGodInterface
             // Use Multi Curl for categories
             $ref = new \cURmultiStable;
             $htmlCategories = $ref->runmulticurl($categoryUrls);
-
-            $cardGood = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
 
             // Get all url of products from card in category
             for ($k = 0; $k < count($htmlCategories); ++$k) {
@@ -64,7 +84,7 @@ class ParserGod implements ParserGodInterface
                             }
                         }
 
-                        $hrefs = array_unique($hrefs);                        
+                        $hrefs = array_unique($hrefs);
                     }
                     \phpQuery::unloadDocuments();
                 }
@@ -81,20 +101,6 @@ class ParserGod implements ParserGodInterface
             // Use Multi Curl
             $ref = new \cURmultiStable;
             $htmlGoods = $ref->runmulticurl($urlGoods);
-
-            $name = isset($_POST['name']) ? $_POST['name'] : '';
-            $code = isset($_POST['code']) ? $_POST['code'] : '';
-            $price = isset($_POST['price']) ? $_POST['price'] : '';
-            $photo = isset($_POST['photo']) ? $_POST['photo'] : '';
-            $desc = isset($_POST['description']) ? $_POST['description'] : '';
-
-            $_SESSION["name"] = isset($_POST["name"]) ? $_POST["name"] : "";
-            $_SESSION["code"] = isset($_POST["code"]) ? $_POST["code"] : "";
-            $_SESSION["price"] = isset($_POST["price"]) ? $_POST["price"] : "";
-            $_SESSION["photo"] = isset($_POST["photo"]) ? $_POST["photo"] : "";
-            $_SESSION["description"] = isset($_POST["description"]) ? $_POST["description"] : "";
-            $_SESSION["card_good"] = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
-            $_SESSION["url"] = isset($_POST["url"]) ? $_POST["url"] : "";
 
             // Generate goods
             global $arrGoods;
@@ -138,16 +144,16 @@ class ParserGod implements ParserGodInterface
     }
 
     /**
-     * Parsing pagination that to get all 
+     * Parsing pagination that to get all
      * urls of category if it exists.
-     * 
+     *
      * @param string
      * @return array
      */
     public function parsePagination($htmlCat)
     {
         $countPages = 50;
-        
+
         if (!empty($htmlCat["data"])) {
             $domCat = \phpQuery::newDocument($htmlCat["data"]["content"]);
 
