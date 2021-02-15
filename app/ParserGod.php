@@ -33,7 +33,8 @@ class ParserGod implements ParserGodInterface
             // TODO: Make method for registration session data and request data
 
             // Get data from request post if exists post data
-            $cardGood                   = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
+            $productCard                = isset($_POST["product_card"]) ? $_POST["product_card"] : "";
+            $productCardName            = isset($_POST["product_card_name"]) ? $_POST["product_card_name"] : "";
             $paginationUrl              = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
             $quantityPages              = isset($_POST["quantity_pages"]) ? $_POST["quantity_pages"] : "0";
             $name                       = isset($_POST['name']) ? $_POST['name'] : '';
@@ -43,15 +44,16 @@ class ParserGod implements ParserGodInterface
             $desc                       = isset($_POST['description']) ? $_POST['description'] : '';
 
             // Put data in session from request post if exists post data
-            $_SESSION["name"]           = isset($_POST["name"]) ? $_POST["name"] : "";
-            $_SESSION["code"]           = isset($_POST["code"]) ? $_POST["code"] : "";
-            $_SESSION["price"]          = isset($_POST["price"]) ? $_POST["price"] : "";
-            $_SESSION["photo"]          = isset($_POST["photo"]) ? $_POST["photo"] : "";
-            $_SESSION["description"]    = isset($_POST["description"]) ? $_POST["description"] : "";
-            $_SESSION["card_good"]      = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
-            $_SESSION["pagination_url"] = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
-            $_SESSION["quantity_pages"] = isset($_POST["quantity_pages"]) ? $_POST["quantity_pages"] : "";
-            $_SESSION["url"]            = isset($_POST["url"]) ? $_POST["url"] : "";
+            $_SESSION["name"]              = isset($_POST["name"]) ? $_POST["name"] : "";
+            $_SESSION["code"]              = isset($_POST["code"]) ? $_POST["code"] : "";
+            $_SESSION["price"]             = isset($_POST["price"]) ? $_POST["price"] : "";
+            $_SESSION["photo"]             = isset($_POST["photo"]) ? $_POST["photo"] : "";
+            $_SESSION["description"]       = isset($_POST["description"]) ? $_POST["description"] : "";
+            $_SESSION["product_card"]      = isset($_POST["product_card"]) ? $_POST["product_card"] : "";
+            $_SESSION["product_card_name"] = isset($_POST["product_card_name"]) ? $_POST["product_card_name"] : "";
+            $_SESSION["pagination_url"]    = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
+            $_SESSION["quantity_pages"]    = isset($_POST["quantity_pages"]) ? $_POST["quantity_pages"] : "";
+            $_SESSION["url"]               = isset($_POST["url"]) ? $_POST["url"] : "";
 
             $htmlCat = \Parser::getPage([
                 "url" => "$catUrl"
@@ -60,7 +62,7 @@ class ParserGod implements ParserGodInterface
             // Get category urls if exists pagination, otherwise,
             // put category url
             if (!empty($paginationUrl) && intval($quantityPages) > 0) {
-                $categoryUrls = $this->getAllUrlPagesOfPagination($paginationUrl, $quantityPages);
+                $categoryUrls = $this->getUrlsOfPagination($paginationUrl, $quantityPages);
             } else {
                 $categoryUrls[] = $catUrl;
             }
@@ -69,44 +71,7 @@ class ParserGod implements ParserGodInterface
             $ref = new \cURmultiStable;
             $htmlCategories = $ref->runmulticurl($categoryUrls);
 
-            // TODO: Optimize process of parsing products card
-            // 1. Unload memory
-            // 2. Use other library for parsing
-
-            // TODO: Fix select only url product in product card
-
-            // Get all url of products from card in category
-            for ($k = 0; $k < count($htmlCategories); ++$k) {
-                if (!empty($htmlCategories[$k])) {
-                    $domCategory[$k] = \phpQuery::newDocument($htmlCategories[$k]);
-
-                    foreach ($domCategory[$k]->find($cardGood) as $link) {
-                        $productCard = pq($link);
-                        $links = $productCard->find('a');
-
-                        foreach ($links as $link) {
-                            $pqLink = pq($link);
-                            $href = $pqLink->attr('href');
-
-                            if (trim($href) === '#') {
-                                continue;
-                            } else {
-                                $hrefs[] = $pqLink->attr('href');
-                            }
-                        }
-                        $hrefs = array_unique($hrefs);
-                    }
-                    \phpQuery::unloadDocuments();
-                }
-            }
-
-            foreach ($hrefs as $href) {
-                if (substr($href, 0, 4) === 'http') {
-		            $urlGoods[] = $href;
-                } else {
-                    $urlGoods[] = self::$protocol.self::$host.$href;
-                }
-            }
+            $urlGoods = $this->getUrlsOfProducts($htmlCategories, $productCard, $productCardName);
 
             // Use Multi Curl
             $ref = new \cURmultiStable;
@@ -161,7 +126,7 @@ class ParserGod implements ParserGodInterface
      * @param integer $quantiyPages
      * @return array
      */
-    public function getAllUrlPagesOfPagination($paginationUrl, $quantityPages)
+    public function getUrlsOfPagination($paginationUrl, $quantityPages)
     {
         $iterator = 1;
         $categoryHref = [];
@@ -185,6 +150,60 @@ class ParserGod implements ParserGodInterface
         }
 
         return $categoryHref;
+    }
+
+    /**
+     * Parse url products from product card
+     *
+     * @param string $htmlCategories
+     * @return array
+     */
+
+    public function getUrlsOfProducts($htmlCategories, $productCard, $productCardName)
+    {
+        // TODO: Optimize process of parsing products card
+        // 1. Unload memory
+        // 2. Use other library for parsing
+
+        $urlGoods = array();
+        $domCategory = array();
+
+        for ($k = 0; $k < count($htmlCategories); ++$k) {
+            if (!empty($htmlCategories[$k])) {
+                $domCategory[$k] = \phpQuery::newDocument($htmlCategories[$k]);
+
+                foreach ($domCategory[$k]->find($productCard) as $link) {
+                    $productCard = pq($link);
+                    $links = $productCard->find('a'.$productCardName);
+
+                    foreach ($links as $link) {
+                        $pqLink = pq($link);
+                        $href = $pqLink->attr('href');
+
+                        if (trim($href) === '#') {
+                            continue;
+                        } else {
+                            $hrefs[] = $pqLink->attr('href');
+                        }
+                    }
+                    unset($domCategory[$k]);
+                }
+            }
+            unset($htmlCategories[$k]);
+        }
+        \phpQuery::unloadDocuments();
+
+        $hrefs = array_unique($hrefs);
+
+        foreach ($hrefs as $href) {
+            if (substr($href, 0, 4) === 'http') {
+                $urlGoods[] = $href;
+            } else {
+                $urlGoods[] = self::$protocol.self::$host.$href;
+            }
+        }
+
+        return $urlGoods;
     }
 
     /**

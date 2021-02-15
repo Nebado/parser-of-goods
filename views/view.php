@@ -17,8 +17,9 @@
                         <form action="" method="post">
                             <h1 class="title">Parser of Goods</h1>
                             <fieldset class="form-input">
-                                <input class="input input-url" type="text" name="url" value="<?= $_SESSION["url"]?>" placeholder="Enter your url category" /><span class="required">*</span>
-                                <input class="input input-card" type="text" name="card_good" value="<?= $_SESSION["card_good"]?>" placeholder="Enter your class card of good" /><span class="required">*</span><br>
+                                <input class="input input-url" type="text" name="url" value="<?= $_SESSION["url"]?>" placeholder="Enter url of category" /><span class="required">*</span>
+                                <input class="input input-card" type="text" name="product_card" value="<?= $_SESSION["product_card"]?>" placeholder="Enter class of product card" /><span class="required">*</span>
+                                <input class="input input-card-name" type="text" name="product_card_name" value="<?= $_SESSION["product_card_name"]?>" placeholder="Enter class of product card name" /><span class="required">*</span><br>
                                 <div>
                                     <input id="pagination-checkbox" class="input-checkbox" onclick="pagination()" type="checkbox" />
                                     <label for="pagination">Pagination</label><br>
