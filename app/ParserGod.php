@@ -176,7 +176,7 @@ class ParserGod implements ParserGodInterface
                 $iterator++;
             }
 
-            $numberOfDigit = $num - 1;
+            $numberOfDigit = $iterator - 1;
 
             for ($i = 1; $i <= $quantityPages; ++$i) {
                 $paginationHref = substr_replace($paginationUrl, $i, -$numberOfDigit);
