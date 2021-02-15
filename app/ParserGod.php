@@ -31,7 +31,7 @@ class ParserGod implements ParserGodInterface
         if ($start == true && $catUrl != null) {
 
             // TODO: Make method for registration session data and request data
-            
+
             // Get data from request post if exists post data
             $cardGood                   = isset($_POST["card_good"]) ? $_POST["card_good"] : "";
             $paginationUrl              = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
@@ -74,7 +74,7 @@ class ParserGod implements ParserGodInterface
             // 2. Use other library for parsing
 
             // TODO: Fix select only url product in product card
-            
+
             // Get all url of products from card in category
             for ($k = 0; $k < count($htmlCategories); ++$k) {
                 if (!empty($htmlCategories[$k])) {
@@ -163,21 +163,24 @@ class ParserGod implements ParserGodInterface
      */
     public function getAllUrlPagesOfPagination($paginationUrl, $quantityPages)
     {
-        // TODO: Doesn't work with different cases paginationUrl        
-        // work only one digit in paginationUrl
-        
+        $iterator = 1;
         $categoryHref = [];
         $quantityPages = intval($quantityPages);
 
         if ($quantityPages > 0) {
-            for ($i = 1; $i <= $quantityPages; $i++) {
-                if ($paginationUrl[strlen($paginationUrl)-1] == '/') {
-                    $paginationUrl = substr($paginationUrl, 0, -1);
-                }
-                if (intval(substr($paginationUrl, -1)) != false) {
-                    $paginationHref = substr_replace($paginationUrl, $i, -1);
-                    $categoryHref[] = $paginationHref;
-                }
+            if ($paginationUrl[strlen($paginationUrl)-1] == '/') {
+                $paginationUrl = substr($paginationUrl, 0, -1);
+            }
+
+            while (is_numeric(substr($paginationUrl, -$iterator)) != false) {
+                $iterator++;
+            }
+
+            $numberOfDigit = $num - 1;
+
+            for ($i = 1; $i <= $quantityPages; ++$i) {
+                $paginationHref = substr_replace($paginationUrl, $i, -$numberOfDigit);
+                $categoryHref[] = $paginationHref;
             }
         }
 
