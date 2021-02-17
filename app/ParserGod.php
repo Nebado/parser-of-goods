@@ -77,35 +77,8 @@ class ParserGod implements ParserGodInterface
             $ref = new \cURmultiStable;
             $htmlGoods = $ref->runmulticurl($urlGoods);
 
-            // Generate goods
             global $arrGoods;
-
-            for ($i = 0; $i < count($htmlGoods); ++$i) {
-                if(!empty($htmlGoods[$i])) {
-                    $contentGoods[$i] = $htmlGoods[$i];
-                    \phpQuery::newDocument($contentGoods[$i]);
-
-                    // Section main parsing fields
-
-                    $arrGoods[$i]['name'] = (!empty($name)) ? ($arrGoods[$i]['name'] = trim(pq($name)->text())) : '';
-
-                    $arrGoods[$i]['code'] = (!empty($code)) ? ($arrGoods[$i]['code'] = pq($code)->text()) : '';
-
-                    $arrGoods[$i]['price'] = (!empty($price)) ? ($arrGoods[$i]['price'] = pq($price)->text()) : '';
-
-                    $arrGoods[$i]['description'] = (!empty($desc)) ? ($arrGoods[$i]['desc'] = pq($desc)->text()) : '';
-
-                    /* more params... */
-
-                    $arrGoods[$i]['photo'] = (!empty($photo)) ? ($arrGoods[$i]['photo'] = pq($photo)->attr('href')) : '';
-
-                    if ($arrGoods[$i]['photo'] == '') {
-                        $arrGoods[$i]['photo'] = pq($photo)->attr('src');
-                    }
-                }
-
-                \phpQuery::unloadDocuments();
-            }
+            $arrGoods = $this->parseProducts($htmlGoods);
 
             $this->generateExcel($arrGoods);
 
@@ -204,6 +177,46 @@ class ParserGod implements ParserGodInterface
         }
 
         return $urlGoods;
+    }
+
+    /**
+     * Parse all products
+     *
+     * @param array
+     * @return array
+     */
+    public function parseProducts($htmlGoods)
+    {
+        $arrGoods = array();
+
+        for ($i = 0; $i < count($htmlGoods); ++$i) {
+            if(!empty($htmlGoods[$i])) {
+                $contentGoods[$i] = $htmlGoods[$i];
+                \phpQuery::newDocument($contentGoods[$i]);
+
+                // Section main parsing fields
+
+                $arrGoods[$i]['name'] = (!empty($name)) ? ($arrGoods[$i]['name'] = trim(pq($name)->text())) : '';
+
+                $arrGoods[$i]['code'] = (!empty($code)) ? ($arrGoods[$i]['code'] = pq($code)->text()) : '';
+
+                $arrGoods[$i]['price'] = (!empty($price)) ? ($arrGoods[$i]['price'] = pq($price)->text()) : '';
+
+                $arrGoods[$i]['description'] = (!empty($desc)) ? ($arrGoods[$i]['desc'] = pq($desc)->text()) : '';
+
+                /* more params... */
+
+                $arrGoods[$i]['photo'] = (!empty($photo)) ? ($arrGoods[$i]['photo'] = pq($photo)->attr('href')) : '';
+
+                if ($arrGoods[$i]['photo'] == '') {
+                    $arrGoods[$i]['photo'] = pq($photo)->attr('src');
+                }
+            }
+
+            \phpQuery::unloadDocuments();
+        }
+
+        return $arrGoods;
     }
 
     /**
