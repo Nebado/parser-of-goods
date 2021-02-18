@@ -70,7 +70,7 @@ class ParserGod implements ParserGodInterface
             // Use Multi Curl for categories
             $ref = new \cURmultiStable;
             $htmlCategories = $ref->runmulticurl($categoryUrls);
-
+			
             $urlGoods = $this->getUrlsOfProducts($htmlCategories, $productCard, $productCardName);
 
             // Use Multi Curl
@@ -140,31 +140,15 @@ class ParserGod implements ParserGodInterface
 
         $urlGoods = array();
         $domCategory = array();
+		$len = count($htmlCategories);
+		$cardRegex = '<div[^>]+?class\s*?=\s*?(["\'])'.str_replace('.', '', $productCard).'(.*)\1[^>]*?>(.+?)</div>';
 
-        for ($k = 0; $k < count($htmlCategories); ++$k) {
-            if (!empty($htmlCategories[$k])) {
-                $domCategory[$k] = \phpQuery::newDocument($htmlCategories[$k]);
+        for ($k = 0; $k < $len; ++$k) {
+            $domCategory[] = $htmlCategories[$k];
 
-                foreach ($domCategory[$k]->find($productCard) as $link) {
-                    $productCard = pq($link);
-                    $links = $productCard->find('a'.$productCardName);
-
-                    foreach ($links as $link) {
-                        $pqLink = pq($link);
-                        $href = $pqLink->attr('href');
-
-                        if (trim($href) === '#') {
-                            continue;
-                        } else {
-                            $hrefs[] = $pqLink->attr('href');
-                        }
-                    }
-                    unset($domCategory[$k]);
-                }
-            }
-            unset($htmlCategories[$k]);
+			preg_match_all($regexp, $domCategory[$k], $matches); 
+			$hrefs = $matches[1];
         }
-        \phpQuery::unloadDocuments();
 
         $hrefs = array_unique($hrefs);
 
