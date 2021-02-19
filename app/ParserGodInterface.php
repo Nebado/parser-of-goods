@@ -4,5 +4,5 @@ namespace App;
 
 interface ParserGodInterface
 {
-    public function process($start, $url);
+    public function run($start, $url);
 }
