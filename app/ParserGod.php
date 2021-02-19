@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Clue\React\Buzz\Browser;
+use Symfony\Component\DomCrawler\Crawler;
 use PhpOffice\PhpSpreadsheet\Spreadsheet as Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as Xlsx;
 use PHPZip\Zip\File\Zip as Zip;
@@ -10,17 +12,24 @@ use \zipArchive;
 class ParserGod implements ParserGodInterface
 {
     const SSL_PORT = 443;
+
     public $start;
     public $stop;
     public static $host;
     public static $protocol;
+    private $parsed = [];
+    private $client;
+    private $loop;
+    private $links = [];
+    private $productClassName;
 
-    public function __construct()
+    public function __construct(Browser $client, $loop)
     {
-        $this->start = false;
+        $this->client = $client;
+        $this->loop = $loop;
     }
 
-    public function process($start, $catUrl)
+    public function run($start, $catUrl)
     {
         // Get a hostname
         self::$host = self::getHost($catUrl);
@@ -33,15 +42,14 @@ class ParserGod implements ParserGodInterface
             // TODO: Make method for registration session data and request data
 
             // Get data from request post if exists post data
-            $productCard                = isset($_POST["product_card"]) ? $_POST["product_card"] : "";
-            $productCardName            = isset($_POST["product_card_name"]) ? $_POST["product_card_name"] : "";
-            $paginationUrl              = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
-            $quantityPages              = isset($_POST["quantity_pages"]) ? $_POST["quantity_pages"] : "0";
-            $name                       = isset($_POST['name']) ? $_POST['name'] : '';
-            $code                       = isset($_POST['code']) ? $_POST['code'] : '';
-            $price                      = isset($_POST['price']) ? $_POST['price'] : '';
-            $photo                      = isset($_POST['photo']) ? $_POST['photo'] : '';
-            $desc                       = isset($_POST['description']) ? $_POST['description'] : '';
+            $this->productClassName = isset($_POST["product_card_name"]) ? $_POST["product_card_name"] : "";
+            $paginationUrl          = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
+            $quantityPages          = isset($_POST["quantity_pages"]) ? $_POST["quantity_pages"] : "0";
+            $name                   = isset($_POST['name']) ? $_POST['name'] : '';
+            $code                   = isset($_POST['code']) ? $_POST['code'] : '';
+            $price                  = isset($_POST['price']) ? $_POST['price'] : '';
+            $photo                  = isset($_POST['photo']) ? $_POST['photo'] : '';
+            $desc                   = isset($_POST['description']) ? $_POST['description'] : '';
 
             // Put data in session from request post if exists post data
             $_SESSION["name"]              = isset($_POST["name"]) ? $_POST["name"] : "";
@@ -67,28 +75,26 @@ class ParserGod implements ParserGodInterface
                 $categoryUrls[] = $catUrl;
             }
 
-            // Use Multi Curl for categories
-            $ref = new \cURmultiStable;
-            $htmlCategories = $ref->runmulticurl($categoryUrls);
-			
-            $urlGoods = $this->getUrlsOfProducts($htmlCategories, $productCard, $productCardName);
+            $urlProducts = $this->getUrlsProducts($categoryUrls);
+
+            echo "<pre>";
+            print_r($urlProducts);
+            echo "</pre>";
+            die;
+
 
             // Use Multi Curl
             $ref = new \cURmultiStable;
-            $htmlGoods = $ref->runmulticurl($urlGoods);
+            $htmlProducts = $ref->runmulticurl($urlProducts);
 
             global $arrGoods;
-            $arrGoods = $this->parseProducts($htmlGoods);
+            $arrGoods = $this->parseProducts($urlProducts);
 
             $this->generateExcel($arrGoods);
 
             $this->downloadImages($arrGoods);
-
-            // Unset session data
-            unset($_SESSION["pagination_url"]);
-            unset($_SESSION["quantity_pages"]);
         } else {
-            return;
+            return false;
         }
     }
 
@@ -131,36 +137,39 @@ class ParserGod implements ParserGodInterface
      * @param string $htmlCategories
      * @return array
      */
-
-    public function getUrlsOfProducts($htmlCategories, $productCard, $productCardName)
+    public function getUrlsProducts($urls)
     {
-        // TODO: Optimize process of parsing products card
-        // 1. Unload memory
-        // 2. Use other library for parsing
+        $urlProducts = [];
 
-        $urlGoods = array();
-        $domCategory = array();
-		$len = count($htmlCategories);
-		$cardRegex = '<div[^>]+?class\s*?=\s*?(["\'])'.str_replace('.', '', $productCard).'(.*)\1[^>]*?>(.+?)</div>';
+        if (!empty($urls)) {
+            foreach ($urls as $url) {
+                $this->client->get($url)->then(
+                    function (\Psr\Http\Message\ResponseInterface $response) {
+                        $crawler = new Crawler((string) $response->getBody());
 
-        for ($k = 0; $k < $len; ++$k) {
-            $domCategory[] = $htmlCategories[$k];
+                        $this->links[] = $crawler->filter((string) $this->productClassName)->extract(['href']);
+                    });
+            }
+            $this->loop->run();
 
-			preg_match_all($regexp, $domCategory[$k], $matches); 
-			$hrefs = $matches[1];
-        }
+            foreach ($this->links as $key => $value) {
+                foreach ($value as $href) {
+                    $hrefs[] = $href;
+                }
+            }
 
-        $hrefs = array_unique($hrefs);
+            $hrefs = array_unique($hrefs);
 
-        foreach ($hrefs as $href) {
-            if (substr($href, 0, 4) === 'http') {
-                $urlGoods[] = $href;
-            } else {
-                $urlGoods[] = self::$protocol.self::$host.$href;
+            foreach ($hrefs as $href) {
+                if (substr($href, 0, 4) === 'http') {
+                    $urlProducts[] = $href;
+                } else {
+                    $urlProducts[] = self::$protocol.self::$host.$href;
+                }
             }
         }
 
-        return $urlGoods;
+        return $urlProducts;
     }
 
     /**

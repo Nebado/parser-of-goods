@@ -13,11 +13,14 @@ session_start();
 
 $startTime = microtime(true);
 
-$parser = new App\ParserGod();
-$parser->process($_POST['start'], $_POST['url']);
+$loop = \React\EventLoop\Factory::create();
+$client = new \Clue\React\Buzz\Browser($loop);
+
+$parser = new App\ParserGod($client, $loop);
+$parser->run($_POST['start'], $_POST['url']);
+
+$loop->run();
 
 global $time;
-
-$time = microtime(true) - $startTime;
 
 include_once('views/view.php');

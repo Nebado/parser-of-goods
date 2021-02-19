@@ -2,7 +2,10 @@
     "require": {
         "electrolinux/phpquery": "^0.9.6",
         "phpzip/phpzip": "^2.0",
-        "phpoffice/phpspreadsheet": "^1.16"
+        "phpoffice/phpspreadsheet": "^1.16",
+        "clue/buzz-react": "^2.9",
+        "symfony/dom-crawler": "^5.2",
+        "symfony/css-selector": "^5.2"
     },
     "autoload": {
         "psr-4": {
