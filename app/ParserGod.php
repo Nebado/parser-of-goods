@@ -17,11 +17,11 @@ class ParserGod implements ParserGodInterface
     public $stop;
     public static $host;
     public static $protocol;
-    private $parsed = [];
     private $client;
     private $loop;
     private $links = [];
     private $productClassName;
+    private $parsedProduct = [];
 
     public function __construct(Browser $client, $loop)
     {
@@ -45,11 +45,14 @@ class ParserGod implements ParserGodInterface
             $this->productClassName = isset($_POST["product_card_name"]) ? $_POST["product_card_name"] : "";
             $paginationUrl          = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
             $quantityPages          = isset($_POST["quantity_pages"]) ? $_POST["quantity_pages"] : "0";
+
             $name                   = isset($_POST['name']) ? $_POST['name'] : '';
             $code                   = isset($_POST['code']) ? $_POST['code'] : '';
             $price                  = isset($_POST['price']) ? $_POST['price'] : '';
             $photo                  = isset($_POST['photo']) ? $_POST['photo'] : '';
-            $desc                   = isset($_POST['description']) ? $_POST['description'] : '';
+            $description            = isset($_POST['description']) ? $_POST['description'] : '';
+
+            $this->params = ['name' => $name, 'code' => $code, 'price' => $price, 'photo' => $photo, 'description' => $description];
 
             // Put data in session from request post if exists post data
             $_SESSION["name"]              = isset($_POST["name"]) ? $_POST["name"] : "";
@@ -77,22 +80,15 @@ class ParserGod implements ParserGodInterface
 
             $urlProducts = $this->getUrlsProducts($categoryUrls);
 
-            echo "<pre>";
-            print_r($urlProducts);
-            echo "</pre>";
-            die;
-
-
-            // Use Multi Curl
-            $ref = new \cURmultiStable;
-            $htmlProducts = $ref->runmulticurl($urlProducts);
-
             global $arrGoods;
-            $arrGoods = $this->parseProducts($urlProducts);
+
+            $this->parseProducts($urlProducts);
+            $arrGoods = $this->parsedProduct;
 
             $this->generateExcel($arrGoods);
 
             $this->downloadImages($arrGoods);
+
         } else {
             return false;
         }
@@ -122,7 +118,7 @@ class ParserGod implements ParserGodInterface
 
             $numberOfDigit = $iterator - 1;
 
-            for ($i = 1; $i <= $quantityPages; ++$i) {
+            for ($i = 1; $i <= 3; ++$i) {
                 $paginationHref = substr_replace($paginationUrl, $i, -$numberOfDigit);
                 $categoryHref[] = $paginationHref;
             }
@@ -145,6 +141,7 @@ class ParserGod implements ParserGodInterface
             foreach ($urls as $url) {
                 $this->client->get($url)->then(
                     function (\Psr\Http\Message\ResponseInterface $response) {
+
                         $crawler = new Crawler((string) $response->getBody());
 
                         $this->links[] = $crawler->filter((string) $this->productClassName)->extract(['href']);
@@ -178,38 +175,67 @@ class ParserGod implements ParserGodInterface
      * @param array
      * @return array
      */
-    public function parseProducts($htmlGoods)
+    public function parseProducts($urls)
     {
-        $arrGoods = array();
-
-        for ($i = 0; $i < count($htmlGoods); ++$i) {
-            if(!empty($htmlGoods[$i])) {
-                $contentGoods[$i] = $htmlGoods[$i];
-                \phpQuery::newDocument($contentGoods[$i]);
-
-                // Section main parsing fields
-
-                $arrGoods[$i]['name'] = (!empty($name)) ? ($arrGoods[$i]['name'] = trim(pq($name)->text())) : '';
-
-                $arrGoods[$i]['code'] = (!empty($code)) ? ($arrGoods[$i]['code'] = pq($code)->text()) : '';
-
-                $arrGoods[$i]['price'] = (!empty($price)) ? ($arrGoods[$i]['price'] = pq($price)->text()) : '';
-
-                $arrGoods[$i]['description'] = (!empty($desc)) ? ($arrGoods[$i]['desc'] = pq($desc)->text()) : '';
-
-                /* more params... */
-
-                $arrGoods[$i]['photo'] = (!empty($photo)) ? ($arrGoods[$i]['photo'] = pq($photo)->attr('href')) : '';
-
-                if ($arrGoods[$i]['photo'] == '') {
-                    $arrGoods[$i]['photo'] = pq($photo)->attr('src');
-                }
+        if (!empty($urls)) {
+            foreach ($urls as $url) {
+                $this->client->get($url)->then(
+                    function (\Psr\Http\Message\ResponseInterface $response) {
+                        $this->parsedProduct[] = $this->scrapFromHtml((string) $response->getBody());
+                    });
             }
+            $this->loop->run();
 
-            \phpQuery::unloadDocuments();
+        }
+    }
+
+    /**
+     * Extract data from html
+     *
+     * @param string
+     */
+    public function scrapFromHtml($html)
+    {
+        $crawler = new Crawler($html);
+
+        if (!empty($this->params['name'])) {
+            $name = $crawler->filter(trim($this->params['name']))->text();
+        } else {
+            $name = '';
         }
 
-        return $arrGoods;
+        if (!empty($this->params['code'])) {
+            $code = $crawler->filter(trim($this->params['code']))->text();
+        } else {
+            $code = '';
+        }
+
+        if (!empty($this->params['price'])) {
+            $price = $crawler->filter(trim($this->params['price']))->text();
+        } else {
+            $price = '';
+        }
+
+        if (!empty($this->params['photo'])) {
+            $link = $crawler->filter(trim($this->params['photo']));
+            $photo = $link->filter('img')->attr('src');
+        } else {
+            $photo = '';
+        }
+
+        if (!empty($this->params['description'])) {
+            $description = $crawler->filter(trim($this->params['description']))->text();
+        } else {
+            $description = '';
+        }
+
+        return [
+            'name'        => $name,
+            'code'        => $code,
+            'price'       => $price,
+            'photo'       => $photo,
+            'description' => $description
+        ];
     }
 
     /**

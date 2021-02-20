@@ -32,7 +32,7 @@
                                             </div><br>
                                         </div>
                                         <div>
-                                            <input id="image" class="input-checkbox" type="checkbox" checked=" name="image" value="1" />
+                                            <input id="image" class="input-checkbox" type="checkbox" checked="checked" name="image" value="1" />
                                             <label for="image">Download images</label>
                                             <?php if (file_exists($_SERVER['DOCUMENT_ROOT'].'/zip/images.zip')): ?>
                                                 <a href="zip/images.zip" class="download">Download</a>
