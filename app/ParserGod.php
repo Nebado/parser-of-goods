@@ -13,15 +13,16 @@ class ParserGod implements ParserGodInterface
 {
     const SSL_PORT = 443;
 
-    public $start;
-    public $stop;
     public static $host;
     public static $protocol;
+
+    public $start;
     private $client;
     private $loop;
     private $links = [];
-    private $productClassName;
     private $parsedProduct = [];
+    private $request = [];
+    private $session = [];
 
     public function __construct(Browser $client, $loop)
     {
@@ -31,40 +32,16 @@ class ParserGod implements ParserGodInterface
 
     public function run($start, $catUrl)
     {
-        // Get a hostname
-        self::$host = self::getHost($catUrl);
-
-        // Check protocol
-        self::$protocol = self::checkProtocol($catUrl);
-
         if ($start == true && $catUrl != null) {
 
-            // TODO: Make method for registration session data and request data
+            // Get a hostname
+            self::$host = self::getHost($catUrl);
 
-            // Get data from request post if exists post data
-            $this->productClassName = isset($_POST["product_card_name"]) ? $_POST["product_card_name"] : "";
-            $paginationUrl          = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
-            $quantityPages          = isset($_POST["quantity_pages"]) ? $_POST["quantity_pages"] : "0";
+            // Check protocol
+            self::$protocol = self::checkProtocol($catUrl);
 
-            $name                   = isset($_POST['name']) ? $_POST['name'] : '';
-            $code                   = isset($_POST['code']) ? $_POST['code'] : '';
-            $price                  = isset($_POST['price']) ? $_POST['price'] : '';
-            $photo                  = isset($_POST['photo']) ? $_POST['photo'] : '';
-            $description            = isset($_POST['description']) ? $_POST['description'] : '';
-
-            $this->params = ['name' => $name, 'code' => $code, 'price' => $price, 'photo' => $photo, 'description' => $description];
-
-            // Put data in session from request post if exists post data
-            $_SESSION["name"]              = isset($_POST["name"]) ? $_POST["name"] : "";
-            $_SESSION["code"]              = isset($_POST["code"]) ? $_POST["code"] : "";
-            $_SESSION["price"]             = isset($_POST["price"]) ? $_POST["price"] : "";
-            $_SESSION["photo"]             = isset($_POST["photo"]) ? $_POST["photo"] : "";
-            $_SESSION["description"]       = isset($_POST["description"]) ? $_POST["description"] : "";
-            $_SESSION["product_card"]      = isset($_POST["product_card"]) ? $_POST["product_card"] : "";
-            $_SESSION["product_card_name"] = isset($_POST["product_card_name"]) ? $_POST["product_card_name"] : "";
-            $_SESSION["pagination_url"]    = isset($_POST["pagination_url"]) ? $_POST["pagination_url"] : "";
-            $_SESSION["quantity_pages"]    = isset($_POST["quantity_pages"]) ? $_POST["quantity_pages"] : "";
-            $_SESSION["url"]               = isset($_POST["url"]) ? $_POST["url"] : "";
+            $this->saveRequest();
+            $this->saveSession();
 
             $htmlCat = \Parser::getPage([
                 "url" => "$catUrl"
@@ -72,8 +49,12 @@ class ParserGod implements ParserGodInterface
 
             // Get category urls if exists pagination, otherwise,
             // put category url
-            if (!empty($paginationUrl) && intval($quantityPages) > 0) {
-                $categoryUrls = $this->getUrlsOfPagination($paginationUrl, $quantityPages);
+            if (!empty($this->request['pagination_url']) &&
+                intval($this->request['quantity_pages']) > 0)
+            {
+                $categoryUrls = $this->getUrlsOfPagination(
+                    $this->request['pagination_url'],
+                    $this->request['quantity_pages']);
             } else {
                 $categoryUrls[] = $catUrl;
             }
@@ -142,7 +123,7 @@ class ParserGod implements ParserGodInterface
                 $this->client->get($url)->then(
                     function (\Psr\Http\Message\ResponseInterface $response) {
                         $crawler = new Crawler((string) $response->getBody());
-                        $this->links[] = $crawler->filter((string) $this->productClassName)->extract(['href']);
+                        $this->links[] = $crawler->filter((string) $this->request['product_card_name'])->extract(['href']);
                     });
             }
             $this->loop->run();
@@ -196,33 +177,33 @@ class ParserGod implements ParserGodInterface
     {
         $crawler = new Crawler($html);
 
-        if (!empty($this->params['name'])) {
-            $name = $crawler->filter(trim($this->params['name']))->text();
+        if (!empty($this->request['name'])) {
+            $name = $crawler->filter(trim($this->request['name']))->text();
         } else {
             $name = '';
         }
 
-        if (!empty($this->params['code'])) {
-            $code = $crawler->filter(trim($this->params['code']))->text();
+        if (!empty($this->request['code'])) {
+            $code = $crawler->filter(trim($this->request['code']))->text();
         } else {
             $code = '';
         }
 
-        if (!empty($this->params['price'])) {
-            $price = $crawler->filter(trim($this->params['price']))->text();
+        if (!empty($this->request['price'])) {
+            $price = $crawler->filter(trim($this->request['price']))->text();
         } else {
             $price = '';
         }
 
-        if (!empty($this->params['photo'])) {
-            $link = $crawler->filter(trim($this->params['photo']));
+        if (!empty($this->request['photo'])) {
+            $link = $crawler->filter(trim($this->request['photo']));
             $photo = $link->filter('img')->attr('src');
         } else {
             $photo = '';
         }
 
-        if (!empty($this->params['description'])) {
-            $description = $crawler->filter(trim($this->params['description']))->text();
+        if (!empty($this->request['description'])) {
+            $description = $crawler->filter(trim($this->request['description']))->text();
         } else {
             $description = '';
         }
@@ -396,5 +377,23 @@ class ParserGod implements ParserGodInterface
         $result = (!empty($fp)) ? "https://" : "http://";
 
         return $result;
+    }
+
+    private function saveRequest()
+    {
+        if (!empty($_REQUEST)) {
+            foreach ($_REQUEST as $key => $value) {
+                $this->request[$key] = $value;
+            }
+        }
+    }
+
+    private function saveSession()
+    {
+        if (!empty($this->request)) {
+            foreach ($this->request as $key => $value) {
+                $_SESSION[$key] = $value;
+            }
+        }
     }
 }
