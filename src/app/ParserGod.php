@@ -66,6 +66,11 @@ class ParserGod implements ParserGodInterface
             $this->parseProducts($urlProducts);
             $arrGoods = $this->parsedProduct;
 
+            $uploadPath = "src/upload";
+            if(!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
             $this->generateExcel($arrGoods);
 
             $this->downloadImages($arrGoods);
