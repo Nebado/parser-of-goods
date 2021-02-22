@@ -21,6 +21,8 @@ $parser->run($_POST['start'], $_POST['url']);
 
 $loop->run();
 
+$time = microtime(true) - $startTime;
+
 global $time;
 
 include_once('views/view.php');

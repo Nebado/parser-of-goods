@@ -118,7 +118,7 @@ class ParserGod implements ParserGodInterface
 
             $numberOfDigit = $iterator - 1;
 
-            for ($i = 1; $i <= 3; ++$i) {
+            for ($i = 1; $i <= $quantityPages; ++$i) {
                 $paginationHref = substr_replace($paginationUrl, $i, -$numberOfDigit);
                 $categoryHref[] = $paginationHref;
             }
@@ -141,9 +141,7 @@ class ParserGod implements ParserGodInterface
             foreach ($urls as $url) {
                 $this->client->get($url)->then(
                     function (\Psr\Http\Message\ResponseInterface $response) {
-
                         $crawler = new Crawler((string) $response->getBody());
-
                         $this->links[] = $crawler->filter((string) $this->productClassName)->extract(['href']);
                     });
             }
@@ -323,13 +321,20 @@ class ParserGod implements ParserGodInterface
             $k = 0;
             for($k = 0; $k < count($arrGoods); $k++) {
                 $photoName = substr($arrGoods[$k]['photo'], (strrpos($arrGoods[$k]['photo'], "/") + 1));
-                $photoUrl = self::$protocol.self::$host.$arrGoods[$k]['photo'];
+
+                if (substr($arrGoods[$k]['photo'], 0, 4) === 'http') {
+                    $photoUrl = $arrGoods[$k]['photo'];
+                } else {
+                    $photoUrl = self::$protocol.self::$host.$arrGoods[$k]['photo'];
+                }
 
                 $fullPhotoPathName = $catalogOutPath . DIRECTORY_SEPARATOR . $photoName;
                 $arrFullPhotos[] = $fullPhotoPathName;
 
                 if (!file_exists($fullPhotoPathName)) {
                     file_put_contents($fullPhotoPathName, file_get_contents($photoUrl));
+                } else {
+                    unlink($fullPhotoPathName);
                 }
             }
 
