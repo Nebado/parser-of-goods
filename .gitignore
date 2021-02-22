@@ -1,6 +1,7 @@
 todo.org
-/images
+images/
 vendor/
+test/
 goods.xlsx
 .zip
 zip/
