@@ -278,7 +278,7 @@ class ParserGod implements ParserGodInterface
             $page = $phpExcel->setActiveSheetIndex(0);
             $page->setTitle('goods');
             $objWriter = new Xlsx($phpExcel);
-            $filename = "goods.xlsx";
+            $filename = "src/upload/goods.xlsx";
 
             if (file_exists($filename)) {
                 unlink($filename);
@@ -294,7 +294,7 @@ class ParserGod implements ParserGodInterface
     public function downloadImages($arrGoods)
     {
         if (isset($_POST["image"]) && $_POST["image"] == "1") {
-            $catalogOutPath = "images";
+            $catalogOutPath = "src/upload/images";
             if(!is_dir($catalogOutPath)) {
                 mkdir($catalogOutPath, 0777, true);
             }
@@ -328,7 +328,8 @@ class ParserGod implements ParserGodInterface
      */
     public function zipUp()
     {
-        $zipPath = "zip";
+        $zipPath = "src/upload/zip";
+        $imagesPath = "src/upload/images";
 
         if(!is_dir($zipPath)) {
             mkdir($zipPath, 0777, true);
@@ -339,12 +340,12 @@ class ParserGod implements ParserGodInterface
         /* $zip = new Zip();
          * $zip->saveZipFile($filenameZip); */
         $res = $zip->open($filenameZip, ZipArchive::CREATE);
-        $files = scandir('images');
+        $files = scandir($imagesPath);
 
         if ($res === TRUE) {
             foreach ($files as $file) {
                 if ($file == '.' || $file == '..') {continue;}
-                $f = 'images'.DIRECTORY_SEPARATOR.$file;
+                $f = $imagesPath.DIRECTORY_SEPARATOR.$file;
                 $zip->addFile($f);
             }
             $zip->close();

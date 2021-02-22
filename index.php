@@ -1,13 +1,9 @@
 <?php
 
-require_once("./config.php");
-// require_once("./libs/autoload.php");
-// require_once("./app/ParserGodInterface.php");
-// require_once("./app/ParserGod.php");
+require_once("./src/config/config.php");
 require_once("./vendor/autoload.php");
-require_once("./libs/CurlMulti.php");
-require_once("./libs/Curl.php");
-require_once("./libs/PhpQuery.php");
+require_once("./src/libs/CurlMulti.php");
+require_once("./src/libs/Curl.php");
 
 session_start();
 
@@ -17,7 +13,7 @@ $loop = \React\EventLoop\Factory::create();
 $client = new \Clue\React\Buzz\Browser($loop);
 
 $parser = new App\ParserGod($client, $loop);
-$parser->run($_POST['start'], $_POST['url']);
+$parser->run($_REQUEST['start'], $_REQUEST['url']);
 
 $loop->run();
 
@@ -25,4 +21,4 @@ $time = microtime(true) - $startTime;
 
 global $time;
 
-include_once('views/view.php');
+include_once('./src/views/view.php');

@@ -1,8 +1,4 @@
-todo.org
-images/
+src/upload/
+src/app/Tests/*
 vendor/
-test/
-goods.xlsx
-.zip
-zip/
 composer.lock
