@@ -6,17 +6,18 @@ WARNING! The parser is in an active development state. If you want to use parser
 
 * [Version 0.1](https://github.com/Nebado/ParserOfGoods/releases/tag/0.1)
 
-![screenshot](./assets/images/parser_v0.1_3.png)
+![screenshot](./src/assets/images/parser_v0.1_4.png)
 
 ## Dependencies
 
-- php ^5.2
+- php ^7.2
 - php-xml
 - php-curl
 - php-zip
 - php-gb
-- phpQuery
-- PhpSpreadsheet
+- clue/buzz-react
+- symfony/dom-crawler
+- symfony/css-selector
 
 ## Installation
 
@@ -26,10 +27,6 @@ WARNING! The parser is in an active development state. If you want to use parser
 $ composer update
 
 ```
-* Without composer
-
-Uncomment /* require_once("./libs/autoload.php"); */ in index.php
-and comment require_once("./vendor/autoload.php");
 
 ## Quick start
 
