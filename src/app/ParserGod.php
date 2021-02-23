@@ -29,12 +29,12 @@ class ParserGod implements ParserGodInterface
 		$this->loop = $loop;
 	}
 
-    /**
-     * Run application
-     *
-     * @param integer
-     * @param string
-     */
+	/**
+	 * Run application
+	 *
+	 * @param integer
+	 * @param string
+	 */
 	public function run($start, $catUrl)
 	{
 		if ($start == true && $catUrl != null) {
@@ -45,7 +45,7 @@ class ParserGod implements ParserGodInterface
 			// Check protocol
 			self::$protocol = self::checkProtocol($catUrl);
 
-            // Registration request data and session
+			// Registration request data and session
 			$this->saveRequest();
 			$this->saveSession();
 
@@ -93,7 +93,7 @@ class ParserGod implements ParserGodInterface
 	 * @param integer $quantiyPages
 	 * @return array
 	 */
-    private function getUrlsOfPagination($paginationUrl, $quantityPages) : array
+	private function getUrlsOfPagination($paginationUrl, $quantityPages) : array
 	{
 		$iterator = 1;
 		$categoryHref = [];
@@ -164,7 +164,7 @@ class ParserGod implements ParserGodInterface
 	 *
 	 * @param array
 	 */
-    private function parseProducts(array $urls) : void
+	private function parseProducts(array $urls) : void
 	{
 		if (!empty($urls)) {
 			foreach ($urls as $url) {
@@ -183,7 +183,7 @@ class ParserGod implements ParserGodInterface
 	 * @param string
 	 * @return array
 	 */
-    private function scrapFromHtml(string $html) : array
+	private function scrapFromHtml(string $html) : array
 	{
 		$crawler = new Crawler($html);
 
@@ -232,7 +232,7 @@ class ParserGod implements ParserGodInterface
 	 *
 	 * @param array
 	 */
-    private function generateExcel($arrGoods) : void
+	private function generateExcel($arrGoods) : void
 	{
 		if (isset($_POST["excel"]) && $_POST["excel"] == "1") {
 			$phpExcel = new Spreadsheet();
@@ -305,7 +305,7 @@ class ParserGod implements ParserGodInterface
 	 *
 	 * @param array
 	 */
-    private function downloadImages($arrGoods) : void
+	private function downloadImages($arrGoods) : void
 	{
 		if (isset($_POST["image"]) && $_POST["image"] == "1") {
 			$catalogOutPath = "src/upload/images";
@@ -340,7 +340,7 @@ class ParserGod implements ParserGodInterface
 	/**
 	 * Create zip file for images
 	 */
-    private function zipUp() : void
+	private function zipUp() : void
 	{
 		$zipPath = "src/upload/zip";
 		$imagesPath = "src/upload/images";
@@ -394,9 +394,9 @@ class ParserGod implements ParserGodInterface
 		return $result;
 	}
 
-    /**
-     * Registration request data
-     */
+	/**
+	 * Registration request data
+	 */
 	private function saveRequest() : void
 	{
 		if (!empty($_REQUEST)) {
@@ -406,9 +406,9 @@ class ParserGod implements ParserGodInterface
 		}
 	}
 
-    /**
-     * Registration session data
-     */
+	/**
+	 * Registration session data
+	 */
 	private function saveSession() : void
 	{
 		if (!empty($this->request)) {
@@ -418,11 +418,11 @@ class ParserGod implements ParserGodInterface
 		}
 	}
 
-    /**
-     * Write all category urls in file
-     *
-     * @param array
-     */
+	/**
+	 * Write all category urls in file
+	 *
+	 * @param array
+	 */
 	private function writeUrlsCategory(array $urls) : void
 	{
 		$tmpPath = "src/tmp/";
@@ -436,11 +436,11 @@ class ParserGod implements ParserGodInterface
 		file_put_contents($filename, $data);
 	}
 
-    /**
-     * Write all products urls in file
-     *
-     * @param array
-     */
+	/**
+	 * Write all products urls in file
+	 *
+	 * @param array
+	 */
 	private function writeUrlsProducts(array $urls) : void
 	{
 		$tmpPath = "src/tmp/";
