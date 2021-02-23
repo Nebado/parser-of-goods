@@ -16,7 +16,6 @@ class ParserGod implements ParserGodInterface
 	public static $host;
 	public static $protocol;
 
-	public $start;
 	private $client;
 	private $loop;
 	private $links = [];
@@ -30,6 +29,12 @@ class ParserGod implements ParserGodInterface
 		$this->loop = $loop;
 	}
 
+    /**
+     * Run application
+     *
+     * @param integer
+     * @param string
+     */
 	public function run($start, $catUrl)
 	{
 		if ($start == true && $catUrl != null) {
@@ -40,12 +45,9 @@ class ParserGod implements ParserGodInterface
 			// Check protocol
 			self::$protocol = self::checkProtocol($catUrl);
 
+            // Registration request data and session
 			$this->saveRequest();
 			$this->saveSession();
-
-			$htmlCat = \Parser::getPage([
-				"url" => "$catUrl"
-			]);
 
 			// Get category urls if exists pagination, otherwise,
 			// put category url
@@ -91,7 +93,7 @@ class ParserGod implements ParserGodInterface
 	 * @param integer $quantiyPages
 	 * @return array
 	 */
-	public function getUrlsOfPagination($paginationUrl, $quantityPages)
+    private function getUrlsOfPagination($paginationUrl, $quantityPages) : array
 	{
 		$iterator = 1;
 		$categoryHref = [];
@@ -120,10 +122,10 @@ class ParserGod implements ParserGodInterface
 	/**
 	 * Parse url products from product card
 	 *
-	 * @param string $htmlCategories
+	 * @param array $htmlCategories
 	 * @return array
 	 */
-	public function getUrlsProducts($urls)
+	private function getUrlsProducts(array $urls) : array
 	{
 		$urlProducts = [];
 
@@ -161,9 +163,8 @@ class ParserGod implements ParserGodInterface
 	 * Parse all products
 	 *
 	 * @param array
-	 * @return array
 	 */
-	public function parseProducts($urls)
+    private function parseProducts(array $urls) : void
 	{
 		if (!empty($urls)) {
 			foreach ($urls as $url) {
@@ -173,7 +174,6 @@ class ParserGod implements ParserGodInterface
 					});
 			}
 			$this->loop->run();
-
 		}
 	}
 
@@ -181,8 +181,9 @@ class ParserGod implements ParserGodInterface
 	 * Extract data from html
 	 *
 	 * @param string
+	 * @return array
 	 */
-	public function scrapFromHtml($html)
+    private function scrapFromHtml(string $html) : array
 	{
 		$crawler = new Crawler($html);
 
@@ -228,8 +229,10 @@ class ParserGod implements ParserGodInterface
 
 	/**
 	 * Generate Excel file
+	 *
+	 * @param array
 	 */
-	public function generateExcel($arrGoods)
+    private function generateExcel($arrGoods) : void
 	{
 		if (isset($_POST["excel"]) && $_POST["excel"] == "1") {
 			$phpExcel = new Spreadsheet();
@@ -299,8 +302,10 @@ class ParserGod implements ParserGodInterface
 
 	/**
 	 * Download images
+	 *
+	 * @param array
 	 */
-	public function downloadImages($arrGoods)
+    private function downloadImages($arrGoods) : void
 	{
 		if (isset($_POST["image"]) && $_POST["image"] == "1") {
 			$catalogOutPath = "src/upload/images";
@@ -335,7 +340,7 @@ class ParserGod implements ParserGodInterface
 	/**
 	 * Create zip file for images
 	 */
-	public function zipUp()
+    private function zipUp() : void
 	{
 		$zipPath = "src/upload/zip";
 		$imagesPath = "src/upload/images";
@@ -367,7 +372,7 @@ class ParserGod implements ParserGodInterface
 	 * @param string
 	 * @return string
 	 */
-	public static function getHost($url)
+	public static function getHost(string $url) : string
 	{
 		$urlArr = explode('/', $url);
 		$host = $urlArr[2];
@@ -381,7 +386,7 @@ class ParserGod implements ParserGodInterface
 	 * @param string
 	 * @return string
 	 */
-	public static function checkProtocol($url)
+	public static function checkProtocol(string $url) : string
 	{
 		$fp = fsockopen('ssl://'. self::$host, ParserGod::SSL_PORT, $errno, $errstr, 30);
 		$result = (!empty($fp)) ? "https://" : "http://";
@@ -389,7 +394,10 @@ class ParserGod implements ParserGodInterface
 		return $result;
 	}
 
-	private function saveRequest()
+    /**
+     * Registration request data
+     */
+	private function saveRequest() : void
 	{
 		if (!empty($_REQUEST)) {
 			foreach ($_REQUEST as $key => $value) {
@@ -398,7 +406,10 @@ class ParserGod implements ParserGodInterface
 		}
 	}
 
-	private function saveSession()
+    /**
+     * Registration session data
+     */
+	private function saveSession() : void
 	{
 		if (!empty($this->request)) {
 			foreach ($this->request as $key => $value) {
@@ -407,6 +418,11 @@ class ParserGod implements ParserGodInterface
 		}
 	}
 
+    /**
+     * Write all category urls in file
+     *
+     * @param array
+     */
 	private function writeUrlsCategory(array $urls) : void
 	{
 		$tmpPath = "src/tmp/";
@@ -420,6 +436,11 @@ class ParserGod implements ParserGodInterface
 		file_put_contents($filename, $data);
 	}
 
+    /**
+     * Write all products urls in file
+     *
+     * @param array
+     */
 	private function writeUrlsProducts(array $urls) : void
 	{
 		$tmpPath = "src/tmp/";
