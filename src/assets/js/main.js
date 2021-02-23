@@ -112,7 +112,7 @@ function pagination() {
         properties = {
             bgColor             : 'rgba(17, 17, 19, 1)',
             particleColor       : 'rgba(128, 128, 128, 1)',
-            particleRadius      : 3,
+            particleRadius      : 1,
             particleCount       : 100,
             particleMaxVelocity : 0.5,
             lineLength          : 150,
@@ -181,7 +181,7 @@ function pagination() {
                 if (length < properties.lineLength) {
                     opacity = 1 - length / properties.lineLength;
                     ctx.lineWidth = '0,5';
-                    ctx.strokeStyle = 'rgba(128, 255, 128, '+opacity+')';
+                    ctx.strokeStyle = 'rgba(128, 230, 128, '+opacity*.2+')';
                     ctx.beginPath();
                     ctx.moveTo(x1, y1);
                     ctx.lineTo(x2, y2);
