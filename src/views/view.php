@@ -12,87 +12,84 @@
         <main id="main" class="main--wrapper">
             <div class="left_block_main simple-form">
                 <div class="slider">
-                    <div class="item">
-                        <a id="btn" href="#modalTable" class="btn btn-show">Show Table</a>
-                        <form action="" method="post">
+                    <form action="/" method="post">
+                        <div class="item">
                             <h1 class="title">Parser of Goods</h1>
                             <fieldset class="form-input">
-                                <input class="input input-url" type="text" name="url" value="<?= $_SESSION["url"]?>" placeholder="Enter url of category" /><span class="required">*</span>
-                                <input class="input input-card-name" type="text" name="product_card_name" value="<?= $_SESSION["product_card_name"]?>" placeholder="Enter class of product card name" /><span class="required">*</span><br>
-                                <div>
-                                    <input id="pagination-checkbox" class="input-checkbox" onclick="pagination()" type="checkbox" />
-                                    <label for="pagination">Pagination</label><br>
+                                <input class="input input-url" type="text" name="url" value="<?= $_SESSION["url"]?>" placeholder="Enter url of category" required /><span class="required">*</span>
+                                <input class="input input-card-name" type="text" name="product_card_name" value="<?= $_SESSION["product_card_name"]?>" placeholder="Enter selector of product card name" required /><span class="required">*</span><br>
+                                <input id="pagination-checkbox" class="input-checkbox" onclick="pagination()" type="checkbox" <?= (!empty($_SESSION['pagination_url'])) ? "checked" : "" ?> />
+                                <label for="pagination">Pagination</label><br>
+                                <div id="pagination" style="display: <?= (!empty($_SESSION['pagination_url'])) ? "block" : "none" ?>">
+                                    <input id="pagination-url" class="input input-pagination" type="text" name="pagination_url" value="<?= isset($_SESSION["pagination_url"]) ? $_SESSION["pagination_url"] : ""?>" placeholder="Enter url page with pagination" />
                                     <div>
-                                        <div id="pagination" style="display: none;">
-                                            <input id="pagination-url" class="input input-pagination" type="text" name="pagination_url" value="<?= isset($_SESSION["pagination_url"]) ? $_SESSION["pagination_url"] : ""?>" placeholder="Enter url page with pagination" />
-                                            <div>
-                                                <p>Enter the number of pages in pagination</p>
-                                                <input type="text" name="quantity_pages" value="<?= isset($_SESSION["quantity_pages"]) ? $_SESSION["quantity_pages"] : "0"?>" class="quantity-pages" id="quantiy-pages" />
-                                            </div><br>
-                                        </div>
-                                        <div>
-                                            <input id="image" class="input-checkbox" type="checkbox" checked="checked" name="image" value="1" />
-                                            <label for="image">Download images</label>
-                                            <?php if (file_exists($_SERVER['DOCUMENT_ROOT'].'/src/upload/zip/images.zip')): ?>
-                                                <a href="/src/upload/zip/images.zip" class="download">Download</a>
-                                            <?php endif; ?>
-                                        </div>
-                                        <div>
-                                            <input id="excel" class="input-checkbox" type="checkbox" checked="checked" name="excel" value="1" />
-                                            <label for="excel">Excel/CSV</label>
-                                            <?php if (file_exists($_SERVER['DOCUMENT_ROOT'].'/src/upload/goods.xlsx')): ?>
-                                                <a href="/src/upload/goods.xlsx" class="download">Download</a>
-                                            <?php endif; ?>
-                                        </div>
-                                        <a class="next btn" onclick="nextSlide()">Next</a>
-                            </fieldset>
-                                    </div>
-                                    <div class="item">
-                                        <h1 class="title">Choose Fields</h1>
-                                        <fieldset class="form-input">
-                                            <div id="form-fields">
-                                                <input class="input input-name" type="text" name="name" value="<?= $_SESSION["name"]?>" placeholder="Input class name" /><span class="required">*</span>
-                                                <input class="input input-code" type="text" name="code" value="<?= $_SESSION["code"]?>" placeholder="Input class code" /><span class="required">*</span>
-                                                <input class="input input-price" type="text" name="price" value="<?= $_SESSION["price"]?>" placeholder="Input class price" /><span class="required">*</span>
-                                                <input class="input input-photo" type="text" name="photo" value="<?= $_SESSION["photo"]?>" placeholder="Input class photo" /><span class="required">*</span>
-                                                <input class="input input-description" type="text" value="<?= $_SESSION["description"]?>" name="description" placeholder="Input class description" />
-                                            </div>
-                                            <div class="btn-group">
-                                                <button class="btn btn-start" type="submit" name="start" value="1">Start</button>
-                                                <button class="btn btn-stop" type="button" onclick="window.stop()">Stop</button>
-                                                <a class="previous btn" onclick="previousSlide()">Previous</a>
-                                            </div>
-                                        </fieldset>
-                        </form>
-                        <button class="btn btn-add" onclick="addField()">Add</button>
-                                    </div>
+                                        <p>Enter the number of pages in pagination</p>
+                                        <input type="text" name="quantity_pages" value="<?= isset($_SESSION["quantity_pages"]) ? $_SESSION["quantity_pages"] : "0"?>" class="quantity-pages" id="quantiy-pages" />
+                                    </div><br>
                                 </div>
-                    </div>
-                    <div id="modalTable" class="modal-content output-table">
-                        <span class="close">&times;</span>
-                        <?php
-                        if (isset($arrGoods) && !empty($arrGoods)) {
-                            echo '<table id="table">';
-                            echo '<tr><th>Name</th><th>Code</th><th>Price</th><th>Description</th><th>Photos</th></tr>';
-                            for ($i = 0; $i < count($arrGoods); ++$i) {
-                                echo '<tr>';
-                                echo '<td>'.$arrGoods[$i]['name'].'</td>';
-                                echo '<td>'.$arrGoods[$i]['code'].'</td>';
-                                echo '<td>'.$arrGoods[$i]['price'].'</td>';
-                                echo '<td>'.$arrGoods[$i]['description'].'</td>';
-                                $photosTitle[$i] = substr($arrGoods[$i]['photo'], (strrpos($arrGoods[$i]['photo'], "/") + 1));
-                                echo '<td>'.$photosTitle[$i].'</td>';
-                                echo '</tr>';
-                            }
-                            echo '</tr></table>';
+                                <div>
+                                    <input id="image" class="input-checkbox" type="checkbox" checked="checked" name="image" value="1" />
+                                    <label for="image">Download images</label>
+                                    <?php if (file_exists($_SERVER['DOCUMENT_ROOT'].'/src/upload/zip/images.zip')): ?>
+                                        <a href="/src/upload/zip/images.zip" class="download">Download</a>
+                                    <?php endif; ?>
+                                </div>
+                                <div>
+                                    <input id="excel" class="input-checkbox" type="checkbox" checked="checked" name="excel" value="1" />
+                                    <label for="excel">Excel/CSV</label>
+                                    <?php if (file_exists($_SERVER['DOCUMENT_ROOT'].'/src/upload/goods.xlsx')): ?>
+                                        <a href="/src/upload/goods.xlsx" class="download">Download</a>
+                                    <?php endif; ?>
+                                </div>
+                                <a class="next btn" onclick="nextSlide()">Next</a>
+                            </fieldset>
+                            <a id="btn" href="#modalTable" class="btn btn-show">Show Table</a>
+                        </div>
+                        <div class="item">
+                            <h1 class="title">Choose Fields</h1>
+                            <fieldset class="form-input">
+                                <div id="form-fields">
+                                    <input class="input input-name" type="text" name="name" value="<?= $_SESSION["name"]?>" placeholder="Enter selector of name" />
+                                    <input class="input input-code" type="text" name="code" value="<?= $_SESSION["code"]?>" placeholder="Enter selector of code" />
+                                    <input class="input input-price" type="text" name="price" value="<?= $_SESSION["price"]?>" placeholder="Enter selector of price" />
+                                    <input class="input input-photo" type="text" name="photo" value="<?= $_SESSION["photo"]?>" placeholder="Enter selector of photo" />
+                                    <input class="input input-description" type="text" value="<?= $_SESSION["description"]?>" name="description" placeholder="Enter selector of description" />
+                                    <div class="btn btn-add" onclick="addField()">Add</div>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn btn-start" type="submit" name="start" value="1">Start</button>
+                                    <button class="btn btn-stop" type="button" onclick="window.stop()">Stop</button>
+                                    <a class="previous btn" onclick="previousSlide()">Previous</a>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="modalTable" class="modal-content output-table">
+                <span class="close">&times;</span>
+                <?php
+                if (isset($arrGoods) && !empty($arrGoods)) {
+                    echo '<table id="table">';
+                    echo '<tr><th>Name</th><th>Code</th><th>Price</th><th>Description</th><th>Photos</th></tr>';
+                    for ($i = 0; $i < count($arrGoods); ++$i) {
+                        echo '<tr>';
+                        echo '<td>'.$arrGoods[$i]['name'].'</td>';
+                        echo '<td>'.$arrGoods[$i]['code'].'</td>';
+                        echo '<td>'.$arrGoods[$i]['price'].'</td>';
+                        echo '<td>'.$arrGoods[$i]['description'].'</td>';
+                        $photosTitle[$i] = substr($arrGoods[$i]['photo'], (strrpos($arrGoods[$i]['photo'], "/") + 1));
+                        echo '<td>'.$photosTitle[$i].'</td>';
+                        echo '</tr>';
+                    }
+                    echo '</tr></table>';
 
-                            echo '<hr/><p class="total">Done. Total: ' . count($arrGoods) . ' products</p><p class="time">Time - '.$time.'</p><br/>';
-                        }
-                        ?>
-                    </div>
+                    echo '<hr/><p class="total">Done. Total: ' . count($arrGoods) . ' products</p><p class="time">Time - '.$time.'</p><br/>';
+                }
+                ?>
+            </div>
         </main>
-        <footer id="footer" class="footer_wrapper">          
-        </footer>
+        <footer id="footer" class="footer_wrapper"></footer>
     </body>
     <script src="./src/assets/js/main.js" type="text/javascript"></script>
 </html>

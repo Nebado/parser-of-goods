@@ -66,17 +66,16 @@ function addField() {
     i++;
     let containerId = document.getElementById('form-fields'),
         inputField  = document.createElement('input'),
-        removeBtn   = document.createElement('input');
+        removeBtn   = document.createElement('div');
 
     inputField.setAttribute('type', 'text');
     inputField.setAttribute('name', 'field[]');
     inputField.setAttribute('id', 'field'+i);
     inputField.setAttribute('class', 'input');
-    inputField.setAttribute('placeholder', 'Input custom field');
+    inputField.setAttribute('placeholder', 'Enter selector of custom field');
 
-    removeBtn.setAttribute('type', 'submit');
     removeBtn.setAttribute('id', 'btnRem'+i);
-    removeBtn.setAttribute('value', '-');
+    removeBtn.innerHTML = '-';
     removeBtn.setAttribute("onclick", "removeField('field"+i+"', 'btnRem"+i+"')");
     removeBtn.setAttribute('class', 'btn btn-remove');
 

@@ -9,7 +9,7 @@ body {
 }
 body {
     margin: 0%;
-    overflow: hidden;
+    overflow-x: hidden;
     background: rgba(28, 28, 28, 1);
 }
 main {
@@ -115,6 +115,7 @@ input:active,
     margin-top: 20px;
 }
 .btn {
+    display: inline-block;
     opacity: 0.7;
     color: #ffffff;
     border: none;
@@ -148,12 +149,18 @@ input:active,
     position: fixed;
     right: 20px;
     top: 318px;
+    text-align: center;
     width: 70px;
 }
 .btn-remove {
-    background-color: #770008;
-    width: 40px;
+    width: 20px;
+    font-size: 25px;
+    margin-left: 15px;
+    vertical-align: middle;
+    line-height: 5px;
+    background-color: #c10b17;
     text-align: center;
+    border-radius: 7px;
 }
 .btn:hover {
     opacity: 1;
