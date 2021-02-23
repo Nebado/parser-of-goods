@@ -138,6 +138,7 @@ input:active,
     background-color: rgba(128, 128, 128, 1);
 }
 .btn-show {
+    display: none;
     position: absolute;
     bottom: 20px;
     left: 36%;

@@ -45,10 +45,10 @@
                                     <?php endif; ?>
                                 </div>
                                 <a class="next btn" onclick="nextSlide()">Next</a>
+                                <a id="btn" href="#modalTable" class="btn btn-show">Show Table</a>
                             </fieldset>
-                            <a id="btn" href="#modalTable" class="btn btn-show">Show Table</a>
                         </div>
-                        <div class="item">
+                        <div class="item" style="display: none;">
                             <h1 class="title">Choose Fields</h1>
                             <fieldset class="form-input">
                                 <div id="form-fields">
