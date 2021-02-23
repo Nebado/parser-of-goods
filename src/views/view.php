@@ -16,12 +16,15 @@
                         <div class="item">
                             <h1 class="title">Parser of Goods</h1>
                             <fieldset class="form-input">
-                                <input class="input input-url" type="text" name="url" value="<?= $_SESSION["url"]?>" placeholder="Enter url of category" required /><span class="required">*</span>
-                                <input class="input input-card-name" type="text" name="product_card_name" value="<?= $_SESSION["product_card_name"]?>" placeholder="Enter selector of product card name" required /><span class="required">*</span><br>
+                                <input class="input input-url" type="text" name="url" value="<?= $_SESSION["url"]?>" placeholder="Enter url of category" required />
+                                <div class="tooltip">?<span class="tooltip-content">E.g. https://site.com/category/</span></div>
+                                <input class="input input-card-name" type="text" name="product_card_name" value="<?= $_SESSION["product_card_name"]?>" placeholder="Enter selector of product card name" required />
+                                <div class="tooltip">?<span class="tooltip-content">E.g. .product-name a</span></div><br>
                                 <input id="pagination-checkbox" class="input-checkbox" onclick="pagination()" type="checkbox" <?= (!empty($_SESSION['pagination_url'])) ? "checked" : "" ?> />
                                 <label for="pagination">Pagination</label><br>
                                 <div id="pagination" style="display: <?= (!empty($_SESSION['pagination_url'])) ? "block" : "none" ?>">
                                     <input id="pagination-url" class="input input-pagination" type="text" name="pagination_url" value="<?= isset($_SESSION["pagination_url"]) ? $_SESSION["pagination_url"] : ""?>" placeholder="Enter url page with pagination" />
+                                    <div class="tooltip">?<span class="tooltip-content">E.g. https://site.com/category?page=3</span></div>
                                     <div>
                                         <p>Enter the number of pages in pagination</p>
                                         <input type="text" name="quantity_pages" value="<?= isset($_SESSION["quantity_pages"]) ? $_SESSION["quantity_pages"] : "0"?>" class="quantity-pages" id="quantiy-pages" />
@@ -50,10 +53,15 @@
                             <fieldset class="form-input">
                                 <div id="form-fields">
                                     <input class="input input-name" type="text" name="name" value="<?= $_SESSION["name"]?>" placeholder="Enter selector of name" />
+                                    <div class="tooltip">?<span class="tooltip-content">E.g. h1</span></div>
                                     <input class="input input-code" type="text" name="code" value="<?= $_SESSION["code"]?>" placeholder="Enter selector of code" />
+                                    <div class="tooltip">?<span class="tooltip-content">E.g. .product-article</span></div>
                                     <input class="input input-price" type="text" name="price" value="<?= $_SESSION["price"]?>" placeholder="Enter selector of price" />
+                                    <div class="tooltip">?<span class="tooltip-content">E.g. .product-price</span></div>
                                     <input class="input input-photo" type="text" name="photo" value="<?= $_SESSION["photo"]?>" placeholder="Enter selector of photo" />
+                                    <div class="tooltip">?<span class="tooltip-content">E.g. div.product-image</span></div>
                                     <input class="input input-description" type="text" value="<?= $_SESSION["description"]?>" name="description" placeholder="Enter selector of description" />
+                                    <div class="tooltip">?<span class="tooltip-content">E.g. .product-desc</span></div>
                                     <div class="btn btn-add" onclick="addField()">Add</div>
                                 </div>
                                 <div class="btn-group">
