@@ -185,6 +185,7 @@ class ParserGod implements ParserGodInterface
 	 */
 	private function scrapFromHtml(string $html) : array
 	{
+        $fields = [];
 		$crawler = new Crawler($html);
 
 		if (!empty($this->request['name'])) {
@@ -218,12 +219,19 @@ class ParserGod implements ParserGodInterface
 			$description = '';
 		}
 
+        if (!empty($this->request['field'])) {
+            foreach ($this->request['field'] as $field) {
+                $fields[] = $crawler->filter(trim($field))->text();
+            }
+        }
+
 		return [
 			'name'        => $name,
 			'code'        => $code,
 			'price'       => $price,
+			'description' => $description,
 			'photo'       => $photo,
-			'description' => $description
+            'fields'      => $fields
 		];
 	}
 
