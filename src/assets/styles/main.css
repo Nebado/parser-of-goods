@@ -23,6 +23,7 @@ table,
 tr,
 td,
 th {
+    font-size: 10px;
     width: 100%;
     background-color: #282828;
     border-right: 1px solid;
@@ -37,11 +38,9 @@ th {
 }
 td,
 th {
-    width: 20%;
+    font-size: 12px;
+    width: 10%;
 }
-    #table > tbody > tr:nth-child(2) > td:nth-child(3) {
-        width: 80px;
-    }
 #table tr:hover td {
     background: #000;
     transition: 0.6s;
@@ -49,7 +48,7 @@ th {
 th {
     background-color: #727272;
     padding: 10px 0;
-    font-size: 23px;
+    font-size: 17px;
     line-height: 1.7;
 }
 h1.title {
