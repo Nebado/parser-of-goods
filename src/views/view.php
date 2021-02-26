@@ -78,16 +78,42 @@
                 <span class="close">&times;</span>
                 <?php
                 if (isset($arrGoods) && !empty($arrGoods)) {
+                    $names = array_keys($arrGoods[0]);
+                    $fields = $arrGoods[0]['fields'];
+                    
                     echo '<table id="table">';
-                    echo '<tr><th>Name</th><th>Code</th><th>Price</th><th>Description</th><th>Photos</th></tr>';
+                    
+                    // Head table
+                    echo "<tr>";
+                    foreach ($names as $name) {
+                        if ($name == 'fields') {
+                            $i = 1;
+                            foreach ($fields as $field) {
+                                echo "<th>Field $i</th>";
+                                $i++;
+                            }
+                        } else {
+                            echo "<th>$name</th>";
+                        }
+                    }
+                    echo "</tr>";
+
+                    // Body table
                     for ($i = 0; $i < count($arrGoods); ++$i) {
+                        $photosTitle[$i] = substr($arrGoods[$i]['photo'], (strrpos($arrGoods[$i]['photo'], "/") + 1));
+                        
                         echo '<tr>';
+                        
                         echo '<td>'.$arrGoods[$i]['name'].'</td>';
                         echo '<td>'.$arrGoods[$i]['code'].'</td>';
                         echo '<td>'.$arrGoods[$i]['price'].'</td>';
                         echo '<td>'.$arrGoods[$i]['description'].'</td>';
-                        $photosTitle[$i] = substr($arrGoods[$i]['photo'], (strrpos($arrGoods[$i]['photo'], "/") + 1));
                         echo '<td>'.$photosTitle[$i].'</td>';
+                        
+                        foreach ($arrGoods[$i]['fields'] as $field) {
+                            echo '<td>'.$field.'</td>';
+                        }
+                        
                         echo '</tr>';
                     }
                     echo '</tr></table>';
