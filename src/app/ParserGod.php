@@ -135,7 +135,7 @@ class ParserGod implements ParserGodInterface
 					function (\Psr\Http\Message\ResponseInterface $response) {
 						$crawler = new Crawler((string) $response->getBody());
 						$this->links[] = $crawler->filter((string) $this->request['product_card_name'])->extract(['href']);
-					});
+				});
 			}
 			$this->loop->run();
 
@@ -171,7 +171,7 @@ class ParserGod implements ParserGodInterface
 				$this->client->get($url)->then(
 					function (\Psr\Http\Message\ResponseInterface $response) {
 						$this->parsedProduct[] = $this->scrapFromHtml((string) $response->getBody());
-					});
+				});
 			}
 			$this->loop->run();
 		}
@@ -245,55 +245,63 @@ class ParserGod implements ParserGodInterface
 		if (isset($_POST["excel"]) && $_POST["excel"] == "1") {
 			$phpExcel = new Spreadsheet();
 
-			$titles = array(
-				array(
-					'name' => 'Name',
-					'ceil' => 'A'
-				),
-				array(
-					'name' => 'Code',
-					'ceil' => 'B'
-				),
-				array(
-					'name' => 'Price',
-					'ceil' => 'C'
-				),
-				array(
-					'name' => 'Description',
-					'ceil' => 'D'
-				),
-				array(
-					'name' => 'Image',
-					'ceil' => 'E'
-				)
-			);
+            $ceils = array(
+                'A', 'B', 'C', 'D', 'E',
+                'F', 'G', 'H', 'I', 'K',
+                'L', 'M', 'N', 'O', 'P',
+                'Q', 'R', 'S', 'T', 'U',
+                'V', 'W', 'X', 'Y', 'Z');
+            $names = array_keys($arrGoods[0]);
+            $fields = $arrGoods[0]['fields'];
+
+			$titles = array();
+
+            for ($i = 0; $i < count($names); ++$i) {
+                if ($names[$i] == 'fields') {
+                    $j = 1;
+                    foreach ($fields as $field) {
+                        $titles[] = array(
+                            'name' => "field $j",
+                            'ceil' => $ceils[$i]
+                        );
+                        ++$i;
+                        ++$j;
+                    }
+                } else {
+                    $titles[] = array(
+                        'name' => $names[$i],
+                        'ceil' => $ceils[$i]
+                    );
+                }
+            }
 
 			for ($i = 0; $i < count($titles); $i++) {
 				$string = $titles[$i]['name'];
-				//$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
 				$ceilLetter = $titles[$i]['ceil'] . 1;
 				$phpExcel->getActiveSheet()->setCellValueExplicit($ceilLetter, $string, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 			}
 
-			$i = 2;
+            $k = 2;
+			for ($i = 0; $i < count($arrGoods); ++$i) {
+                $phpExcel->getActiveSheet()->setCellValueExplicit("A".$k, $arrGoods[$i]['name'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+				$phpExcel->getActiveSheet()->setCellValue("B".$k, $arrGoods[$i]['code']);
+				$phpExcel->getActiveSheet()->setCellValue("C".$k, $arrGoods[$i]['price']);
+				$phpExcel->getActiveSheet()->setCellValueExplicit("D".$k, $arrGoods[$i]['description'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+				$phpExcel->getActiveSheet()->setCellValue("E".$k, $arrGoods[$i]['photo'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
 
-			foreach($arrGoods as $row) {
-				$phpExcel->getActiveSheet()->setCellValueExplicit("A$i", $row['name'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-				//$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
-				$phpExcel->getActiveSheet()->setCellValue("B$i", $row['code']);
-				$phpExcel->getActiveSheet()->setCellValue("C$i", $row['price']);
-				$description = $row['description'];
-				//$string = mb_convert_encoding($string, 'UTF-8', 'Windows-1251');
-				$phpExcel->getActiveSheet()->setCellValueExplicit("D$i", $description, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-				$phpExcel->getActiveSheet()->setCellValue("E$i", $row['photo'], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-				$i++;
+                $j = 5;
+                foreach ($arrGoods[$i]['fields'] as $field) {
+				    $phpExcel->getActiveSheet()->setCellValue($ceils[$j].$k, $field, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    ++$j;
+                }
+                ++$k;
 			}
 
-			$phpExcel->getActiveSheet()->getColumnDimension('A')->setWidth(96);
-			$phpExcel->getActiveSheet()->getColumnDimension('B')->setWidth(16);
-			$phpExcel->getActiveSheet()->getColumnDimension('C')->setWidth(16);
-			$phpExcel->getActiveSheet()->getColumnDimension('D')->setWidth(96);
-			$phpExcel->getActiveSheet()->getColumnDimension('E')->setWidth(96);
+			$phpExcel->getActiveSheet()->getColumnDimension('A')->setWidth(28);
+			$phpExcel->getActiveSheet()->getColumnDimension('B')->setWidth(28);
+			$phpExcel->getActiveSheet()->getColumnDimension('C')->setWidth(28);
+			$phpExcel->getActiveSheet()->getColumnDimension('D')->setWidth(28);
+			$phpExcel->getActiveSheet()->getColumnDimension('E')->setWidth(28);
 
 			$page = $phpExcel->setActiveSheetIndex(0);
 			$page->setTitle('goods');
