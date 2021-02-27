@@ -1,5 +1,6 @@
 src/upload/
 src/tmp/
+src/cache/
 src/app/Tests/*
 vendor/
 composer.lock
