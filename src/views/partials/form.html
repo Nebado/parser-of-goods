@@ -2,9 +2,9 @@
     <div class="item">
         <h1 class="title">Parser of Goods</h1>
         <fieldset class="form-input">
-            <input class="input input-url" type="text" name="url" value="<?= $_SESSION["url"]?>" placeholder="Enter url of category" required />
+            <input class="input input-url" type="text" name="url" value="<?= (!empty($_SESSION["url"])) ? $_SESSION["url"] : "" ?>" placeholder="Enter url of category" required />
             <div class="tooltip">?<span class="tooltip-content">E.g. https://site.com/category/</span></div>
-            <input class="input input-card-name" type="text" name="product_card_name" value="<?= $_SESSION["product_card_name"]?>" placeholder="Enter selector of product card name" required />
+            <input class="input input-card-name" type="text" name="product_card_name" value="<?= (!empty($_SESSION["product_card_name"])) ? $_SESSION["product_card_name"] : "" ?>"" placeholder="Enter selector of product card name" required />
             <div class="tooltip">?<span class="tooltip-content">E.g. .product-name a</span></div><br>
             <input id="pagination-checkbox" class="input-checkbox" onclick="pagination()" type="checkbox" <?= (!empty($_SESSION['pagination_url'])) ? "checked" : "" ?> />
             <label for="pagination">Pagination</label><br>
@@ -38,15 +38,15 @@
         <h1 class="title">Choose Fields</h1>
         <fieldset class="form-input">
             <div id="form-fields">
-                <input class="input input-name" type="text" name="name" value="<?= $_SESSION["name"]?>" placeholder="Enter selector of name" />
+                <input class="input input-name" type="text" name="name" value="<?= (!empty($_SESSION["name"])) ? $_SESSION["name"] : "" ?>" placeholder="Enter selector of name" />
                 <div class="tooltip">?<span class="tooltip-content">E.g. h1</span></div>
-                <input class="input input-code" type="text" name="code" value="<?= $_SESSION["code"]?>" placeholder="Enter selector of code" />
+                <input class="input input-code" type="text" name="code" value="<?= (!empty($_SESSION["code"])) ? $_SESSION["code"] : "" ?>" placeholder="Enter selector of code" />
                 <div class="tooltip">?<span class="tooltip-content">E.g. .product-article</span></div>
-                <input class="input input-price" type="text" name="price" value="<?= $_SESSION["price"]?>" placeholder="Enter selector of price" />
+                <input class="input input-price" type="text" name="price" value="<?= (!empty($_SESSION["price"])) ? $_SESSION["price"] : "" ?>" placeholder="Enter selector of price" />
                 <div class="tooltip">?<span class="tooltip-content">E.g. .product-price</span></div>
-                <input class="input input-photo" type="text" name="photo" value="<?= $_SESSION["photo"]?>" placeholder="Enter selector of photo" />
+                <input class="input input-photo" type="text" name="photo" value="<?= (!empty($_SESSION["photo"])) ? $_SESSION["photo"] : "" ?>" placeholder="Enter selector of photo" />
                 <div class="tooltip">?<span class="tooltip-content">E.g. div.product-image</span></div>
-                <input class="input input-description" type="text" value="<?= $_SESSION["description"]?>" name="description" placeholder="Enter selector of description" />
+                <input class="input input-description" type="text" value="<?= (!empty($_SESSION["description"])) ? $_SESSION["description"] : "" ?>"" name="description" placeholder="Enter selector of description" />
                 <div class="tooltip">?<span class="tooltip-content">E.g. .product-desc</span></div>
                 <div class="btn btn-add" onclick="addField()">Add</div>
             </div>

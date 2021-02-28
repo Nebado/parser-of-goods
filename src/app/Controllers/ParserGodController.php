@@ -1,8 +1,7 @@
 <?php
 
-namespace App;
+namespace App\Controllers;
 
-use App\Template;
 use Clue\React\Buzz\Browser;
 use Symfony\Component\DomCrawler\Crawler;
 use PhpOffice\PhpSpreadsheet\Spreadsheet as Spreadsheet;
@@ -10,7 +9,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx as Xlsx;
 use PHPZip\Zip\File\Zip as Zip;
 use \zipArchive;
 
-class ParserGod implements ParserGodInterface
+class ParserGodController 
 {
     const SSL_PORT = 443;
 
@@ -29,14 +28,6 @@ class ParserGod implements ParserGodInterface
     {
         $this->client = $client;
         $this->loop = $loop;
-    }
-
-    /**
-     * Initialization application
-     */
-    public function init()
-    {
-        return $this->view('index.html');
     }
 
     /**
@@ -463,17 +454,5 @@ class ParserGod implements ParserGodInterface
 
         $data = json_encode($urls);
         file_put_contents($filename, $data);
-    }
-
-    /**
-     * Render the view
-     *
-     * @param string
-     * @param array
-     */
-    private function view($file, $data = [])
-    {
-        $template = new Template();
-        $template->render($file, $data);
     }
 }
