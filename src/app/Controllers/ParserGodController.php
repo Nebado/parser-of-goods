@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use React\EventLoop\Factory;
 use Clue\React\Buzz\Browser;
 use Symfony\Component\DomCrawler\Crawler;
 use PhpOffice\PhpSpreadsheet\Spreadsheet as Spreadsheet;
@@ -24,21 +25,18 @@ class ParserGodController
     private $session = [];
     private $arrGoods = [];
 
-    public function __construct(Browser $client, $loop)
-    {
-        $this->client = $client;
-        $this->loop = $loop;
-    }
-
     /**
      * Run application
      *
      * @param integer
      * @param string
      */
-    public function run($start, $catUrl)
+    public function run()
     {
-        if ($start == true && $catUrl != null) {
+        $this->loop = Factory::create();
+        $this->client = new Browser($this->loop);
+
+        if ($catUrl != null) {
 
             self::$host = self::getHost($catUrl);
             self::$protocol = self::checkProtocol($catUrl);
@@ -70,6 +68,8 @@ class ParserGodController
 
             $this->generateExcel($this->parsedProduct);
             $this->downloadImages($this->parsedProduct);
+
+            echo json_encode($this->parsedProduct);
 
         } else {
             return false;
@@ -394,7 +394,7 @@ class ParserGodController
      */
     public static function checkProtocol(string $url) : string
     {
-        $fp = fsockopen('ssl://'. self::$host, ParserGod::SSL_PORT, $errno, $errstr, 30);
+        $fp = fsockopen('ssl://'. self::$host, ParserGodController::SSL_PORT, $errno, $errstr, 30);
         $result = (!empty($fp)) ? "https://" : "http://";
 
         return $result;

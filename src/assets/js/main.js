@@ -1,11 +1,13 @@
 // Modal Window
 let modal = document.getElementById("modalTable");
-let btn = document.getElementById("btn");
-let table = document.getElementById("table");
-let span = document.getElementsByClassName("close")[0];
-let paginationRange = document.getElementById("pagination-range"),
-    numberPages = document.getElementById("number-pages");
+    btn = document.getElementById("btn"),
+    table = document.getElementById("table"),
+    span = document.getElementsByClassName("close")[0],
+    paginationRange = document.getElementById("pagination-range"),
+    numberPages = document.getElementById("number-pages"),
+    btnStart = document.getElementById("btn_start");
 
+btnStart.addEventListener("click", ajaxRequest);
 btn.addEventListener("click", showFunc);
 span.addEventListener("click", hideFunc);
 
@@ -26,7 +28,7 @@ if (table) {
     btn.style.display = "none";
 }
 
-// Slider
+// Main Slider
 let slideIndex = 1;
 let next = document.getElementsByClassName("next")[0];
 let previous = document.getElementsByClassName("previous")[0];
@@ -60,7 +62,7 @@ function showSlides(n) {
     slides[slideIndex - 1].style.display = "block";
 }
 
-// Add more fields
+// Custom fields
 let i = 0;
 function addField() {
     i++;
@@ -102,118 +104,48 @@ function pagination() {
     }
 }
 
-// Background
-(function() {
-    var canvas = document.createElement('canvas'),
-        ctx = canvas.getContext('2d'),
-        w = canvas.width = innerWidth,
-        h = canvas.height = innerHeight,
-        particles = [],
-        properties = {
-            bgColor             : 'rgba(17, 17, 19, 1)',
-            particleColor       : 'rgba(128, 128, 128, 1)',
-            particleRadius      : 1,
-            particleCount       : 100,
-            particleMaxVelocity : 0.5,
-            lineLength          : 150,
-            particleLife        : 12
+// Ajax request
+function ajaxRequest(event) {
+    event.preventDefault();
+
+    const requestURL = 'http://localhost:7777/parser';
+
+    function sendRequest(method, url, body = null) {
+        const headers = {
+            'Content-Type': 'application/json'
         };
 
-    document.querySelector('body').appendChild(canvas);
-
-    window.onresize = function() {
-        w = canvas.width = innerWidth,
-        h = canvas.height = innerHeight;
-    }
-
-    class Particle {
-        constructor() {
-            this.x = Math.random() * w;
-            this.y = Math.random() * h;
-            this.velocityX = Math.random() * (properties.particleMaxVelocity*2) - properties.particleMaxVelocity;
-            this.velocityY = Math.random() * (properties.particleMaxVelocity*2) - properties.particleMaxVelocity;
-            this.life = Math.random() * properties.particleLife * 60;
-        }
-
-        position() {
-            this.x + this.velocityX > w && this.velocityX > 0 || this.x + this.velocityX < 0 && this.velocityX < 0 ? this.velocityX *= -1 : this.velocityX;
-            this.y + this.velocityY > h && this.velocityY > 0 || this.y + this.velocityY < 0 && this.velocityY < 0 ? this.velocityY *= -1 : this.velocityY;
-            this.x += this.velocityX;
-            this.y += this.velocityY;
-        }
-
-        reDraw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, properties.particleRadius, 0, Math.PI*2);
-            ctx.closePath();
-            ctx.fillStyle = properties.particleColor;
-            ctx.fill();
-        }
-
-        reCalculateLife() {
-            if (this.life < 1) {
-                this.x = Math.random() * w;
-                this.y = Math.random() * h;
-                this.velocityX = Math.random() * (properties.particleMaxVelocity*2) - properties.particleMaxVelocity;
-                this.velocityY = Math.random() * (properties.particleMaxVelocity*2) - properties.particleMaxVelocity;
-                this.life = Math.random() * properties.particleLife * 60;
+        return fetch(url, {
+            method: method,
+            body: JSON.stringify(body),
+            headers: headers
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
             }
-            this.life--;
-        }
+
+            return response.json().then(error => {
+                const e = new Error('Error');
+                e.data = error;
+                throw e;
+            })
+        });
     }
 
-    function reDrawBackground() {
-        ctx.fillStyle = properties.bgColor;
-        ctx.fillRect(0, 0, w, h);
-    }
+    const body = {
+        
+    };
 
-    function drawLines() {
-        var x1, y1, x2, y2, length, opacity;
+    sendRequest('POST', requestURL, body)
+        .then(data => console.log(data))
+        .catch(err => console.error(err))
+}
 
-        for (var i in particles) {
-            for (var j in particles) {
-                x1 = particles[i].x;
-                y1 = particles[i].y;
-                x2 = particles[j].x;
-                y2 = particles[j].y;
-                length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 
-                if (length < properties.lineLength) {
-                    opacity = 1 - length / properties.lineLength;
-                    ctx.lineWidth = '0,5';
-                    ctx.strokeStyle = 'rgba(128, 230, 128, '+opacity*.2+')';
-                    ctx.beginPath();
-                    ctx.moveTo(x1, y1);
-                    ctx.lineTo(x2, y2);
-                    ctx.closePath();
-                    ctx.stroke();
-                }
-            }
-        }
-    }
 
-    function reDrawParticles() {
-        for (var i in particles) {
-            particles[i].reCalculateLife();
-            particles[i].position();
-            particles[i].reDraw();
-        }
-    }
 
-    function loop() {
-        reDrawBackground();
-        reDrawParticles();
-        drawLines();
-        requestAnimationFrame(loop);
-    }
 
-    function init() {
-        for (var i = 0; i < properties.particleCount; i++) {
-            particles.push(new Particle);
-        }
 
-        loop();
-    }
 
-    init();
-}())
+
+
