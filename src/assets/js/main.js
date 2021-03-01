@@ -1,11 +1,13 @@
 // Modal Window
 let modal = document.getElementById("modalTable");
-let btn = document.getElementById("btn");
-let table = document.getElementById("table");
-let span = document.getElementsByClassName("close")[0];
-let paginationRange = document.getElementById("pagination-range"),
-    numberPages = document.getElementById("number-pages");
+    btn = document.getElementById("btn"),
+    table = document.getElementById("table"),
+    span = document.getElementsByClassName("close")[0],
+    paginationRange = document.getElementById("pagination-range"),
+    numberPages = document.getElementById("number-pages"),
+    btnStart = document.getElementById("btn_start");
 
+btnStart.addEventListener("click", ajaxRequest);
 btn.addEventListener("click", showFunc);
 span.addEventListener("click", hideFunc);
 
@@ -101,4 +103,49 @@ function pagination() {
         pagination.style.display = 'none';
     }
 }
+
+// Ajax request
+function ajaxRequest(event) {
+    event.preventDefault();
+
+    const requestURL = 'http://localhost:7777/parser';
+
+    function sendRequest(method, url, body = null) {
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+
+        return fetch(url, {
+            method: method,
+            body: JSON.stringify(body),
+            headers: headers
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+
+            return response.json().then(error => {
+                const e = new Error('Error');
+                e.data = error;
+                throw e;
+            })
+        });
+    }
+
+    const body = {
+        
+    };
+
+    sendRequest('POST', requestURL, body)
+        .then(data => console.log(data))
+        .catch(err => console.error(err))
+}
+
+
+
+
+
+
+
+
 
