@@ -1,15 +1,12 @@
-// Modal Window
-let modal = document.getElementById("modalTable");
-    btn = document.getElementById("btn"),
+// Initialization dom elements 
+let modal = document.getElementById("modal-table");
     table = document.getElementById("table"),
-    span = document.getElementsByClassName("close")[0],
-    paginationRange = document.getElementById("pagination-range"),
+    showTableBtn = document.getElementById("show-table"),
+    closeTableBtn = document.getElementById("close-table"),
     numberPages = document.getElementById("number-pages"),
-    btnStart = document.getElementById("btn_start");
 
-btnStart.addEventListener("click", ajaxRequest);
-btn.addEventListener("click", showFunc);
-span.addEventListener("click", hideFunc);
+showTableBtn.addEventListener("click", showFunc);
+closeTableBtn.addEventListener("click", hideFunc);
 
 function showFunc() {
     modal.style.display = "block";
@@ -19,13 +16,6 @@ function showFunc() {
 function hideFunc() {
     modal.style.display = "none";
     document.body.style.overflowY = "hidden";
-}
-
-// Show Table
-if (table) {
-    btn.style.display = "inline-block";
-} else {
-    btn.style.display = "none";
 }
 
 // Main Slider
@@ -105,10 +95,11 @@ function pagination() {
 }
 
 // Ajax request
-function ajaxRequest(event) {
+//function ajaxRequest(event) {
+document.querySelector('form').addEventListener('submit', event => {
     event.preventDefault();
 
-    const requestURL = 'http://localhost:7777/parser';
+    const requestURL = 'http://localhost:6363/parser';
 
     function sendRequest(method, url, body = null) {
         const headers = {
@@ -132,20 +123,54 @@ function ajaxRequest(event) {
         });
     }
 
-    const body = {
-        
+    // Form fields
+    let target = event.currentTarget;
+    let form = document.querySelector('form');
+    let serializeForm = function (form) {
+	let obj = {};
+	let formData = new FormData(form);
+	for (let key of formData.keys()) {
+		obj[key] = formData.get(key);
+	}
+	return obj;
     };
 
+    const body = serializeForm(target); 
+
     sendRequest('POST', requestURL, body)
-        .then(data => console.log(data))
+        .then(data => initTable(data))
         .catch(err => console.error(err))
+
+});
+
+function initTable(data) {
+    const table = document.createElement('table');
+    table.setAttribute('id', 'table');
+    table.innerHTML = `<thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Image</th>
+        <tr>
+    </thead>`;
+
+    const trs = data.map((item, index) => (
+        `<tr>
+            <td>${index + 1}</td>
+            <td>${item.name}</td>
+            <td>${item.code}</td>
+            <td>${item.price}</td>
+            <td>${item.description}</td>
+            <td>${item.photo}</td>
+        </tr>`
+    ))
+
+    showTableBtn.style.display = 'inline-block';
+
+    table.innerHTML += trs.join("\n");
+
+    modal.appendChild(table);
 }
-
-
-
-
-
-
-
-
-
