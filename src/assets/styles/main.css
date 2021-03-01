@@ -200,7 +200,7 @@ input:active,
     z-index: 1000;
     transform: scale(1);
 }
-.close {
+#close-table {
     color: #aaa;
     font-size: 60px;
     font-weight: bold;
@@ -208,8 +208,8 @@ input:active,
     right: -10px;
     top: 10px;
 }
-.close:hover,
-.close:focus {
+#close-table:hover,
+#close-table:focus {
     color: #eee;
     text-decoration: none;
     cursor: pointer;

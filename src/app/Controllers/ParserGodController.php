@@ -36,6 +36,10 @@ class ParserGodController
         $this->loop = Factory::create();
         $this->client = new Browser($this->loop);
 
+        // TODO
+        $_REQUEST = (array)json_decode(file_get_contents("php://input"));
+        $catUrl = $_REQUEST['url'];
+
         if ($catUrl != null) {
 
             self::$host = self::getHost($catUrl);
