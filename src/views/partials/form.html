@@ -19,19 +19,15 @@
             <div>
                 <input id="image" class="input-checkbox" type="checkbox" checked="checked" name="image" value="1" />
                 <label for="image">Download images</label>
-                <?php if (file_exists($_SERVER['DOCUMENT_ROOT'].'/src/upload/zip/images.zip')): ?>
                 <a href="/src/upload/zip/images.zip" class="download">Download</a>
-                <?php endif; ?>
             </div>
             <div>
                 <input id="excel" class="input-checkbox" type="checkbox" checked="checked" name="excel" value="1" />
                 <label for="excel">Excel/CSV</label>
-                <?php if (file_exists($_SERVER['DOCUMENT_ROOT'].'/src/upload/goods.xlsx')): ?>
                 <a href="/src/upload/goods.xlsx" class="download">Download</a>
-                <?php endif; ?>
             </div>
             <a class="next btn" onclick="nextSlide()">Next</a>
-            <a id="show-table" href="#modal-table" class="btn btn-show">Show Table</a>
+            <a id="show-table" class="btn btn-show">Show Table</a>
         </fieldset>
     </div>
     <div class="item" style="display: none;">

@@ -1,9 +1,10 @@
-// Initialization dom elements 
+// Initialization dom elements
 let modal = document.getElementById("modal-table");
     table = document.getElementById("table"),
     showTableBtn = document.getElementById("show-table"),
     closeTableBtn = document.getElementById("close-table"),
     numberPages = document.getElementById("number-pages"),
+    form = document.querySelector("form");
 
 showTableBtn.addEventListener("click", showFunc);
 closeTableBtn.addEventListener("click", hideFunc);
@@ -95,11 +96,10 @@ function pagination() {
 }
 
 // Ajax request
-//function ajaxRequest(event) {
-document.querySelector('form').addEventListener('submit', event => {
+form.addEventListener('submit', event => {
     event.preventDefault();
 
-    const requestURL = 'http://localhost:6363/parser';
+    const requestURL = window.location.href + 'parser';
 
     function sendRequest(method, url, body = null) {
         const headers = {
@@ -135,16 +135,17 @@ document.querySelector('form').addEventListener('submit', event => {
 	return obj;
     };
 
-    const body = serializeForm(target); 
+    const body = serializeForm(target);
 
     sendRequest('POST', requestURL, body)
         .then(data => initTable(data))
         .catch(err => console.error(err))
-
 });
 
 function initTable(data) {
     const table = document.createElement('table');
+    const fields = data[0].fields;
+
     table.setAttribute('id', 'table');
     table.innerHTML = `<thead>
         <tr>
