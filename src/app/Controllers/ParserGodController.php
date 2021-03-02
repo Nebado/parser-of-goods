@@ -10,7 +10,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx as Xlsx;
 use PHPZip\Zip\File\Zip as Zip;
 use \zipArchive;
 
-class ParserGodController 
+class ParserGodController
 {
     const SSL_PORT = 443;
 
@@ -234,9 +234,9 @@ class ParserGodController
      *
      * @param array
      */
-    private function generateExcel($arrGoods) : void
+    private function generateExcel($arrGoods) : void 
     {
-        if (isset($_POST["excel"]) && $_POST["excel"] == "1") {
+        if (isset($this->request["excel"]) && $this->request["excel"] == "1") {
             $phpExcel = new Spreadsheet();
 
             $ceils = array(
@@ -317,7 +317,7 @@ class ParserGodController
      */
     private function downloadImages($arrGoods) : void
     {
-        if (isset($_POST["image"]) && $_POST["image"] == "1") {
+        if (isset($this->request["image"]) && $this->request["image"] == "1") {
             $catalogOutPath = "src/upload/images";
             if(!is_dir($catalogOutPath)) {
                 mkdir($catalogOutPath, 0777, true);
@@ -334,12 +334,11 @@ class ParserGodController
                 }
 
                 $fullPhotoPathName = $catalogOutPath . DIRECTORY_SEPARATOR . $photoName;
-                $arrFullPhotos[] = $fullPhotoPathName;
 
-                if (!file_exists($fullPhotoPathName)) {
-                    file_put_contents($fullPhotoPathName, file_get_contents($photoUrl));
+                if (file_exists($fullPhotoPathName) and filesize($fullPhotoPathName) > 0) {
+                    continue;
                 } else {
-                    unlink($fullPhotoPathName);
+                    file_put_contents($fullPhotoPathName, file_get_contents($photoUrl));
                 }
             }
 
