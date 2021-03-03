@@ -95,10 +95,19 @@ function pagination() {
     }
 }
 
+// Spinner
+const spinner = document.getElementById('spinner');
+
+function showSpinner() {
+    spinner.className = "show";
+    setTimeout(() => {
+        spinner.className = spinner.className.replace("show", "");
+    }, 5000);
+}
+
 // Ajax request
 form.addEventListener('submit', event => {
     event.preventDefault();
-
     const requestURL = window.location.href + 'parser';
 
     function sendRequest(method, url, body = null) {
@@ -106,13 +115,15 @@ form.addEventListener('submit', event => {
             'Content-Type': 'application/json'
         };
 
+        showSpinner();
+
         return fetch(url, {
             method: method,
             body: JSON.stringify(body),
             headers: headers
         }).then(response => {
             if (response.ok) {
-                return response.json();
+                return response.json(); 
             }
 
             return response.json().then(error => {

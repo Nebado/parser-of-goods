@@ -41,7 +41,6 @@ class ParserGodController
         $catUrl = $_REQUEST['url'];
 
         if ($catUrl != null) {
-
             self::$host = self::getHost($catUrl);
             self::$protocol = self::checkProtocol($catUrl);
 
