@@ -13,7 +13,8 @@
         "phpoffice/phpspreadsheet": "^1.16",
         "clue/buzz-react": "^2.9",
         "symfony/dom-crawler": "^5.2",
-        "symfony/css-selector": "^5.2"
+        "symfony/css-selector": "^5.2",
+        "maximebf/debugbar": "^1.16"
     },
     "autoload": {
         "psr-4": {
