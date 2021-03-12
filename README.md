@@ -6,7 +6,7 @@ WARNING! The parser is in an active development state. If you want to use parser
 
 * [Version 0.1](https://github.com/Nebado/ParserOfGoods/releases/tag/0.1)
 
-![screenshot](./src/assets/images/parser_v0.1_5.png)
+![screenshot](src/assets/images/parser_v0.1_6.png)
 
 ## Dependencies
 
