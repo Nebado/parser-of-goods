@@ -123,7 +123,7 @@ form.addEventListener('submit', event => {
             headers: headers
         }).then(response => {
             if (response.ok) {
-                return response.json(); 
+                return response.json();
             }
 
             return response.json().then(error => {
@@ -137,16 +137,23 @@ form.addEventListener('submit', event => {
     // Form fields
     let target = event.currentTarget;
     let form = document.querySelector('form');
+
     let serializeForm = function (form) {
-	let obj = {};
-	let formData = new FormData(form);
-	for (let key of formData.keys()) {
-		obj[key] = formData.get(key);
-	}
-	return obj;
+	    let obj = {};
+	    let formData = new FormData(form);
+
+	    for (let key of formData.keys()) {
+		    obj[key] = formData.get(key);
+	    }
+	    return obj;
     };
 
     const body = serializeForm(target);
+
+    let tableEx = document.getElementById('table');
+    if (tableEx) {
+        tableEx.remove();
+    }
 
     sendRequest('POST', requestURL, body)
         .then(data => initTable(data))
