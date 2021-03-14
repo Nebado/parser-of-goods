@@ -212,9 +212,13 @@ class ParserGodController
             $description = '';
         }
 
-        if (!empty($this->request['field'])) {
-            foreach ($this->request['field'] as $field) {
-                $fields[] = $crawler->filter(trim($field))->text();
+        if (!empty($this->request['field["custom"]'])) {
+            if (is_array($this->request['field["custom"]'])) {
+                foreach ($this->request['field["custom"]'] as $field) {
+                    $fields[] = $crawler->filter(trim($field))->text();
+                }
+            } else {
+                $fields[] = $crawler->filter(trim($this->request['field["custom"]']))->text();
             }
         }
 
@@ -233,7 +237,7 @@ class ParserGodController
      *
      * @param array
      */
-    private function generateExcel($arrGoods) : void 
+    private function generateExcel($arrGoods) : void
     {
         if (isset($this->request["excel"]) && $this->request["excel"] == "1") {
             $phpExcel = new Spreadsheet();

@@ -62,7 +62,7 @@ function addField() {
         removeBtn   = document.createElement('div');
 
     inputField.setAttribute('type', 'text');
-    inputField.setAttribute('name', 'field[]');
+    inputField.setAttribute('name', 'field["custom"]');
     inputField.setAttribute('id', 'field'+i);
     inputField.setAttribute('class', 'input');
     inputField.setAttribute('placeholder', 'Enter selector of custom field');
@@ -137,18 +137,24 @@ form.addEventListener('submit', event => {
     // Form fields
     let target = event.currentTarget;
     let form = document.querySelector('form');
+    let data = new FormData(form);
 
-    let serializeForm = function (form) {
+    function serializeForm(data) {
 	    let obj = {};
-	    let formData = new FormData(form);
-
-	    for (let key of formData.keys()) {
-		    obj[key] = formData.get(key);
+	    for (let [key, value] of data) {
+		    if (obj[key] !== undefined) {
+			    if (!Array.isArray(obj[key])) {
+				    obj[key] = [obj[key]];
+			    }
+			    obj[key].push(value);
+		    } else {
+			    obj[key] = value;
+		    }
 	    }
 	    return obj;
     };
 
-    const body = serializeForm(target);
+    const body = serializeForm(data);
 
     let tableEx = document.getElementById('table');
     if (tableEx) {
@@ -160,36 +166,51 @@ form.addEventListener('submit', event => {
         .catch(err => console.error(err))
 });
 
+// Table
 function initTable(data) {
+    const fields = ['#', 'Name', 'Code', 'Price', 'Description', 'Image'];
     const table = document.createElement('table');
-    const fields = data[0].fields;
+    const customFields = data[0].fields;
 
     table.setAttribute('id', 'table');
-    table.innerHTML = `<thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Code</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Image</th>
-        <tr>
-    </thead>`;
 
-    const trs = data.map((item, index) => (
-        `<tr>
-            <td>${index + 1}</td>
-            <td>${item.name}</td>
-            <td>${item.code}</td>
-            <td>${item.price}</td>
-            <td>${item.description}</td>
-            <td>${item.photo}</td>
-        </tr>`
-    ))
+    let row = table.insertRow(-1);
+    for (let i = 0; i < fields.length; ++i) {
+        let headerCell = document.createElement('th');
+        headerCell.innerHTML = fields[i];
+        row.appendChild(headerCell);
+    }
+
+    if (customFields.length > 0) {
+        for (let i = 0; i < customFields.length; ++i) {
+            let headerCell = document.createElement('th');
+            headerCell.innerHTML = "Custom Field"
+            row.appendChild(headerCell);
+        }
+    }
+
+    let trs = '';
+    let counter = 1;
+    for (let i = 0; i < data.length; ++i) {
+        trs += "<tr>";
+        trs += `<td>${counter}</td>
+                <td>${data[i].name}</td>
+                <td>${data[i].code}</td>
+                <td>${data[i].price}</td>
+                <td>${data[i].description}</td>
+                <td>${data[i].photo}</td>`;
+
+        if (customFields.length > 0) {
+            for (let j = 0; j < customFields.length; ++j) {
+                trs += `<td>${data[i].fields[j]}</td>`;
+            }
+        }
+
+        trs += "</tr>";
+        counter++;
+    }
 
     showTableBtn.style.display = 'inline-block';
-
-    table.innerHTML += trs.join("\n");
-
+    table.innerHTML += trs;
     modal.appendChild(table);
 }
