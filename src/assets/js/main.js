@@ -95,14 +95,15 @@ function pagination() {
     }
 }
 
-// Spinner
-const spinner = document.getElementById('spinner');
+// Loader
+const loader = document.getElementById('loader');
 
-function showSpinner() {
-    spinner.className = "show";
-    setTimeout(() => {
-        spinner.className = spinner.className.replace("show", "");
-    }, 5000);
+function showLoader() {
+    loader.className = "show";
+}
+
+function hideLoader() {
+    loader.className = loader.className.replace("show", "");
 }
 
 // Ajax request
@@ -115,22 +116,24 @@ form.addEventListener('submit', event => {
             'Content-Type': 'application/json'
         };
 
-        showSpinner();
+        showLoader();
 
         return fetch(url, {
             method: method,
             body: JSON.stringify(body),
             headers: headers
         }).then(response => {
+            hideLoader();
             if (response.ok) {
                 return response.json();
             }
 
             return response.json().then(error => {
+                hideLoader();
                 const e = new Error('Error');
                 e.data = error;
                 throw e;
-            })
+            });
         });
     }
 
