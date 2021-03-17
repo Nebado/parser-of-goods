@@ -106,12 +106,20 @@ function hideLoader() {
     loader.className = loader.className.replace("show", "");
 }
 
+let controller = new AbortController();
+
+function abortFetching() {
+    hideLoader();
+    controller.abort();
+}
+
 // Ajax request
 form.addEventListener('submit', event => {
     event.preventDefault();
     const requestURL = window.location.href + 'parser';
 
     function sendRequest(method, url, body = null) {
+        controller = new AbortController();
         const headers = {
             'Content-Type': 'application/json'
         };
@@ -120,6 +128,7 @@ form.addEventListener('submit', event => {
 
         return fetch(url, {
             method: method,
+            signal: controller.signal,
             body: JSON.stringify(body),
             headers: headers
         }).then(response => {
