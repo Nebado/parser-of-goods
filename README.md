@@ -4,7 +4,8 @@ Parser of goods on php with generate Excel file, also downloading images.
 
 WARNING! The parser is in an active development state. If you want to use parser just download source code version 0.1 and use.
 
-* [Version 0.1](https://github.com/Nebado/ParserOfGoods/releases/tag/0.1)
+* [ver. 0.1](https://github.com/Nebado/ParserOfGoods/releases/tag/0.1)
+* [ver. 0.2](https://github.com/Nebado/ParserOfGoods/releases/tag/0.2)
 
 ![screenshot](src/assets/images/parser_v0.1_6.png)
 
