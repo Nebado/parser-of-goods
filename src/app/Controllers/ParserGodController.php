@@ -20,7 +20,8 @@ class ParserGodController
     private $client;
     private $loop;
     private $links = [];
-    private $parsedProduct = [];
+    private $errors = [];
+    private $parsedProducts = [];
     private $request = [];
     private $session = [];
     private $arrGoods = [];
@@ -45,8 +46,7 @@ class ParserGodController
             self::$protocol = self::checkProtocol($catUrl);
 
             $this->saveRequest();
-            $this->saveSession();
-
+            
             if (!empty($this->request['pagination_url']) &&
                 intval($this->request['quantity_pages']) > 0)
             {
@@ -59,6 +59,10 @@ class ParserGodController
 
             $urlProducts = $this->getUrlsProducts($categoryUrls);
 
+            if (empty($urlProducts)) {
+                $this->errors[] = 'Array url products is empty';
+            }           
+
             $this->writeUrlsCategory($categoryUrls);
             $this->writeUrlsProducts($urlProducts);
 
@@ -69,10 +73,16 @@ class ParserGodController
                 mkdir($uploadPath, 0777, true);
             }
 
-            $this->generateExcel($this->parsedProduct);
-            $this->downloadImages($this->parsedProduct);
+            if (empty($this->parsedProducts)) {
+                $this->errors[] = 'Array parsed products is empty';
+            }
 
-            echo json_encode($this->parsedProduct);
+            $this->saveSession($this->errors);
+
+            $this->generateExcel($this->parsedProducts);
+            $this->downloadImages($this->parsedProducts);
+
+            echo json_encode($this->parsedProducts);
 
         } else {
             return false;
@@ -132,6 +142,10 @@ class ParserGodController
             }
             $this->loop->run();
 
+            if (empty($this->links)) {
+                $this->errors[] = "Don't generate products array of links in category page";
+            }
+
             foreach ($this->links as $key => $value) {
                 foreach ($value as $href) {
                     $hrefs[] = $href;
@@ -163,7 +177,7 @@ class ParserGodController
             foreach ($urls as $url) {
                 $this->client->get($url)->then(
                     function (\Psr\Http\Message\ResponseInterface $response) {
-                        $this->parsedProduct[] = $this->scrapFromHtml((string) $response->getBody());
+                        $this->parsedProducts[] = $this->scrapFromHtml((string) $response->getBody());
                 });
             }
             $this->loop->run();
@@ -239,7 +253,7 @@ class ParserGodController
      */
     private function generateExcel($arrGoods) : void
     {
-        if (isset($this->request["excel"]) && $this->request["excel"] == "1") {
+        if ($this->request["excel"] == "1" && !empty($arrGoods)) {
             $phpExcel = new Spreadsheet();
 
             $ceils = array(
@@ -415,16 +429,17 @@ class ParserGodController
             foreach ($_REQUEST as $key => $value) {
                 $this->request[$key] = $value;
             }
+            $this->saveSession($this->request);
         }
     }
 
     /**
      * Registration session data
      */
-    private function saveSession() : void
+    private function saveSession(array $data) : void
     {
-        if (!empty($this->request)) {
-            foreach ($this->request as $key => $value) {
+        if (!empty($data)) {
+            foreach ($data as $key => $value) {
                 $_SESSION[$key] = $value;
             }
         }
