@@ -125,6 +125,7 @@ form.addEventListener('submit', event => {
         };
 
         showLoader();
+        previousSlide();
 
         return fetch(url, {
             method: method,
