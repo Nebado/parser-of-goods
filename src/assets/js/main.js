@@ -175,7 +175,13 @@ form.addEventListener('submit', event => {
     }
 
     sendRequest('POST', requestURL, body)
-        .then(data => initTable(data))
+        .then(data => {
+            if (data['errors']) {
+                errorHandle(data['errors']);
+            } else {
+                initTable(data);
+            }
+        })
         .catch(err => console.error(err))
 });
 
@@ -226,4 +232,21 @@ function initTable(data) {
     showTableBtn.style.display = 'inline-block';
     table.innerHTML += trs;
     modal.appendChild(table);
+}
+
+function errorHandle(errors) {
+    const errorsBox = document.querySelector('.errors');
+    const errorsContainer = document.createElement('div');
+
+    for (let i = 0; i < errors.length; ++i) {
+        let error = document.createElement('div');
+        error.innerHTML = errors[i];
+        errorsContainer.appendChild(error);
+    }
+
+    errorsBox.appendChild(errorsContainer);
+
+    setTimeout(() => {
+        errorsContainer.remove();
+    }, 10000);
 }

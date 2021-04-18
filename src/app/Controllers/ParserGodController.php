@@ -60,7 +60,7 @@ class ParserGodController
             $urlProducts = $this->getUrlsProducts($categoryUrls);
 
             if (empty($urlProducts)) {
-                $this->errors[] = 'Array url products is empty';
+                $this->errors['errors'][] = 'Array url products is empty';
             }           
 
             $this->writeUrlsCategory($categoryUrls);
@@ -72,18 +72,18 @@ class ParserGodController
             if(!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
             }
-
-            if (empty($this->parsedProducts)) {
-                $this->errors[] = 'Array parsed products is empty';
-            }
-
+            
             $this->saveSession($this->errors);
+            
+            if (empty($this->parsedProducts)) {
+                $this->errors['errors'][] = 'Array parsed products is empty';
+                echo json_encode($this->errors);
+            } else {
+                $this->generateExcel($this->parsedProducts);
+                $this->downloadImages($this->parsedProducts);
 
-            $this->generateExcel($this->parsedProducts);
-            $this->downloadImages($this->parsedProducts);
-
-            echo json_encode($this->parsedProducts);
-
+                echo json_encode($this->parsedProducts);
+            }
         } else {
             return false;
         }
@@ -128,9 +128,10 @@ class ParserGodController
      * @param array $htmlCategories
      * @return array
      */
-    private function getUrlsProducts(array $urls) : array
+    private function getUrlsProducts(array $urls)
     {
         $urlProducts = [];
+        $hrefs = [];
 
         if (!empty($urls)) {
             foreach ($urls as $url) {
@@ -138,12 +139,12 @@ class ParserGodController
                     function (\Psr\Http\Message\ResponseInterface $response) {
                         $crawler = new Crawler((string) $response->getBody());
                         $this->links[] = $crawler->filter((string) $this->request['product_card_name'])->extract(['href']);
-                });
+                    });
             }
             $this->loop->run();
 
-            if (empty($this->links)) {
-                $this->errors[] = "Don't generate products array of links in category page";
+            if (empty($this->links[0])) {
+                $this->errors['errors'][] = "Don't generate products array of links in category page";
             }
 
             foreach ($this->links as $key => $value) {
