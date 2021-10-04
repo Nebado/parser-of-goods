@@ -9,7 +9,7 @@ WARNING! The parser is in an active development state. If you want to use parser
 
 ![screenshot](src/assets/images/parser_v0.1_6.png)
 
-## Dependencies
+## Requirements
 
 - php ^7.2
 - php-xml
@@ -20,31 +20,17 @@ WARNING! The parser is in an active development state. If you want to use parser
 - symfony/dom-crawler
 - symfony/css-selector
 
-## Installation
-
-* Composer
-
-```
-$ composer update
-
-```
-
 ## Quick start
 
-#### Linux
-
 ```
-$ php -S localhost:5757
-
+$ docker-compose run up -d --build
+$ composer install
 ```
-
-#### Windows
-
-Use WAMP, XAMP, MAMP or OpenServer
 
 ## Usage
 
-In order to start parsing, you need to get fields, and for this you need to know tags, classes or id of the elements (name, price, etc).
+In order to start parsing, you need to fill fields, and for this you need to know tags, classes or id of the elements (name, price, etc).
+
 ## References
 
 [PhpSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet)
