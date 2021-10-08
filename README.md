@@ -1,8 +1,8 @@
 # Parser of Goods
 
-Parser of goods on php with generate Excel file, also downloading images.
+The parser can generate Excel, download images.
 
-WARNING! The parser is in an active development state. If you want to use parser just download source code version 0.1 and use.
+WARNING! The parser is in an active development state.
 
 * [ver. 0.1](https://github.com/Nebado/ParserOfGoods/releases/tag/0.1)
 * [ver. 0.2](https://github.com/Nebado/ParserOfGoods/releases/tag/0.2)
@@ -23,7 +23,7 @@ WARNING! The parser is in an active development state. If you want to use parser
 ## Quick start
 
 ```
-$ docker-compose run up -d --build
+$ docker-compose up -d --build
 $ composer install
 ```
 
