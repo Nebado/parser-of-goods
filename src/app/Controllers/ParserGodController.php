@@ -12,7 +12,7 @@ use \zipArchive;
 
 class ParserGodController
 {
-    const SSL_PORT = 443;
+    private const SSL_PORT = 443;
 
     public static $host;
     public static $protocol;
@@ -25,6 +25,11 @@ class ParserGodController
     private $request = [];
     private $session = [];
     private $arrGoods = [];
+
+    public function __construct()
+    {
+        header('Content-type: application/json');
+    }
 
     /**
      * Run application
@@ -39,11 +44,11 @@ class ParserGodController
 
         // TODO
         $_REQUEST = (array)json_decode(file_get_contents("php://input"));
-        $catUrl = $_REQUEST['url'];
+        $categoryUrl = $_REQUEST['url'];
 
-        if ($catUrl != null) {
-            self::$host = self::getHost($catUrl);
-            self::$protocol = self::checkProtocol($catUrl);
+        if ($categoryUrl != null) {
+            self::$host = self::getHost($categoryUrl);
+            self::$protocol = self::checkProtocol($categoryUrl);
 
             $this->saveRequest();
             
@@ -54,7 +59,7 @@ class ParserGodController
                     $this->request['pagination_url'],
                     $this->request['quantity_pages']);
             } else {
-                $categoryUrls[] = $catUrl;
+                $categoryUrls[] = $categoryUrl;
             }
 
             $urlProducts = $this->getUrlsProducts($categoryUrls);
@@ -139,7 +144,7 @@ class ParserGodController
                     function (\Psr\Http\Message\ResponseInterface $response) {
                         $crawler = new Crawler((string) $response->getBody());
                         $this->links[] = $crawler->filter((string) $this->request['product_card_name'])->extract(['href']);
-                    });
+                });
             }
             $this->loop->run();
 

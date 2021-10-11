@@ -6,8 +6,9 @@
             <div class="tooltip">?<span class="tooltip-content">E.g. https://site.com/category/</span></div>
             <input class="input input-card-name" type="text" name="product_card_name" value="<?= (!empty($_SESSION["product_card_name"])) ? $_SESSION["product_card_name"] : "" ?>"" placeholder="Enter selector of product card name" required />
             <div class="tooltip">?<span class="tooltip-content">E.g. .product-name a</span></div><br>
-            <input id="pagination-checkbox" class="input-checkbox" onclick="pagination()" type="checkbox" <?= (!empty($_SESSION['pagination_url'])) ? "checked" : "" ?> />
-            <label for="pagination">Pagination</label><br>
+            <label for="pagination-checkbox">
+                <input id="pagination-checkbox" class="input-checkbox" onclick="showPagination()" type="checkbox" <?= (!empty($_SESSION['pagination_url'])) ? "checked" : "" ?> />
+                Pagination</label><br>
             <div id="pagination" style="display: <?= (!empty($_SESSION['pagination_url'])) ? "block" : "none" ?>">
                 <input id="pagination-url" class="input input-pagination" type="text" name="pagination_url" value="<?= isset($_SESSION["pagination_url"]) ? $_SESSION["pagination_url"] : ""?>" placeholder="Enter url page with pagination" />
                 <div class="tooltip">?<span class="tooltip-content">E.g. https://site.com/category?page=3</span></div>

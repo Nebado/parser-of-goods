@@ -6,15 +6,15 @@ let modal = document.getElementById("modal-table");
     numberPages = document.getElementById("number-pages"),
     form = document.querySelector("form");
 
-showTableBtn.addEventListener("click", showFunc);
-closeTableBtn.addEventListener("click", hideFunc);
+showTableBtn.addEventListener("click", show);
+closeTableBtn.addEventListener("click", hide);
 
-function showFunc() {
+function show() {
     modal.style.display = "block";
     document.body.style.overflowY = "auto";
 }
 
-function hideFunc() {
+function hide() {
     modal.style.display = "none";
     document.body.style.overflowY = "hidden";
 }
@@ -23,26 +23,27 @@ function hideFunc() {
 let slideIndex = 1;
 let next = document.getElementsByClassName("next")[0];
 let previous = document.getElementsByClassName("previous")[0];
-showSlides(slideIndex);
+showSlide(slideIndex);
 
 function nextSlide() {
-    showSlides(slideIndex += 1);
+    showSlide(slideIndex += 1);
 }
 
 function previousSlide() {
-    showSlides(slideIndex -= 1);
+    showSlide(slideIndex -= 1);
 }
 
 function currentSlide(n) {
-    showSlides(slideIndex = n);
+    showSlide(slideIndex = n);
 }
 
-function showSlides(n) {
+function showSlide(n) {
     let slides = document.getElementsByClassName("item");
 
     if (n > slides.length) {
         slideIndex = 1;
     }
+    
     if (n < 1) {
         slideIndex = slides.length;
     }
@@ -50,10 +51,11 @@ function showSlides(n) {
     for (let slide of slides) {
         slide.style.display = "none";
     }
+    
     slides[slideIndex - 1].style.display = "block";
 }
 
-// Custom fields
+// Additional fields
 let i = 0;
 function addField() {
     i++;
@@ -84,14 +86,14 @@ function removeField(fieldId, btnId) {
 }
 
 // Pagination
-function pagination() {
-    let checkPagination = document.getElementById('pagination-checkbox'),
-        pagination      = document.getElementById('pagination');
+function showPagination() {
+    let checkboxPagination   = document.getElementById('pagination-checkbox'),
+        paginationBlock      = document.getElementById('pagination');
 
-    if (checkPagination.checked == true) {
-        pagination.style.display = 'block';
+    if (checkboxPagination.checked == true) {
+        paginationBlock.style.display = 'block';
     } else {
-        pagination.style.display = 'none';
+        paginationBlock.style.display = 'none';
     }
 }
 
@@ -150,11 +152,11 @@ form.addEventListener('submit', event => {
     // Form fields
     let target = event.currentTarget;
     let form = document.querySelector('form');
-    let data = new FormData(form);
+    let formData = new FormData(form);
 
-    function serializeForm(data) {
+    function serializeForm(formData) {
 	    let obj = {};
-	    for (let [key, value] of data) {
+	    for (let [key, value] of formData) {
 		    if (obj[key] !== undefined) {
 			    if (!Array.isArray(obj[key])) {
 				    obj[key] = [obj[key]];
@@ -167,7 +169,7 @@ form.addEventListener('submit', event => {
 	    return obj;
     };
 
-    const body = serializeForm(data);
+    const body = serializeForm(formData);
 
     let tableEx = document.getElementById('table');
     if (tableEx) {
