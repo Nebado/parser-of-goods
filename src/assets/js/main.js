@@ -1,10 +1,12 @@
 // Initialization dom elements
-let modal = document.getElementById("modal-table");
+let modal = document.getElementById("modal-table"),
     table = document.getElementById("table"),
     showTableBtn = document.getElementById("show-table"),
     closeTableBtn = document.getElementById("close-table"),
     numberPages = document.getElementById("number-pages"),
-    form = document.querySelector("form");
+    form = document.querySelector("form"),
+    downloadExcel = document.getElementById("download_excel"),
+    downloadImage = document.getElementById("download_image");
 
 showTableBtn.addEventListener("click", show);
 closeTableBtn.addEventListener("click", hide);
@@ -181,7 +183,19 @@ form.addEventListener('submit', event => {
             if (data['errors']) {
                 errorHandle(data['errors']);
             } else {
-                initTable(data);
+                if (data['zipFile']) {
+                    downloadImage.style.display = "inline-block";
+                } else {
+                    downloadImage.style.display = "none";
+                }
+
+                if (data['excelFile']) {
+                    downloadExcel.style.display = "inline-block";
+                } else {
+                    downloadExcel.style.display = "none";
+                }
+                
+                initTable(data['products']);
             }
         })
         .catch(err => console.error(err))
