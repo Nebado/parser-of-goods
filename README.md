@@ -26,9 +26,9 @@ $ composer install
 ## Usage
 
 - Open your web client in localhost
-- Enter your specific url of website with category of products
-- In order to start parsing, you need to fill fields, and for this you need to know tags,
-classes or id of the elements (name, price, etc).
+- Enter your specific URL of the website with the category of products
+- To start parsing, you need to fill fields, and for this, you need to
+know tags,classes, or id of the elements (name, price, etc).
 
 ## Releases
 
