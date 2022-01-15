@@ -1,11 +1,11 @@
 {
-    "name": "nebado/parserofgoods",
+    "name": "nebado/parser-of-goods",
     "license": "MIT",
     "authors": [
-    {
-        "name": "Ruslan Lazurenko",
-        "email": "ruslan.nbd@gmail.com"
-    }
+        {
+            "name": "Ruslan Lazurenko",
+            "email": "ruslan.nbd@gmail.com"
+        }
     ],
     "require": {
         "php": ">=7.2.0",
