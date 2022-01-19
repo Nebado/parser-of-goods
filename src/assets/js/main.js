@@ -1,12 +1,12 @@
-// Initialization dom elements
-let modal = document.getElementById("modal-table"),
-    table = document.getElementById("table"),
-    showTableBtn = document.getElementById("show-table"),
-    closeTableBtn = document.getElementById("close-table"),
-    numberPages = document.getElementById("number-pages"),
-    form = document.querySelector("form"),
-    downloadExcel = document.getElementById("download_excel"),
-    downloadImage = document.getElementById("download_image");
+/* Initialization dom elements */
+const modal = document.getElementById("modal-table"),
+      table = document.getElementById("table"),
+      showTableBtn = document.getElementById("show-table"),
+      closeTableBtn = document.getElementById("close-table"),
+      numberPages = document.getElementById("number-pages"),
+      form = document.querySelector("form"),
+      downloadExcel = document.getElementById("download_excel"),
+      downloadImage = document.getElementById("download_image");
 
 showTableBtn.addEventListener("click", show);
 closeTableBtn.addEventListener("click", hide);
@@ -21,10 +21,10 @@ function hide() {
     document.body.style.overflowY = "hidden";
 }
 
-// Main Slider
+/* Slider */
 let slideIndex = 1;
-let next = document.getElementsByClassName("next")[0];
-let previous = document.getElementsByClassName("previous")[0];
+const next = document.getElementsByClassName("next")[0];
+const previous = document.getElementsByClassName("previous")[0];
 showSlide(slideIndex);
 
 function nextSlide() {
@@ -40,7 +40,7 @@ function currentSlide(n) {
 }
 
 function showSlide(n) {
-    let slides = document.getElementsByClassName("item");
+    const slides = document.getElementsByClassName("item");
 
     if (n > slides.length) {
         slideIndex = 1;
@@ -51,13 +51,13 @@ function showSlide(n) {
     }
 
     for (let slide of slides) {
-        slide.style.display = "none";
+        slide.classList.remove("active");
     }
     
-    slides[slideIndex - 1].style.display = "block";
+    slides[slideIndex - 1].classList.add("active");
 }
 
-// Additional fields
+/* Additional fields in form */
 let i = 0;
 function addField() {
     i++;
@@ -87,7 +87,7 @@ function removeField(fieldId, btnId) {
     btn.parentNode.removeChild(btn);
 }
 
-// Pagination
+/* Pagination */
 function showPagination() {
     let checkboxPagination   = document.getElementById('pagination-checkbox'),
         paginationBlock      = document.getElementById('pagination');
@@ -99,7 +99,7 @@ function showPagination() {
     }
 }
 
-// Loader
+/* Loader */
 const loader = document.getElementById('loader');
 
 function showLoader() {
@@ -110,6 +110,7 @@ function hideLoader() {
     loader.className = loader.className.replace("show", "");
 }
 
+/* Ajax request */
 let controller = new AbortController();
 
 function abortFetching() {
@@ -117,7 +118,6 @@ function abortFetching() {
     controller.abort();
 }
 
-// Ajax request
 form.addEventListener('submit', event => {
     event.preventDefault();
     const requestURL = window.location.href + 'parser';
@@ -151,7 +151,6 @@ form.addEventListener('submit', event => {
         });
     }
 
-    // Form fields
     let target = event.currentTarget;
     let form = document.querySelector('form');
     let formData = new FormData(form);
@@ -201,7 +200,7 @@ form.addEventListener('submit', event => {
         .catch(err => console.error(err))
 });
 
-// Table
+/* Table */
 function initTable(data) {
     const fields = ['#', 'Name', 'Code', 'Price', 'Description', 'Image'];
     const table = document.createElement('table');
@@ -250,6 +249,7 @@ function initTable(data) {
     modal.appendChild(table);
 }
 
+/* Error box */
 function errorHandle(errors) {
     const errorsBox = document.querySelector('.errors');
     const errorsContainer = document.createElement('div');

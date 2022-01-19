@@ -125,6 +125,7 @@ input:active,
     margin-left: 8px;
     border-radius: 23px;
     padding: 8px;
+    transition: 0.3s opacity ease-in-out;
 }
 .btn-start {
     background-color: #5fa764;
@@ -232,7 +233,7 @@ input:active,
     color: white;
     font-weight: bold;
     font-size: 20px;
-    transition: 0.6s ease;
+    transition: 0.6s color ease;
     border-radius: 0 3px 3px 0;
 }
 .slider .next {
@@ -248,14 +249,19 @@ input:active,
     color: #ece;
 }
 .slider .item {
-    animation-name: fade;
-    animation-duration: 1.5s;
+    visibility: hidden;
+    opacity: 0;
+    height: 0;
+    transition: visibility 0s, opacity 0.5s ease-in-out;
 }
-
+.slider .item.active {
+    visibility: visible;
+    opacity: 1;
+    height: auto;
+}
 .download {
     color: #f5ee0c;
 }
-
 .tooltip {
     cursor: pointer;
     font-size: 20px;
@@ -265,7 +271,6 @@ input:active,
     display: inline-block;
     position: relative;
 }
-
 .tooltip .tooltip-content {
     font-family: Arial;
     font-size: 16px;
@@ -283,12 +288,13 @@ input:active,
     left: 50%;
     margin-left: -140px;
     box-shadow: 0px 0px 3px 4px #666;
+    transition: 0.4s opacity ease-in-out;
+    opacity: 0;
 }
-
 .tooltip:hover .tooltip-content {
     visibility: visible;
+    opacity: 1;
 }
-
 #loader {
     visibility: hidden;
     width: 250px;
@@ -306,7 +312,9 @@ input:active,
     letter-spacing: 0.2em;
     z-index: 200;
 }
-
+#loader.show {
+    visibility: visible;
+}
 #loader::before, #loader::after {
     content: "";
     display: block;
@@ -316,21 +324,16 @@ input:active,
     position: absolute;
     animation: load .7s infinite alternate ease-in-out;
 }
-
 #loader::before {
     top: 0;
 }
-
 #loader::after {
     bottom: 0;
 }
-
 @keyframes load {
     0% { left: 0; height: 30px; width: 15px }
     50% { height: 8px; width: 40px }
     100% { left: 235px; height: 30px; width: 15px}
 }
 
-#loader.show {
-    visibility: visible;
-}
+
